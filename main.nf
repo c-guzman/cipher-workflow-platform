@@ -278,6 +278,8 @@
  	// STEP 5 ESTIMATE FRAGMENT SIZE SPP
  	process estimate_fragment_size {
 
+ 		publishDir "${params.outdir}/fragment_sizes", mode: 'copy'
+
  		input:
  		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bam_grouping
 
