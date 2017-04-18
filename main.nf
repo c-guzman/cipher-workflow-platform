@@ -1,4 +1,6 @@
 #!/usr/bin/env nextflow
+// Author: Carlos Guzman
+// E-mail: cag104@ucsd.edu
 
 /*
  * DEFINE DEFAULT PARAMETERS
@@ -1153,7 +1155,7 @@
  	}
 
  	// STEP 7 NARROW PEAK CALLING WITH MACS2 NO INPUT
- 	process call_binding_sites_NI {
+ 	process call_binding_sites {
 
  		publishDir "${params.outdir}/peaks", mode: 'copy'
 
