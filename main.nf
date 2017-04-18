@@ -339,7 +339,7 @@
  		val egs_size from egs_size_deeptools_WI
 
  		output:
- 		file("${id}.minusInput.RPGCnorm.bigWig") into bigwigs_WI
+ 		file("${id}.RPGCnorm.bigWig") into bigwigs_WI
 
  		script:
  		"""
@@ -357,7 +357,7 @@
  		val egs_size from egs_size_deeptools_NI
 
  		output:
- 		file("${id}.minusInput.RPGCnorm.bigWig") into bigwigs_NI
+ 		file("${id}.RPGCnorm.bigWig") into bigwigs_NI
 
  		script:
  		"""
@@ -756,7 +756,7 @@
  		val egs_size from egs_size_deeptools_WI
 
  		output:
- 		file("${id}.minusInput.RPGCnorm.bigWig") into bigwigs_WI
+ 		file("${id}.RPGCnorm.bigWig") into bigwigs_WI
 
  		script:
  		"""
@@ -774,7 +774,7 @@
  		val egs_size from egs_size_deeptools_NI
 
  		output:
- 		file("${id}.minusInput.RPGCnorm.bigWig") into bigwigs_NI
+ 		file("${id}.RPGCnorm.bigWig") into bigwigs_NI
 
  		script:
  		"""
@@ -1006,6 +1006,7 @@
 
  		egs_size.into {
  			egs_size_deeptools_NI
+ 			egs_size_macs_NI
  		}
 
  	// Generate BBMap Index
@@ -1130,6 +1131,7 @@
 
  	bams.into {
  		bams_bigwigs
+ 		bams_macs
  	}
 
  	// STEP 6 GENERATE RPGC NORMALIZED COVERAGE TRACKS WITH NO INPUT
@@ -1142,11 +1144,88 @@
  		val egs_size from egs_size_deeptools_NI
 
  		output:
- 		file("${id}.minusInput.RPGCnorm.bigWig") into bigwigs
+ 		file("${id}.RPGCnorm.bigWig") into bigwigs
 
  		script:
  		"""
  		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		"""
+ 	}
+
+ 	// STEP 7 NARROW PEAK CALLING WITH MACS2 NO INPUT
+ 	process call_binding_sites_NI {
+
+ 		publishDir "${params.outdir}/peaks", mode: 'copy'
+
+ 		input:
+ 		file chromSizes from chrom_sizes_NI.val
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bams_macs
+ 		val egs_size from egs_size_macs_NI
+
+ 		output:
+ 		set mergeid, id, file("${id}/${id}_peaks.narrowPeak"), mark, fragLen into np_NI_anno, np_NI_motifs
+
+ 		script:
+ 		shiftsize = (-1 * (${fraglen}/2))
+ 		"""
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir ${id} -f BAM -g ${egs_size} --tempdir $baseDir -q ${params.qvalue} --nomodel --extsize=${fragLen} --shift ${shiftsize} --seed 111
+ 		"""
+ 	}
+
+ 	// STEP 9 ANNOTATE PEAKS USING HOMER
+ 	process annotate_binding_sites {
+
+ 		publishDir "${params.outdir}/annotated_peaks", mode: 'copy'
+
+ 		input:
+ 		file fasta_file
+ 		file gtf_file
+ 		set mergeid, id, file(np), mark, fragLen from np_NI_anno
+
+ 		output:
+ 		file("${id}_narrowPeaks.annotated.txt")
+
+ 		script:
+ 		"""
+ 		perl $baseDir/bin/homer/bin/annotatePeaks.pl ${np} ${fasta_file} -gtf ${gtf_file} > ${id}_narrowPeaks.annotated.txt
+ 		"""
+ 	}
+
+ 	// STEP 10 IDENTIFY POTENTIAL MOTIFS
+ 	process identify_binding_motifs {
+
+ 		publishDir "${params.outdir}", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(np), mark, fragLen from np_NI_motifs
+ 		file fasta_file
+
+ 		output:
+ 		file("${id}_motifs/*")
+
+ 		script:
+ 		"""
+ 		sort -nk8 ${np} | awk '{ a[NR] = \$0 } END { for (i = 1; i <= NR / 10; ++i) print a[i] }' > ${id}.sorted.peak.files.txt
+ 		perl $baseDir/bin/homer/bin/findMotifsGenome.pl ${id}.sorted.peak.files.txt ${fasta_file} ${id}_motifs -size 100
+ 		"""
+ 	}
+
+ 	// STEP 11 MULTIQC
+ 	process multiqc {
+
+ 		publishDir "${params.outdir}/multiqc", mode: 'copy'
+
+ 		input:
+ 		file ('fastqc/*') from post_fastqc_results.flatten().toList()
+ 		file ('fastqc/*') from pre_fastqc_results.flatten().toList()
+
+ 		output:
+ 		file "*multiqc_report.html"
+ 		file "*multiqc_data"
+
+ 		script:
+ 		"""
+ 		multiqc -f .
  		"""
  	}
 
@@ -1158,5 +1237,7 @@
  	println "Workflow completed on: $workflow.complete"
  	println "Execution status: ${ workflow.success ? 'Succeeded' : 'Failed' }"
  	println "Workflow Duration: $workflow.duration"
+ 	println ""
+ 	println "Submit issues/requests on GitHub or e-mail cag104@ucsd.edu"
  	println ""
  }
