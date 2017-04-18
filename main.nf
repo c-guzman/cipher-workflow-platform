@@ -13,7 +13,8 @@
  params.epic_w = 200
  params.epic_g = 3
  //params.binSize = 10
- //params.smoothLen = 60
+ //params.smoothLen = 50
+ //params.aligner = 'bbmap'
 
  // PRINT HELP
  if (params.help) {
@@ -342,7 +343,7 @@
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 60 -e ${fragLen} --ignoreDuplicates --centerReadss
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReadss
  		"""
  	}
 
@@ -356,10 +357,11 @@
  		val egs_size from egs_size_deeptools_NI
 
  		output:
+ 		file("${id}.minusInput.RPGCnorm.bigWig") into bigwigs_NI
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 60 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -758,7 +760,7 @@
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 60 -e ${fragLen} --ignoreDuplicates --centerReadss
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReadss
  		"""
  	}
 
@@ -772,10 +774,11 @@
  		val egs_size from egs_size_deeptools_NI
 
  		output:
+ 		file("${id}.minusInput.RPGCnorm.bigWig") into bigwigs_NI
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 60 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -920,6 +923,234 @@
  	}
 
  } // closing bracket PE chip
+
+ // SE DNASE
+ if (params.mode == 'dnase' && params.lib == 's') {
+
+ 	// Parse config file
+ 	fastqs = Channel
+ 	.from(config_file.readLines())
+ 	.map { line ->
+ 			list = line.split()
+ 			mergeid = list[0]
+ 			id = list[1]
+ 			path1 = file(list[2])
+ 			controlid = list[3]
+ 			mark = list[4]
+ 			[ mergeid, id, path1, controlid, mark ]
+ 		}
+
+ 	// Subsample
+ 	if (params.subsample == true) {
+ 		process subsampling {
+
+ 			input:
+ 			set mergeid, id, file(read1), controlid, mark from fastqs
+
+ 			output:
+ 			set mergeid, id, file("${id}.subsampled.fastq.gz"), controlid, mark into subsampled_fastqs
+
+ 			script:
+ 			"""
+ 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=100000
+ 			"""
+ 		}
+
+ 		subsampled_fastqs.into {
+ 			fastqs_fastqc
+ 			fastqs_bbduk
+ 		}
+ 	}	else {
+ 		fastqs.into {
+ 			fastqs_fastqc
+ 			fastqs_bbduk
+ 		}
+ 	}
+
+ 	// Fetch chromosome sizes from FASTA
+ 	process fetch_chrom_sizes {
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file "chromSizes.txt" into chrom_sizes_WI, chrom_sizes_NI, chrom_sizes_epic
+
+ 		script:
+ 		"""
+ 		samtools faidx ${fasta_file}
+ 		awk -v OFS='\t' '{print \$1, \$2}' ${fasta_file}.fai > chromSizes.txt
+ 		"""
+ 	}
+
+ 	// Calculate effective genome size
+ 	process calculate_egs {
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file "egs_size.txt" into egs_file
+
+ 		script:
+ 		"""
+ 		epic-effective -r ${params.readLen} -n ${params.threads} -t $baseDir ${fasta_file} > egs_file.txt
+ 		Rscript $baseDir/bin/process_epic_effective_output.R egs_file.txt
+ 		"""
+ 	}
+
+ 	egs_file.map{ file ->
+ 		file.text.trim() } .set {
+ 			egs_size
+ 		}
+
+ 		egs_size.into {
+ 			egs_size_deeptools_NI
+ 		}
+
+ 	// Generate BBMap Index
+ 	process create_mapping_index {
+
+ 		publishDir "${params.outdir}/bbmap_index", mode: 'copy'
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file("ref/*") into bbmap_index
+
+ 		script:
+ 		"""
+ 		bbmap.sh ref=${fasta_file} usemodulo
+ 		"""
+ 	}
+
+ 	// STEP 1 PRE TRIM FASTQC
+ 	process fastqc_preTrim {
+
+ 		publishDir "${params.outdir}/preTrim_fastqc", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), controlid, mark from fastqs_fastqc
+
+ 		output:
+ 		file("*.zip") into pre_fastqc_results
+
+ 		script:
+ 		"""
+ 		fastqc ${read1}
+ 		"""
+ 	}
+
+ 	// STEP 2 TRIMMING WITH BBDUK
+ 	process trimming {
+
+ 		publishDir "${params.outdir}/trimmed_reads", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), controlid, mark from fastqs_bbduk
+
+ 		output:
+ 		set mergeid, id, file("${id}_postTrimmed.fastq.gz"), controlid, mark into bbmap_trimmed_fastqs, fastqc_trimmed_fastqs
+
+ 		script:
+ 		"""
+ 		bbduk.sh in=${read1} out=${id}_postTrimmed.fastq.gz ref=$baseDir/adapters/adapters.fa ktrim=r k=23 mink=11 hdist=1 tbo tpe
+ 		"""
+ 	}
+
+ 	// STEP 3 POST TRIM FASTQC
+ 	process fastqc_postTrim {
+
+ 		publishDir "${params.outdir}/postTrim_fastqc", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), controlid, mark from fastqc_trimmed_fastqs
+
+ 		output:
+ 		file("*.zip") into post_fastqc_results
+
+ 		script:
+ 		"""
+ 		fastqc ${read1}
+ 		"""
+ 	}
+
+ 	// STEP 4 MAPPING WITH BBMAP
+ 	process mapping {
+
+ 		publishDir "${params.outdir}/alignments", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), controlid, mark from bbmap_trimmed_fastqs
+ 		file("ref/*") from bbmap_index.first()
+
+ 		output:
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), controlid, mark, file("${id}.sorted.mapped.bam.bai") into bam_grouping
+ 		file("${id}.alignmentReport.txt")
+ 		file("${id}.unmapped.bam") into unmapped_bams
+
+ 		script:
+ 		"""
+ 		bbmap.sh in=${read1} outm=${id}.mapped.bam outu=${id}.unmapped.bam keepnames=t trd sam=1.3 maxindel=1 ambig=random statsfile=${id}.alignmentReport.txt minid=${params.minid} usemodulo
+ 		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.bam
+ 		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
+ 		"""
+ 	}
+
+ 	// SEPARATE CHIP AND INPUT FILES
+ 	//treat = Channel.create()
+ 	//control = Channel.create()
+ 	//bam_grouping.choice(treat, control) {
+ 	//	it[4] == 'input' ? 1 : 0
+ 	//}
+
+ 	// STEP 5 ESTIMATE FRAGMENT SIZE SPP
+ 	process estimate_fragment_size {
+
+ 		publishDir "${params.outdir}/fragment_sizes", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bam_grouping
+
+ 		output:
+ 		set mergeid, id, file("${id}.params.out") into modelParams
+ 		set mergeid, id, file(bam), controlid, file("${id}.params.out"), mark, file(bam_index) into modelBams
+
+ 		script:
+ 		"""
+ 		Rscript $baseDir/bin/run_spp.R -c=${bam} -rf -out=${id}.params.out -savp=${id}.pdf -p=${params.threads} -tmpdir=$baseDir
+ 		"""
+ 	}
+
+ 	(bams) = modelBams.map { mergeid, id, bam, controlid, paramFile, mark, bam_index ->
+ 		fragLen = paramFile.text.split()[2].split(',')[0]
+ 		[ mergeid, id, bam, controlid, mark, fragLen, bam_index ]
+ 	}.into(1)
+
+ 	bams.into {
+ 		bams_bigwigs
+ 	}
+
+ 	// STEP 6 GENERATE RPGC NORMALIZED COVERAGE TRACKS WITH NO INPUT
+ 	process create_coverage_tracks {
+
+ 		publishDir "${params.outdir}/tracks", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bams_bigwigs
+ 		val egs_size from egs_size_deeptools_NI
+
+ 		output:
+ 		file("${id}.minusInput.RPGCnorm.bigWig") into bigwigs
+
+ 		script:
+ 		"""
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		"""
+ 	}
+
+ 	} // closing bracket SE dnase
 
  // ON COMPLETION
  workflow.onComplete {
