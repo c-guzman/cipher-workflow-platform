@@ -2326,6 +2326,7 @@
  	bams.into {
  		bams_bigwigs_fwd
  		bams_bigwigs_rev
+ 		bams_merge
  	}
 
  	// STEP 6 GENERATE RPGC NORMALIZED COVERAGE TRACKS WITH NO INPUT
@@ -2352,7 +2353,7 @@
  		publishDir "${params.outdir}/tracks", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bams_bigwigs_rev
+ 		set mergeid, id, file(bam), controlid, mark, fragLen, file(bam_index) from bams_bigwigs_rev
  		val egs_size from egs_size_deeptools_rev
 
  		output:
@@ -2361,6 +2362,80 @@
  		script:
  		"""
  		bamCoverage -b ${bam} -o ${id}.RPGCnorm.rev.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --filterRNAstrand reverse --Offset 1
+ 		"""
+ 	}
+
+ 	// Merge replicates
+ 	singleBams = Channel.create()
+ 	groupedBams = Channel.create()
+
+ 	bams_merge.groupTuple(by: [0,3,4])
+ 	.choice(singleBams, groupedBams) {
+ 		it[2].size() > 1 ? 1 : 0
+ 	}
+
+ 	// STEP 8 MERGE REPLICATES
+ 	process merge_replicates {
+
+ 		input:
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bams_merge
+
+ 		output:
+ 		set mergeid, id, file(""), mark, fragLen into mergedBams
+
+ 		script:
+ 		def id = id.sort().join(':')
+ 		"""
+ 		(
+ 		samtools view -H ${bam} | grep -v '@SQ';
+ 		for f in ${bam}; do
+ 		  samtools view -H \$f | grep '@SQ';
+ 		done
+ 		) > header.txt && \
+ 		samtools merge -@ ${params.threads} -h header.txt ${mergeid}_primary.bam ${bam}
+ 		"""
+ 	}
+
+ 	singleBams
+ 	.mix(mergedBams)
+ 	.map { mergeid, id, bam, controlid, mark, fragLen ->
+ 		[ mergeid, bam, controlid, mark, fragLen ].flatten()
+ 	}
+ 	.into { bams_grohmm }
+
+ 	// STEP 9 GROHMM WORKFLOW
+ 	process groHMM {
+
+ 		publishDir "${params.outdir}/groHMM", mode: 'copy'
+
+ 		input:
+ 		set mergeid, file(bam), controlid, mark, fragLen from bams_grohmm
+
+ 		output:
+ 		set mergeid, file("${mergeid}_transcripts.txt") into grohmm_transcripts
+
+ 		script:
+ 		"""
+ 		Rscript $baseDir/bin/grohmm.R ${bam} ${mergeid} ${params.threads}
+ 		"""
+ 	}
+
+ 	// STEP 10 MULTIQC
+ 	process multiqc {
+
+ 		publishDir "${params.outdir}/multiqc", mode: 'copy'
+
+ 		input:
+ 		file ('fastqc/*') from post_fastqc_results.flatten().toList()
+ 		file ('fastqc/*') from pre_fastqc_results.flatten().toList()
+
+ 		output:
+ 		file "*multiqc_report.html"
+ 		file "*multiqc_data"
+
+ 		script:
+ 		"""
+ 		multiqc -f .
  		"""
  	}
 
