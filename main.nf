@@ -1779,7 +1779,7 @@
  		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bams_macs
 
  		output:
- 		set mergeid, id, file("${id}/pooled/${id}.sorted.mapped.bam.positions.txt"), mark, fragLen into np_NI_anno, np_NI_motifs
+ 		set mergeid, id, file("${id}/pooled/${id}.sorted.mapped.bam.positions.txt"), mark, fragLen into np_NI_anno
 
  		script:
  		"""
@@ -1808,26 +1808,7 @@
  		"""
  	}
 
- 	// STEP 10 IDENTIFY POTENTIAL MOTIFS
- 	process identify_binding_motifs {
-
- 		publishDir "${params.outdir}/motifs", mode: 'copy'
-
- 		input:
- 		set mergeid, id, file(np), mark, fragLen from np_NI_motifs
- 		file fasta_file
-
- 		output:
- 		file("${id}_motifs/*")
-
- 		script:
- 		"""
- 		sort -nk8 ${np} | awk '{ a[NR] = \$0 } END { for (i = 1; i <= NR / 10; ++i) print a[i] }' > ${id}.sorted.peak.files.txt
- 		perl $baseDir/bin/homer/bin/findMotifsGenome.pl ${id}.sorted.peak.files.txt ${fasta_file} ${id}_motifs -size 100
- 		"""
- 	}
-
- 	// STEP 11 MULTIQC
+ 	// STEP 10 MULTIQC
  	process multiqc {
 
  		publishDir "${params.outdir}/multiqc", mode: 'copy'
@@ -1847,6 +1828,295 @@
  	}
 
  	} // closing bracket SE mnase
+
+ 	// PE MNASE
+ 	if (params.mode == 'mnase' && params.lib == 'p') {
+
+ 	// Parse config file
+ 	fastqs = Channel
+ 	.from(config_file.readLines())
+ 	.map { line ->
+ 			list = line.split()
+ 			mergeid = list[0]
+ 			id = list[1]
+ 			path1 = file(list[2])
+ 			path2 = file(list[3])
+ 			controlid = list[4]
+ 			mark = list[5]
+ 			[ mergeid, id, path1, path2, controlid, mark ]
+ 		}
+
+ 	// Subsample
+ 	if (params.subsample == true) {
+ 		process subsampling {
+
+ 			input:
+ 			set mergeid, id, file(read1), file(read2), controlid, mark from fastqs
+
+ 			output:
+ 			set mergeid, id, file("${id}_1.subsampled.fastq.gz"), file("${id}_2.subsampled.fastq.gz"), controlid, mark into subsampled_fastqs
+
+ 			script:
+ 			"""
+ 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=100000
+ 			"""
+ 		}
+
+ 		subsampled_fastqs.into {
+ 			fastqs_fastqc
+ 			fastqs_bbduk
+ 		}
+ 	}	else {
+ 		fastqs.into {
+ 			fastqs_fastqc
+ 			fastqs_bbduk
+ 		}
+ 	}
+
+ 	// Fetch chromosome sizes from FASTA
+ 	process fetch_chrom_sizes {
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file "chromSizes.txt" into chrom_sizes_WI, chrom_sizes_NI, chrom_sizes_epic
+
+ 		script:
+ 		"""
+ 		samtools faidx ${fasta_file}
+ 		awk -v OFS='\t' '{print \$1, \$2}' ${fasta_file}.fai > chromSizes.txt
+ 		"""
+ 	}
+
+ 	// Calculate effective genome size
+ 	process calculate_egs {
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file "egs_size.txt" into egs_file
+
+ 		script:
+ 		"""
+ 		epic-effective -r ${params.readLen} -n ${params.threads} -t $baseDir ${fasta_file} > egs_file.txt
+ 		Rscript $baseDir/bin/process_epic_effective_output.R egs_file.txt
+ 		"""
+ 	}
+
+ 	egs_file.map{ file ->
+ 		file.text.trim() } .set {
+ 			egs_size
+ 		}
+
+ 		egs_size.into {
+ 			egs_size_deeptools_NI
+ 			egs_size_macs_NI
+ 		}
+
+ 	// Generate BBMap Index
+ 	process create_mapping_index {
+
+ 		publishDir "${params.outdir}/bbmap_index", mode: 'copy'
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file("ref/*") into bbmap_index
+
+ 		script:
+ 		"""
+ 		bbmap.sh ref=${fasta_file} usemodulo
+ 		"""
+ 	}
+
+ 	// STEP 1 PRE TRIM FASTQC
+ 	process fastqc_preTrim {
+
+ 		publishDir "${params.outdir}/preTrim_fastqc", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), file(read2), controlid, mark from fastqs_fastqc
+
+ 		output:
+ 		file("*.zip") into pre_fastqc_results
+
+ 		script:
+ 		"""
+ 		fastqc -t 2 ${read1} ${read2}
+ 		"""
+ 	}
+
+ 	// STEP 2 TRIMMING WITH BBDUK
+ 	process trimming {
+
+ 		publishDir "${params.outdir}/trimmed_reads", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), file(read2), controlid, mark from fastqs_bbduk
+
+ 		output:
+ 		set mergeid, id, file("${id}_1_postTrimmed.fastq.gz"), file("${id}_2_postTrimmed.fastq.gz"), controlid, mark into bbmap_trimmed_fastqs, fastqc_trimmed_fastqs
+
+ 		script:
+ 		"""
+ 		bbduk.sh in=${read1} in2=${read2} out=${id}_1_postTrimmed.fastq.gz out2=${id}_2_postTrimmed.fastq.gz ref=$baseDir/adapters/adapters.fa ktrim=r k=23 mink=11 hdist=1 tbo tpe
+ 		"""
+ 	}
+
+ 	// STEP 3 POST TRIM FASTQC
+ 	process fastqc_postTrim {
+
+ 		publishDir "${params.outdir}/postTrim_fastqc", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), file(read2), controlid, mark from fastqc_trimmed_fastqs
+
+ 		output:
+ 		file("*.zip") into post_fastqc_results
+
+ 		script:
+ 		"""
+ 		fastqc -t 2 ${read1} ${read2}
+ 		"""
+ 	}
+
+ 	// STEP 4 MAPPING WITH BBMAP
+ 	process mapping {
+
+ 		publishDir "${params.outdir}/alignments", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), file(read2), controlid, mark from bbmap_trimmed_fastqs
+ 		file("ref/*") from bbmap_index.first()
+
+ 		output:
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), controlid, mark, file("${id}.sorted.mapped.bam.bai") into bam_grouping
+ 		file("${id}.alignmentReport.txt")
+ 		file("${id}.unmapped.bam") into unmapped_bams
+
+ 		script:
+ 		"""
+ 		bbmap.sh in=${read1} in2=${read2} outm=${id}.mapped.bam outu=${id}.unmapped.bam keepnames=t trd sam=1.3 maxindel=1 ambig=random statsfile=${id}.alignmentReport.txt minid=${params.minid} usemodulo
+ 		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.bam
+ 		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
+ 		"""
+ 	}
+
+ 	// SEPARATE CHIP AND INPUT FILES
+ 	//treat = Channel.create()
+ 	//control = Channel.create()
+ 	//bam_grouping.choice(treat, control) {
+ 	//	it[4] == 'input' ? 1 : 0
+ 	//}
+
+ 	// STEP 5 ESTIMATE FRAGMENT SIZE SPP
+ 	process estimate_fragment_size {
+
+ 		publishDir "${params.outdir}/fragment_sizes", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bam_grouping
+
+ 		output:
+ 		set mergeid, id, file("${id}.params.out") into modelParams
+ 		set mergeid, id, file(bam), controlid, file("${id}.params.out"), mark, file(bam_index) into modelBams
+
+ 		script:
+ 		"""
+ 		Rscript $baseDir/bin/run_spp.R -c=${bam} -rf -out=${id}.params.out -savp=${id}.pdf -p=${params.threads} -tmpdir=$baseDir
+ 		"""
+ 	}
+
+ 	(bams) = modelBams.map { mergeid, id, bam, controlid, paramFile, mark, bam_index ->
+ 		fragLen = paramFile.text.split()[2].split(',')[0]
+ 		[ mergeid, id, bam, controlid, mark, fragLen, bam_index ]
+ 	}.into(1)
+
+ 	bams.into {
+ 		bams_bigwigs
+ 		bams_macs
+ 	}
+
+ 	// STEP 6 GENERATE RPGC NORMALIZED COVERAGE TRACKS WITH NO INPUT
+ 	process create_coverage_tracks {
+
+ 		publishDir "${params.outdir}/tracks", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bams_bigwigs
+ 		val egs_size from egs_size_deeptools_NI
+
+ 		output:
+ 		file("${id}.RPGCnorm.bigWig") into bigwigs
+
+ 		script:
+ 		"""
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 1 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 20 -e ${fragLen} --ignoreDuplicates --centerReads --MNase
+ 		"""
+ 	}
+
+ 	// STEP 7 NUCLEOSOME PEAK CALLING WITH MACS2 NO INPUT
+ 	process call_binding_sites {
+
+ 		publishDir "${params.outdir}/peaks", mode: 'copy'
+
+ 		input:
+ 		file chromSizes from chrom_sizes_NI.val
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bams_macs
+
+ 		output:
+ 		set mergeid, id, file("${id}/pooled/${id}.sorted.mapped.bam.positions.txt"), mark, fragLen into np_NI_anno
+
+ 		script:
+ 		"""
+ 		bam2bed --do-not-sort < ${bam} > ${id}.sorted.mapped.bam.bed
+ 		python $baseDir/bin/danpos/danpos.py dpos ${bed} -m 1 -o ${id} --frsz ${fragLen} -jw 40 -jd 150
+ 		mv ${id}/pooled/${id}.sorted.mapped.bam.positions.xls ${id}/pooled/${id}.sorted.mapped.bam.positions.txt
+ 		"""
+ 	}
+
+ 	// STEP 9 ANNOTATE PEAKS USING HOMER
+ 	process annotate_binding_sites {
+
+ 		publishDir "${params.outdir}/annotated_peaks", mode: 'copy'
+
+ 		input:
+ 		file fasta_file
+ 		file gtf_file
+ 		set mergeid, id, file(np), mark, fragLen from np_NI_anno
+
+ 		output:
+ 		file("${id}_nucleosomes.annotated.txt")
+
+ 		script:
+ 		"""
+ 		perl $baseDir/bin/homer/bin/annotatePeaks.pl ${np} ${fasta_file} -gtf ${gtf_file} > ${id}_nucleosomes.annotated.txt
+ 		"""
+ 	}
+
+ 	// STEP 10 MULTIQC
+ 	process multiqc {
+
+ 		publishDir "${params.outdir}/multiqc", mode: 'copy'
+
+ 		input:
+ 		file ('fastqc/*') from post_fastqc_results.flatten().toList()
+ 		file ('fastqc/*') from pre_fastqc_results.flatten().toList()
+
+ 		output:
+ 		file "*multiqc_report.html"
+ 		file "*multiqc_data"
+
+ 		script:
+ 		"""
+ 		multiqc -f .
+ 		"""
+ 	}
+
+ 	} // closing bracket PE mnase
 
  // ON COMPLETION
  workflow.onComplete {
