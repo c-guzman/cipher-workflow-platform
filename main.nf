@@ -14,6 +14,8 @@
  params.qvalue = 0.05
  params.epic_w = 200
  params.epic_g = 3
+ params.maxindel = '200k'
+ params.intronlen = 20
  //params.binSize = 10
  //params.smoothLen = 50
  //params.aligner = 'bbmap'
@@ -38,6 +40,8 @@
  	log.info '--qvalue			Minimum FDR cutoff for peak detection. (Default: 0.05)'
  	log.info '--epic_w			Size of the windows used to scan the genome for peak detection in EPIC. (Default: 200)'
  	log.info '--epic_g			A multiple of epic_w used to determine the gap size in EPIC. (Default: 3)'
+ 	log.info '--maxindel		Maximum indel length searched. 200k recommended for vertebrate genomes. (Default: 200k)'
+ 	log.info '--intronlen		Maximum intron length. 20 recommended for vertebrate genomes. (Default: 20)'
  	log.info '--outdir			Name of output directory. (Default: results)'
  	log.info ''
  	log.info '--subsample			Set this flag to subsample reads for testing.'
@@ -2440,6 +2444,544 @@
  	}
 
  	} // closing bracket SE gro
+
+ 	// PE GRO
+ 	if (params.mode == 'gro' && params.lib == 'p') {
+
+ 	// Parse config file
+ 	fastqs = Channel
+ 	.from(config_file.readLines())
+ 	.map { line ->
+ 			list = line.split()
+ 			mergeid = list[0]
+ 			id = list[1]
+ 			path1 = file(list[2])
+ 			path2 = file(list[3])
+ 			controlid = list[4]
+ 			mark = list[5]
+ 			[ mergeid, id, path1, path2, controlid, mark ]
+ 		}
+
+ 	// Subsample
+ 	if (params.subsample == true) {
+ 		process subsampling {
+
+ 			input:
+ 			set mergeid, id, file(read1), file(read2), controlid, mark from fastqs
+
+ 			output:
+ 			set mergeid, id, file("${id}_1.subsampled.fastq.gz"), file("${id}_2.subsampled.fastq.gz"), controlid, mark into subsampled_fastqs
+
+ 			script:
+ 			"""
+ 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=100000
+ 			"""
+ 		}
+
+ 		subsampled_fastqs.into {
+ 			fastqs_fastqc
+ 			fastqs_bbduk
+ 		}
+ 	}	else {
+ 		fastqs.into {
+ 			fastqs_fastqc
+ 			fastqs_bbduk
+ 		}
+ 	}
+
+ 	// Fetch chromosome sizes from FASTA
+ 	process fetch_chrom_sizes {
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file "chromSizes.txt" into chrom_sizes_WI, chrom_sizes_NI, chrom_sizes_epic
+
+ 		script:
+ 		"""
+ 		samtools faidx ${fasta_file}
+ 		awk -v OFS='\t' '{print \$1, \$2}' ${fasta_file}.fai > chromSizes.txt
+ 		"""
+ 	}
+
+ 	// Calculate effective genome size
+ 	process calculate_egs {
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file "egs_size.txt" into egs_file
+
+ 		script:
+ 		"""
+ 		epic-effective -r ${params.readLen} -n ${params.threads} -t $baseDir ${fasta_file} > egs_file.txt
+ 		Rscript $baseDir/bin/process_epic_effective_output.R egs_file.txt
+ 		"""
+ 	}
+
+ 	egs_file.map{ file ->
+ 		file.text.trim() } .set {
+ 			egs_size
+ 		}
+
+ 		egs_size.into {
+ 			egs_size_deeptools_NI
+ 			egs_size_macs_NI
+ 		}
+
+ 	// Generate BBMap Index
+ 	process create_mapping_index {
+
+ 		publishDir "${params.outdir}/bbmap_index", mode: 'copy'
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file("ref/*") into bbmap_index
+
+ 		script:
+ 		"""
+ 		bbmap.sh ref=${fasta_file} usemodulo
+ 		"""
+ 	}
+
+ 	// STEP 1 PRE TRIM FASTQC
+ 	process fastqc_preTrim {
+
+ 		publishDir "${params.outdir}/preTrim_fastqc", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), file(read2), controlid, mark from fastqs_fastqc
+
+ 		output:
+ 		file("*.zip") into pre_fastqc_results
+
+ 		script:
+ 		"""
+ 		fastqc -t 2 ${read1} ${read2}
+ 		"""
+ 	}
+
+ 	// STEP 2 TRIMMING WITH BBDUK
+ 	process trimming {
+
+ 		publishDir "${params.outdir}/trimmed_reads", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), file(read2), controlid, mark from fastqs_bbduk
+
+ 		output:
+ 		set mergeid, id, file("${id}_1_postTrimmed.fastq.gz"), file("${id}_2_postTrimmed.fastq.gz"), controlid, mark into bbmap_trimmed_fastqs, fastqc_trimmed_fastqs
+
+ 		script:
+ 		"""
+ 		bbduk.sh in=${read1} in2=${read2} out=${id}_1_postTrimmed.fastq.gz out2=${id}_2_postTrimmed.fastq.gz ref=$baseDir/adapters/adapters.fa ktrim=r k=23 mink=11 hdist=1 tbo tpe
+ 		"""
+ 	}
+
+ 	// STEP 3 POST TRIM FASTQC
+ 	process fastqc_postTrim {
+
+ 		publishDir "${params.outdir}/postTrim_fastqc", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), file(read2), controlid, mark from fastqc_trimmed_fastqs
+
+ 		output:
+ 		file("*.zip") into post_fastqc_results
+
+ 		script:
+ 		"""
+ 		fastqc -t 2 ${read1} ${read2}
+ 		"""
+ 	}
+
+ 	// STEP 4 MAPPING WITH BBMAP
+ 	process mapping {
+
+ 		publishDir "${params.outdir}/alignments", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), file(read2), controlid, mark from bbmap_trimmed_fastqs
+ 		file("ref/*") from bbmap_index.first()
+
+ 		output:
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), controlid, mark, file("${id}.sorted.mapped.bam.bai") into bam_grouping
+ 		file("${id}.alignmentReport.txt")
+ 		file("${id}.unmapped.bam") into unmapped_bams
+
+ 		script:
+ 		"""
+ 		bbmap.sh in=${read1} in2=${read2} outm=${id}.mapped.bam outu=${id}.unmapped.bam keepnames=t trd sam=1.3 maxindel=1 ambig=random statsfile=${id}.alignmentReport.txt minid=${params.minid} usemodulo
+ 		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.bam
+ 		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
+ 		"""
+ 	}
+
+ 	// SEPARATE CHIP AND INPUT FILES
+ 	//treat = Channel.create()
+ 	//control = Channel.create()
+ 	//bam_grouping.choice(treat, control) {
+ 	//	it[4] == 'input' ? 1 : 0
+ 	//}
+
+ 	// STEP 5 ESTIMATE FRAGMENT SIZE SPP
+ 	process estimate_fragment_size {
+
+ 		publishDir "${params.outdir}/fragment_sizes", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bam_grouping
+
+ 		output:
+ 		set mergeid, id, file("${id}.params.out") into modelParams
+ 		set mergeid, id, file(bam), controlid, file("${id}.params.out"), mark, file(bam_index) into modelBams
+
+ 		script:
+ 		"""
+ 		Rscript $baseDir/bin/run_spp.R -c=${bam} -rf -out=${id}.params.out -savp=${id}.pdf -p=${params.threads} -tmpdir=$baseDir
+ 		"""
+ 	}
+
+ 	(bams) = modelBams.map { mergeid, id, bam, controlid, paramFile, mark, bam_index ->
+ 		fragLen = paramFile.text.split()[2].split(',')[0]
+ 		[ mergeid, id, bam, controlid, mark, fragLen, bam_index ]
+ 	}.into(1)
+
+ 	bams.into {
+ 		bams_bigwigs_fwd
+ 		bams_bigwigs_rev
+ 		bams_merge
+ 	}
+
+ 	// STEP 6 GENERATE RPGC NORMALIZED COVERAGE TRACKS WITH NO INPUT
+ 	process create_fwd_coverage_tracks {
+
+ 		publishDir "${params.outdir}/tracks", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bams_bigwigs_fwd
+ 		val egs_size from egs_size_deeptools_fwd
+
+ 		output:
+ 		file("${id}.RPGCnorm.fwd.bigWig") into fwd_bigwigs
+
+ 		script:
+ 		"""
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --filterRNAstrand forward --Offset 1
+ 		"""
+ 	}
+
+ 	// STEP 7 GENERATE RPGC NORMALIZED COVERAGE TRACKS WITH NO INPUT
+ 	process create_rev_coverage_tracks {
+
+ 		publishDir "${params.outdir}/tracks", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), controlid, mark, fragLen, file(bam_index) from bams_bigwigs_rev
+ 		val egs_size from egs_size_deeptools_rev
+
+ 		output:
+ 		file("${id}.RPGCnorm.rev.bigWig") into rev_bigwigs
+
+ 		script:
+ 		"""
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.rev.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --filterRNAstrand reverse --Offset 1
+ 		"""
+ 	}
+
+ 	// Merge replicates
+ 	singleBams = Channel.create()
+ 	groupedBams = Channel.create()
+
+ 	bams_merge.groupTuple(by: [0,3,4])
+ 	.choice(singleBams, groupedBams) {
+ 		it[2].size() > 1 ? 1 : 0
+ 	}
+
+ 	// STEP 8 MERGE REPLICATES
+ 	process merge_replicates {
+
+ 		input:
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bams_merge
+
+ 		output:
+ 		set mergeid, id, file(""), mark, fragLen into mergedBams
+
+ 		script:
+ 		def id = id.sort().join(':')
+ 		"""
+ 		(
+ 		samtools view -H ${bam} | grep -v '@SQ';
+ 		for f in ${bam}; do
+ 		  samtools view -H \$f | grep '@SQ';
+ 		done
+ 		) > header.txt && \
+ 		samtools merge -@ ${params.threads} -h header.txt ${mergeid}_primary.bam ${bam}
+ 		"""
+ 	}
+
+ 	singleBams
+ 	.mix(mergedBams)
+ 	.map { mergeid, id, bam, controlid, mark, fragLen ->
+ 		[ mergeid, bam, controlid, mark, fragLen ].flatten()
+ 	}
+ 	.into { bams_grohmm }
+
+ 	// STEP 9 GROHMM WORKFLOW
+ 	process groHMM {
+
+ 		publishDir "${params.outdir}/groHMM", mode: 'copy'
+
+ 		input:
+ 		set mergeid, file(bam), controlid, mark, fragLen from bams_grohmm
+
+ 		output:
+ 		set mergeid, file("${mergeid}_transcripts.txt") into grohmm_transcripts
+
+ 		script:
+ 		"""
+ 		Rscript $baseDir/bin/grohmm.R ${bam} ${mergeid} ${params.threads}
+ 		"""
+ 	}
+
+ 	// STEP 10 MULTIQC
+ 	process multiqc {
+
+ 		publishDir "${params.outdir}/multiqc", mode: 'copy'
+
+ 		input:
+ 		file ('fastqc/*') from post_fastqc_results.flatten().toList()
+ 		file ('fastqc/*') from pre_fastqc_results.flatten().toList()
+
+ 		output:
+ 		file "*multiqc_report.html"
+ 		file "*multiqc_data"
+
+ 		script:
+ 		"""
+ 		multiqc -f .
+ 		"""
+ 	}
+
+ 	} // closing bracket PE gro
+
+ 	// SE RNA
+ 	if (params.mode == 'rna' && params.lib == 's') {
+
+ 	// Parse config file
+ 	fastqs = Channel
+ 	.from(config_file.readLines())
+ 	.map { line ->
+ 			list = line.split()
+ 			mergeid = list[0]
+ 			id = list[1]
+ 			path1 = file(list[2])
+ 			[ mergeid, id, path1 ]
+ 		}
+
+ 	// Subsample
+ 	if (params.subsample == true) {
+ 		process subsampling {
+
+ 			input:
+ 			set mergeid, id, file(read1) from fastqs
+
+ 			output:
+ 			set mergeid, id, file("${id}.subsampled.fastq.gz") into subsampled_fastqs
+
+ 			script:
+ 			"""
+ 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=100000
+ 			"""
+ 		}
+
+ 		subsampled_fastqs.into {
+ 			fastqs_fastqc
+ 			fastqs_bbduk
+ 		}
+ 	}	else {
+ 		fastqs.into {
+ 			fastqs_fastqc
+ 			fastqs_bbduk
+ 		}
+ 	}
+
+ 	// Fetch chromosome sizes from FASTA
+ 	process fetch_chrom_sizes {
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file "chromSizes.txt" into chrom_sizes_WI, chrom_sizes_NI, chrom_sizes_epic
+
+ 		script:
+ 		"""
+ 		samtools faidx ${fasta_file}
+ 		awk -v OFS='\t' '{print \$1, \$2}' ${fasta_file}.fai > chromSizes.txt
+ 		"""
+ 	}
+
+ 	// Calculate effective genome size
+ 	process calculate_egs {
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file "egs_size.txt" into egs_file
+
+ 		script:
+ 		"""
+ 		epic-effective -r ${params.readLen} -n ${params.threads} -t $baseDir ${fasta_file} > egs_file.txt
+ 		Rscript $baseDir/bin/process_epic_effective_output.R egs_file.txt
+ 		"""
+ 	}
+
+ 	egs_file.map{ file ->
+ 		file.text.trim() } .set {
+ 			egs_size
+ 		}
+
+ 		egs_size.into {
+ 			egs_size_deeptools_NI
+ 			egs_size_macs_NI
+ 		}
+
+ 	// Generate BBMap Index
+ 	process create_mapping_index {
+
+ 		publishDir "${params.outdir}/bbmap_index", mode: 'copy'
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file("ref/*") into bbmap_index
+
+ 		script:
+ 		"""
+ 		bbmap.sh ref=${fasta_file} usemodulo
+ 		"""
+ 	}
+
+ 	// STEP 1 PRE TRIM FASTQC
+ 	process fastqc_preTrim {
+
+ 		publishDir "${params.outdir}/preTrim_fastqc", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1) from fastqs_fastqc
+
+ 		output:
+ 		file("*.zip") into pre_fastqc_results
+
+ 		script:
+ 		"""
+ 		fastqc ${read1}
+ 		"""
+ 	}
+
+ 	// STEP 2 TRIMMING WITH BBDUK
+ 	process trimming {
+
+ 		publishDir "${params.outdir}/trimmed_reads", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1) from fastqs_bbduk
+
+ 		output:
+ 		set mergeid, id, file("${id}_postTrimmed.fastq.gz") into bbmap_trimmed_fastqs, fastqc_trimmed_fastqs, qorts_trimmed_fastqs
+
+ 		script:
+ 		"""
+ 		bbduk.sh in=${read1} out=${id}_postTrimmed.fastq.gz ref=$baseDir/adapters/adapters.fa ktrim=r k=23 mink=11 hdist=1 tbo tpe
+ 		"""
+ 	}
+
+ 	// STEP 3 POST TRIM FASTQC
+ 	process fastqc_postTrim {
+
+ 		publishDir "${params.outdir}/postTrim_fastqc", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1) from fastqc_trimmed_fastqs
+
+ 		output:
+ 		file("*.zip") into post_fastqc_results
+
+ 		script:
+ 		"""
+ 		fastqc ${read1}
+ 		"""
+ 	}
+
+ 	// STEP 4 MAPPING WITH BBMAP
+ 	process mapping {
+
+ 		publishDir "${params.outdir}/alignments", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1) from bbmap_trimmed_fastqs
+ 		file("ref/*") from bbmap_index.first()
+
+ 		output:
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), file("${id}.sorted.mapped.bam.bai") into bam_qorts, bam_preseq
+ 		file("${id}.alignmentReport.txt")
+ 		file("${id}.unmapped.bam") into unmapped_bams
+
+ 		script:
+ 		"""
+ 		bbmap.sh in=${read1} outm=${id}.mapped.bam outu=${id}.unmapped.bam keepnames=t trd sam=1.3 intronlen=${params.intronlen} maxindel=${params.maxindel} ambig=random statsfile=${id}.alignmentReport.txt minid=${params.minid} usemodulo
+ 		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.bam
+ 		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
+ 		"""
+ 	}
+
+ 	// STEP 5 QUALITY CONTROL WITH QORTS
+ 	process qorts {
+
+ 		publishDir "${params.outdir}/qc", mode: 'copy'
+
+ 		input:
+ 		file gtf_file
+ 		file fasta_file
+ 		set mergeid, id, file(bam), file(bam_index) from bam_qorts
+ 		set mergeid, id, file(read1) from qorts_trimmed_fastqs
+
+ 		output:
+ 		file 'QC/*' into qc_files
+
+ 		script:
+ 		"""
+ 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --unstranded --title ${id} --randomseed 111 --outfilePrefix ${id}  --singleEnded --rawfastq ${read1} ${bam} ${gtf_file} QC
+ 		"""
+ 	}
+
+ 	// STEP 6 PRESEQ
+ 	process preseq {
+
+ 		publishDir "${params.outdir}/preseq", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), file(bam_index) from bam_preseq
+
+ 		output:
+ 		file("${id}.c_curve.txt") into preseq_results
+
+ 		script:
+ 		"""
+ 		preseq c_curve -l 9000000000 -B -o ${id}.c_curve.txt ${bam}
+ 		"""
+ 	}
+
+ 	// STEP 7 COUNT READS OF FEATURES USING FEATURECOUNT
+
+ 	} // closing bracket SE RNA
 
  // ON COMPLETION
  workflow.onComplete {
