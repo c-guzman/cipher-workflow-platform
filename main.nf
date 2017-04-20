@@ -35,7 +35,8 @@
  	log.info '--readLen			The length of your reads.'
  	log.info ''
  	log.info 'RNA-seq ONLY:'
- 	log.info '--strandInfo		Strandedness information. Choose from "unstranded", "frFirstStrand", "frSecondStrand".'
+ 	log.info '--strandInfo			Strandedness information. Choose from "unstranded", "frFirstStrand", "frSecondStrand".'
+ 	log.info '--expInfo				Experiment file for RNA-seq data DGE analysis. Check README for information.'
  	log.info ''
  	log.info 'OPTIONAL PARAMETERS:'
  	log.info '--threads			Number of threads. (Default: 1)'
@@ -43,8 +44,8 @@
  	log.info '--qvalue			Minimum FDR cutoff for peak detection. (Default: 0.05)'
  	log.info '--epic_w			Size of the windows used to scan the genome for peak detection in EPIC. (Default: 200)'
  	log.info '--epic_g			A multiple of epic_w used to determine the gap size in EPIC. (Default: 3)'
- 	log.info '--maxindel		Maximum indel length searched. 200k recommended for vertebrate genomes. (Default: 200k)'
- 	log.info '--intronlen		Maximum intron length. 20 recommended for vertebrate genomes. (Default: 20)'
+ 	log.info '--maxindel			Maximum indel length searched. 200k recommended for vertebrate genomes. (Default: 200k)'
+ 	log.info '--intronlen			Maximum intron length. 20 recommended for vertebrate genomes. (Default: 20)'
  	log.info '--outdir			Name of output directory. (Default: results)'
  	log.info ''
  	log.info '--subsample			Set this flag to subsample reads for testing.'
@@ -2779,6 +2780,12 @@
  	exit 1, "Please specify strand information. Available: unstranded, frFirstStrand, frSecondStrand. If you are unsure, run the pipeline using --strandInfo unstranded and --subsample and then look in your qc folder for information."
  }
 
+ 		if (!params.expInfo) {
+ 	exit 1, "Please specify a experiment config file. Check README for exact information. Typically includes condition information for differential gene expression analysis."
+ }
+
+ exp_file = file(params.expInfo)
+
  	// Parse config file
  	fastqs = Channel
  	.from(config_file.readLines())
@@ -3083,8 +3090,48 @@
  	}
 
  	// STEP 9 DGE with RUVSeq and EdgeR annd DESeq2
+ 	process dge {
+
+ 		publishDir "${params.outdir}/dge", mode: 'copy'
+
+ 		input:
+ 		file input_files from geneCounts.toSortedList()
+ 		file exp_file
+
+ 		output:
+ 		file "*" into dge_results
+
+ 		script:
+ 		"""
+ 		Rscript $baseDir/bin/dge.R ${exp_file} $input_files
+ 		"""
+ 	}
+
+ 	// STEP 10 MULTIQC
+ 	process multiqc {
+
+ 		publishDir "${params.outdir}/multiqc", mode: 'copy'
+
+ 		input:
+ 		file ('fastqc/*') from post_fastqc_results.flatten().toList()
+ 		file ('fastqc/*') from pre_fastqc_results.flatten().toList()
+ 		file ('preseq/*') from preseq_results.flatten().toList()
+ 		file ('featurecounts/*') from featureCounts_logs.flatten().toList()
+ 		file ('stringtie/*') from stringtie_log.flatten().toList()
+
+ 		output:
+ 		file "*multiqc_report.html"
+ 		file "*multiqc_data"
+
+ 		script:
+ 		"""
+ 		multiqc -f .
+ 		"""
+ 	}
 
  	} // closing bracket SE RNA
+
+ 	// PE RNA
 
  // ON COMPLETION
  workflow.onComplete {
