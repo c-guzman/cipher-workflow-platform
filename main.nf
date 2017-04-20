@@ -34,6 +34,9 @@
  	log.info '--lib				Library information. s for single-stranded data, p for pair-ended data.'
  	log.info '--readLen			The length of your reads.'
  	log.info ''
+ 	log.info 'RNA-seq ONLY:'
+ 	log.info '--strandInfo		Strandedness information. Choose from "unstranded", "frFirstStrand", "frSecondStrand".'
+ 	log.info ''
  	log.info 'OPTIONAL PARAMETERS:'
  	log.info '--threads			Number of threads. (Default: 1)'
  	log.info '--minid				Minimum alignment identity to look for. Higher is faster and less sensitive. (Default: 0.76)'
@@ -2772,6 +2775,10 @@
  	// SE RNA
  	if (params.mode == 'rna' && params.lib == 's') {
 
+ 		if (!params.strandInfo) {
+ 	exit 1, "Please specify strand information. Available: unstranded, frFirstStrand, frSecondStrand. If you are unsure, run the pipeline using --strandInfo unstranded and --subsample and then look in your qc folder for information."
+ }
+
  	// Parse config file
  	fastqs = Channel
  	.from(config_file.readLines())
@@ -2930,7 +2937,7 @@
  		file("ref/*") from bbmap_index.first()
 
  		output:
- 		set mergeid, id, file("${id}.sorted.mapped.bam"), file("${id}.sorted.mapped.bam.bai") into bam_qorts, bam_preseq
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), file("${id}.sorted.mapped.bam.bai") into bam_qorts, bam_preseq, bam_stringtie, bam_fc_unstranded, bam_fc_frfirst, bam_fc_frsecond
  		file("${id}.alignmentReport.txt")
  		file("${id}.unmapped.bam") into unmapped_bams
 
@@ -2979,7 +2986,103 @@
  		"""
  	}
 
- 	// STEP 7 COUNT READS OF FEATURES USING FEATURECOUNT
+ 	// STEP 7 STRINGTIE
+ 	process stringtie {
+
+ 		publishDir "${params.outdir}/stringtie", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), file(bam_index) from bam_stringtie
+ 		file gtf_file
+
+ 		output:
+ 		file "${id}.gene_abundance.txt"
+ 		file "${id}.cov_refs.gtf"
+ 		file "stringtie_log" into stringtie_log
+
+ 		script:
+ 		"""
+ 		stringtie ${bam} -G ${gtf_file} -A ${id}.gene_abundance.txt -C ${id}.cov_refs.gtf -e -b ${id}_ballgown -p ${params.threads} > stringtie_log
+ 		"""
+ 	}
+
+ 	// STEP 8 READ COUNTING WITH FEATURECOUNTS
+ 	if (params.strandInfo == 'unstranded') {
+
+ 		process featurecounts_unstranded {
+
+ 			publishDir "${params.outdir}/featurecounts", mode: 'copy'
+
+ 			input:
+ 			set mergeid, id, file(bam), file(bam_index) from bam_fc_unstranded
+ 			file gtf_file
+
+ 			output:
+ 			file "${id}_gene.featureCounts.txt" into geneCounts
+ 			file "${id}_gene.featureCounts.txt.summary" into featureCounts_logs
+ 			file "${id}_biotype_counts.txt" into featureCounts_biotype
+
+ 			script:
+ 			"""
+ 			featureCounts -a ${gtf_file} -g gene_id -o ${id}_gene.featureCounts.txt -s 0 ${bam}
+ 			featureCounts -a ${gtf_file} -g gene_biotype -o ${id}_biotype.featureCounts.txt -s 0 ${bam}
+ 			cut -f 1,7 ${id}_biotype.featureCounts.txt > ${id}_biotype_counts.txt
+ 			"""
+
+ 		}
+ 	}
+
+ 	if (params.strandInfo == 'frFirstStrand') {
+
+ 		process featurecounts_unstranded {
+
+ 			publishDir "${params.outdir}/featurecounts", mode: 'copy'
+
+ 			input:
+ 			set mergeid, id, file(bam), file(bam_index) from bam_fc_frfirst
+ 			file gtf_file
+
+ 			output:
+ 			file "${id}_gene.featureCounts.txt" into geneCounts
+ 			file "${id}_gene.featureCounts.txt.summary" into featureCounts_logs
+ 			file "${id}_biotype_counts.txt" into featureCounts_biotype
+
+ 			script:
+ 			"""
+ 			featureCounts -a ${gtf_file} -g gene_id -o ${id}_gene.featureCounts.txt -s 2 ${bam}
+ 			featureCounts -a ${gtf_file} -g gene_biotype -o ${id}_biotype.featureCounts.txt -s 2 ${bam}
+ 			cut -f 1,7 ${id}_biotype.featureCounts.txt > ${id}_biotype_counts.txt
+ 			"""
+
+ 		}
+ 	}
+
+ 	if (params.strandInfo == 'frSecondStrand') {
+
+ 		process featurecounts_unstranded {
+
+ 			publishDir "${params.outdir}/featurecounts", mode: 'copy'
+
+ 			input:
+ 			set mergeid, id, file(bam), file(bam_index) from bam_fc_frsecond
+ 			file gtf_file
+
+ 			output:
+ 			file "${id}_gene.featureCounts.txt" into geneCounts
+ 			file "${id}_gene.featureCounts.txt.summary" into featureCounts_logs
+ 			file "${id}_biotype_counts.txt" into featureCounts_biotype
+
+ 			script:
+ 			"""
+ 			featureCounts -a ${gtf_file} -g gene_id -o ${id}_gene.featureCounts.txt -s 1 ${bam}
+ 			featureCounts -a ${gtf_file} -g gene_biotype -o ${id}_biotype.featureCounts.txt -s 1 ${bam}
+ 			cut -f 1,7 ${id}_biotype.featureCounts.txt > ${id}_biotype_counts.txt
+ 			"""
+
+ 		}
+ 	}
+
+ 	// STEP 9 DGE with RUVSeq and EdgeR annd DESeq2
 
  	} // closing bracket SE RNA
 
