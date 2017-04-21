@@ -36,7 +36,7 @@
  	log.info ''
  	log.info 'RNA-seq ONLY:'
  	log.info '--strandInfo			Strandedness information. Choose from "unstranded", "frFirstStrand", "frSecondStrand".'
- 	log.info '--expInfo				Experiment file for RNA-seq data DGE analysis. Check README for information.'
+ 	log.info '--expInfo			Experiment config file for RNA-seq data DGE analysis. Check README for more information.'
  	log.info ''
  	log.info 'OPTIONAL PARAMETERS:'
  	log.info '--threads			Number of threads. (Default: 1)'
@@ -168,6 +168,7 @@
 
  		output:
  		file "egs_size.txt" into egs_file
+ 		file "egs_ratio.txt" into egs_ratio
 
  		script:
  		"""
@@ -186,8 +187,16 @@
  			egs_size_deeptools_NI
  			egs_size_macs_WI
  			egs_size_macs_NI
- 			egs_size_epic_WI
  		}
+
+ 		egs_ratio.map{ file ->
+ 			file.text.trim() } .set {
+ 				egs_ratio
+ 			}
+
+ 			egs_ratio.into {
+ 				egs_ratio_epic_WI
+ 			}
 
  	// Generate BBMap Index
  	process create_mapping_index {
@@ -424,7 +433,7 @@
  		input:
  		file chromSizes from chrom_sizes_epic.val
  		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_epic
- 		val egs_size from egs_size_epic_WI
+ 		val egs_ratio from egs_ratio_epic_WI
 
  		output:
  		set mergeid, id, file("${id}_epic.broadPeak"), mark, fragLen into bp_WI_anno
@@ -433,7 +442,7 @@
  		"""
  		bedtools bamtobed -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -i ${control} > ${id}_control.bed
- 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_size} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.qvalue} -cs ${chromSizes} > ${id}_epic.broadPeak
+ 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.qvalue} -cs ${chromSizes} > ${id}_epic.broadPeak
  		"""
  	}
 
@@ -585,6 +594,7 @@
 
  		output:
  		file "egs_size.txt" into egs_file
+ 		file "egs_ratio.txt" into egs_ratio
 
  		script:
  		"""
@@ -603,8 +613,16 @@
  			egs_size_deeptools_NI
  			egs_size_macs_WI
  			egs_size_macs_NI
- 			egs_size_epic_WI
  		}
+
+ 		egs_ratio.map{ file ->
+ 			file.text.trim() } .set {
+ 				egs_ratio
+ 			}
+
+ 			egs_ratio.into {
+ 				egs_ratio_epic_WI
+ 			}
 
  	// Generate BBMap Index
  	process create_mapping_index {
@@ -841,7 +859,7 @@
  		input:
  		file chromSizes from chrom_sizes_epic.val
  		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_epic
- 		val egs_size from egs_size_epic_WI
+ 		val egs_ratio from egs_ratio_epic_WI
 
  		output:
  		set mergeid, id, file("${id}_epic.broadPeak"), mark, fragLen into bp_WI_anno
@@ -850,7 +868,7 @@
  		"""
  		bedtools bamtobed -bedpe -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -bedpe -i ${control} > ${id}_control.bed
- 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_size} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.qvalue} -cs ${chromSizes} --pair-end > ${id}_epic.bed
+ 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.qvalue} -cs ${chromSizes} --pair-end > ${id}_epic.bed
  		"""
  	}
 
@@ -2862,8 +2880,8 @@
  		}
 
  		egs_size.into {
- 			egs_size_deeptools_NI
- 			egs_size_macs_NI
+ 			egs_size_deeptools_fwd
+ 			egs_size_deeptools_rev
  		}
 
  	// Generate BBMap Index
@@ -2944,7 +2962,7 @@
  		file("ref/*") from bbmap_index.first()
 
  		output:
- 		set mergeid, id, file("${id}.sorted.mapped.bam"), file("${id}.sorted.mapped.bam.bai") into bam_qorts, bam_preseq, bam_stringtie, bam_fc_unstranded, bam_fc_frfirst, bam_fc_frsecond
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), file("${id}.sorted.mapped.bam.bai") into bam_deeptools_fwd, bam_deeptools_rev, bam_qorts, bam_preseq, bam_stringtie, bam_fc_unstranded, bam_fc_frfirst, bam_fc_frsecond
  		file("${id}.alignmentReport.txt")
  		file("${id}.unmapped.bam") into unmapped_bams
 
@@ -2956,7 +2974,42 @@
  		"""
  	}
 
- 	// STEP 5 QUALITY CONTROL WITH QORTS
+ 	// STEP 5 CREATE BIGWIGS WITH DEEPTOOLS
+ 	process create_fwd_coverage_tracks {
+
+ 		publishDir "${params.outdir}/tracks", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bam_deeptools_fwd
+ 		val egs_size from egs_size_deeptools_fwd
+
+ 		output:
+ 		file("${id}.RPGCnorm.fwd.bigWig") into fwd_bigwigs
+
+ 		script:
+ 		"""
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --filterRNAstrand forward
+ 		"""
+ 	}
+
+ 	process create_rev_coverage_tracks {
+
+ 		publishDir "${params.outdir}/tracks", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), controlid, mark, fragLen, file(bam_index) from bam_deeptools_rev
+ 		val egs_size from egs_size_deeptools_rev
+
+ 		output:
+ 		file("${id}.RPGCnorm.rev.bigWig") into rev_bigwigs
+
+ 		script:
+ 		"""
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --filterRNAstrand reverse
+ 		"""
+ 	}
+
+ 	// STEP 6 QUALITY CONTROL WITH QORTS
  	process qorts {
 
  		publishDir "${params.outdir}/qc", mode: 'copy'
@@ -2976,7 +3029,7 @@
  		"""
  	}
 
- 	// STEP 6 PRESEQ
+ 	// STEP 7 PRESEQ
  	process preseq {
 
  		publishDir "${params.outdir}/preseq", mode: 'copy'
@@ -2993,7 +3046,7 @@
  		"""
  	}
 
- 	// STEP 7 STRINGTIE
+ 	// STEP 8 STRINGTIE
  	process stringtie {
 
  		publishDir "${params.outdir}/stringtie", mode: 'copy'
@@ -3013,7 +3066,7 @@
  		"""
  	}
 
- 	// STEP 8 READ COUNTING WITH FEATURECOUNTS
+ 	// STEP 9 READ COUNTING WITH FEATURECOUNTS
  	if (params.strandInfo == 'unstranded') {
 
  		process featurecounts_unstranded {
@@ -3089,7 +3142,7 @@
  		}
  	}
 
- 	// STEP 9 DGE with RUVSeq and EdgeR annd DESeq2
+ 	// STEP 10 DGE with RUVSeq and EdgeR annd DESeq2
  	process dge {
 
  		publishDir "${params.outdir}/dge", mode: 'copy'
@@ -3107,7 +3160,7 @@
  		"""
  	}
 
- 	// STEP 10 MULTIQC
+ 	// STEP 11 MULTIQC
  	process multiqc {
 
  		publishDir "${params.outdir}/multiqc", mode: 'copy'
