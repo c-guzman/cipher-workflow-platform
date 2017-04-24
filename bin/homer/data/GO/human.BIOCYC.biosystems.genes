@@ -1,0 +1,590 @@
+META_PWY-5905	hypusine biosynthesis	83475
+META_SER-GLYSYN-PWY	superpathway of L-serine and glycine biosynthesis I	6470,6472
+META_ALANINE-SYN2-PWY	L-alanine biosynthesis II	2875
+META_PWY0-1021	L-alanine biosynthesis III	9054
+META_ARGININE-SYN4-PWY	L-ornithine de novo  biosynthesis	2747,2751,4942,5832
+META_ASPARTATESYN-PWY	L-aspartate biosynthesis	2805
+META_PWY-3982	uracil degradation I (reductive)	1806,1807,51733
+META_PWY-6292	superpathway of L-cysteine biosynthesis (mammalian)	875
+META_ARGASEDEG-PWY	L-arginine degradation I (arginase pathway)	384,4942,8659
+META_GLUTAMATE-SYN2-PWY	L-glutamate biosynthesis II	2747,2751
+META_PWY-5505	L-glutamate and L-glutamine biosynthesis	2747,2751,2752
+META_GLNSYN-PWY	L-glutamine biosynthesis I	2752
+META_GLYCINE-SYN2-PWY	glycine biosynthesis II	275,1738,2731
+META_ADENOSYLHOMOCYSCAT-PWY	L-methionine salvage from L-homocysteine	635,4548,23743
+META_PWY-4361	S-methyl-5-thio-alpha-D-ribose 1-phosphate degradation	883
+META_PWY-5331	taurine biosynthesis	1036,51380,84890
+META_CITRULBIO-PWY	L-citrulline biosynthesis	384,4942,5009,5625,5832
+META_PWY-4921	protein citrullination	11240,23569,29943,51702,353238
+META_PROSYN-PWY	L-proline biosynthesis I	5831,5832
+META_PWY-6134	L-tyrosine biosynthesis IV	5053
+META_PWY-5886	4-hydroxyphenylpyruvate biosynthesis	6898
+META_PWY-5754	4-hydroxybenzoate biosynthesis I (eukaryotes)	6898
+META_PWY-5661	GDP-glucose biosynthesis	2645,3098,3101,55276
+META_PWY-6145	superpathway of sialic acids and CMP-sialic acids biosynthesis	54187,140838
+META_PWY-6138	CMP-N-acetylneuraminate biosynthesis I (eukaryotes)	54187,140838
+META_PWY-5067	glycogen biosynthesis II (from UDP-D-Glucose)	2632,2992,2997,8908
+META_PWY-5512	UDP-N-acetyl-D-galactosamine biosynthesis I	2582
+META_PWY-922	mevalonate pathway I	38,39,3156,3157,3158,3422,4597,4598,10654,91734
+META_NADSYN-PWY	NAD biosynthesis II (from tryptophan)	3620,6999,8564,8942,23475,23498,55191,64802,349565
+META_PWY-5653	NAD biosynthesis from 2-amino-3-carboxymuconate semialdehyde	23475,55191,64802,349565
+META_PWY3O-4106	NAD salvage pathway III	64802,349565
+META_PWY-5123	trans, trans-farnesyl diphosphate biosynthesis	2224,3422,9453,91734
+META_PWY-5806	all-trans-decaprenyl diphosphate biosynthesis	23590,57107
+META_PWY-5120	geranylgeranyl diphosphate biosynthesis	9453
+META_PWY-5910	superpathway of geranylgeranyldiphosphate biosynthesis I (via mevalonate)	38,39,2224,3156,3157,3158,3422,4597,4598,9453,10654,91734
+META_HEME-BIOSYNTHESIS-II	heme biosynthesis I (aerobic)	1371,2235,5498
+META_PWY-5920	superpathway of heme biosynthesis from glycine	210,211,212,1371,2235,3145,5498
+META_PWY-5872	ubiquinol-10 biosynthesis (eukaryotic)	23590,51004,51805,57107
+META_GLUT-REDOX-PWY	glutathione redox reactions II	2936
+META_PWY-4041	gamma-glutamyl cycle	2729,2730
+META_PWY-4081	glutathione redox reactions I	2876,2877,2878,2879,2936
+META_PWY-5663	tetrahydrobiopterin biosynthesis I	2643,5805,6697
+META_PWY-5664	tetrahydrobiopterin biosynthesis II	2643,5805,6697
+META_PWY-5189	tetrapyrrole biosynthesis II (from glycine)	210,211,212,3145
+META_PWY-6076	vitamin D3 biosynthesis	5447,120227
+META_PLPSAL-PWY	pyridoxal 5'-phosphate salvage I	8566,55163
+META_PWY-6030	serotonin and melatonin biosynthesis	15,438,1644,7166,121278
+META_PWY-6241	thyroid hormone biosynthesis	1509
+META_PWY66-301	catecholamine biosynthesis	1621,1644,5409
+META_PWY3DJ-12	ceramide de novo biosynthesis	2531,8560,9517,10558,10715,171546
+META_PWY-5966	fatty acid biosynthesis initiation II	2194
+META_PWY-6000	gamma-linolenate biosynthesis II (animals)	2180,9415,11001
+META_PWY-5996	oleate biosynthesis II (animals and fungi)	10965,122970,641371
+META_PWY-5994	palmitate biosynthesis I (animals and fungi)	2194,10965,122970,641371
+META_PWY-5972	stearate biosynthesis I (animals and fungi)	2180,10965,11001,79071,122970,641371
+META_PWY-6352	3-phosphoinositide biosynthesis	5286,5287,5288,5289,5290,5291,5293,5294,5295,5296,5297,5298,8394,8395,8503,9896,10423,22908,23396,23533,30849,55300,55361,146850,200576
+META_PWY-6367	D-myo-inositol-5-phosphate metabolism	5305,5330,5333,5336,8897,51196,55529,64419,90809
+META_PWY-5269	cardiolipin biosynthesis II	9489
+META_PWY-5667	CDP-diacylglycerol biosynthesis I	10554,10555,55326,56894,56895
+META_PWY-6273	phosphatidylethanolamine biosynthesis III	81490
+META_PWY-6061	bile acid biosynthesis, neutral pathway	1581,5447,8309,11001
+META_PWY-6074	zymosterol biosynthesis	1595,3930,6307,50814,51478
+META_PWY-6132	lanosterol biosynthesis	4047
+META_PWY66-3	cholesterol biosynthesis II (via 24,25-dihydrolanosterol)	1595,1717,2222,3930,4047,6307,6309,6713,10682,50814,51478
+META_PWY66-341	cholesterol biosynthesis I	1595,1717,2222,3930,4047,6307,6309,6713,10682,50814,51478
+META_PWY66-4	cholesterol biosynthesis III (via desmosterol)	1595,1717,2222,3930,4047,6307,6309,6713,10682,50814,51478
+META_PWY66-5	superpathway of cholesterol biosynthesis	38,39,1595,1717,2222,2224,3156,3157,3158,3422,3930,4047,4597,4598,6307,6309,6713,9453,10654,10682,50814,51478,91734
+META_PWY-6100	L-carnitine biosynthesis	223,8424,55217
+META_PWY-6158	creatine-phosphate biosynthesis	1152,1158,1159,1160
+META_PWY-6121	5-aminoimidazole ribonucleotide biosynthesis I	2618,5471
+META_PWY-6124	inosine-5'-phosphate biosynthesis II	471,10606
+META_PWY-841	superpathway of purine nucleotides de novo biosynthesis I	471,2618,2987,3614,3615,4830,4831,5471,6240,6241,10606,26289,654364
+META_SALVADEHYPOX-PWY	adenosine nucleotides degradation II	100,4860,4907,7498,84618
+META_PWY-5686	UMP biosynthesis	790
+META_PWY0-162	superpathway of pyrimidine ribonucleotides de novo biosynthesis	790,1503,4830,4831,51727,56474,654364
+META_PWY-5670	epoxysqualene biosynthesis	2222,6713
+META_PWY0-662	PRPP biosynthesis I	5634,221823
+META_ARGSPECAT-PWY	spermine biosynthesis	6611
+META_BSUBPOLYAMSYN-PWY	spermidine biosynthesis I	6723
+META_GLYCGREAT-PWY	creatine biosynthesis	2593
+META_POLYAMINSYN3-PWY	superpathway of polyamine biosynthesis II	4953,6611,6723,113451
+META_PWY-5695	urate biosynthesis/inosine 5'-phosphate degradation	3614,3615,4860,4907,7498,22978
+META_PWY-6173	histamine biosynthesis	3067
+META_CHOLINE-BETAINE-ANA-PWY	choline degradation I	501,55349
+META_PWY-40	putrescine biosynthesis I	113451
+META_PWY-46	putrescine biosynthesis III	4953
+META_UDPNACETYLGALSYN-PWY	UDP-N-acetyl-D-glucosamine biosynthesis II	2673,5238
+META_PWY-6133	(S)-reticuline biosynthesis II	7299
+META_PWY-2301	myo-inositol biosynthesis	3612,3613,54928
+META_PWY-6351	D-myo-inositol (1,4,5)-trisphosphate biosynthesis	5297,5298,5305,5330,5333,5336,8394,8395,10423,23396,51196,55300,55361
+META_PWY-6358	superpathway of D-myo-inositol (1,4,5)-trisphosphate metabolism	3612,3613,3628,3632,3633,3635,3636,3706,3707,4952,5728,8867,8871,9562,27124,51763,54928,80271,253430
+META_PWY-6363	D-myo-inositol (1,4,5)-trisphosphate degradation	3612,3613,3628,3632,3633,4952,8867,8871,27124,51763,54928
+META_PWY-6364	D-myo-inositol (1,3,4)-trisphosphate biosynthesis	3632,3633,3635,3636,3706,3707,4952,5728,8867,8871,9562,27124,51763,80271,253430
+META_PWY-6365	D-myo-inositol (3,4,5,6)-tetrakisphosphate biosynthesis	3705,253430
+META_PWY-6366	D-myo-inositol (1,4,5,6)-tetrakisphosphate biosynthesis	3705,9562,253430
+META_PWY-6369	inositol pyrophosphates biosynthesis	9677,9807,23262,51447,64768,117283,253430
+META_PWY-6362	1D-myo-inositol hexakisphosphate biosynthesis II (mammalian)	3632,3633,3635,3636,3705,3706,3707,4952,8867,8871,27124,51763,64768,80271,253430
+META_PWY66-161	oxidative ethanol degradation III	217,224,1571,55902
+META_PWY66-162	ethanol degradation IV	217,224,847,55902
+META_PWY66-21	ethanol degradation II	125,217,224,55902
+META_MGLDLCTANA-PWY	methylglyoxal degradation VI	197257
+META_PWY-5453	methylglyoxal degradation III	231,1571
+META_PWY-6117	spermine and spermidine degradation I	6303,54498
+META_PWY-6181	histamine degradation	26,3176
+META_PWY6666-2	dopamine degradation	224,1312,4128
+META_PWY-0	putrescine degradation III	217,224,4129
+META_PWY-5046	2-oxoisovalerate decarboxylation to isobutanoyl-CoA	593,594,1629,1738
+META_PWY-5084	2-oxoglutarate decarboxylation to succinyl-CoA	1738,1743,4967
+META_HYDROXYPRODEG-PWY	trans-4-hydroxy-L-proline degradation I	2806,8659,58510,112817
+META_ALANINE-DEG3-PWY	L-alanine degradation III	2875
+META_MALATE-ASPARTATE-SHUTTLE-PWY	L-aspartate degradation II	2805,4190,4191
+META_PWY-5329	L-cysteine degradation III	2805
+META_GLUDEG-I-PWY	GABA shunt	18,2747,2751
+META_PWY-5766	L-glutamate degradation X	2747,2751
+META_GLYCLEAV-PWY	glycine cleavage	275,1738,2731
+META_HISHP-PWY	L-histidine degradation VI	3034
+META_PWY-5030	L-histidine degradation III	3034,4522
+META_ILEUDEG-PWY	L-isoleucine degradation I	38,593,594,1629,1738,3028
+META_LEU-DEG2-PWY	L-leucine degradation I	549,593,594,1629,1738,56922,64087
+META_LYSINE-DEG1-PWY	L-lysine degradation XI (mammalian)	501,10157
+META_PWY-5327	superpathway of L-lysine degradation	35,38,39,501,1428,10157
+META_PWY-5328	superpathway of L-methionine salvage and degradation	593,594,635,875,1036,1629,1738,2805,4548,4594,5095,6821,23743,84693
+META_PHENYLALANINE-DEG1-PWY	L-phenylalanine degradation I (aerobic)	5053,5860,84105
+META_PWY-6318	L-phenylalanine degradation IV (mammalian, via side chain)	217,224,3242,4129
+META_PROUT-PWY	L-proline degradation	5625,8659
+META_SERDEG-PWY	L-serine degradation	10993,113675
+META_PWY-5651	L-tryptophan degradation to 2-amino-3-carboxymuconate semialdehyde	3620,6999,8564,8942,23498
+META_PWY-6307	L-tryptophan degradation X (mammalian, via tryptamine)	224,1644
+META_PWY-6309	L-tryptophan degradation XI (mammalian, via kynurenine)	883,2806,3620,6999,8564,8942,23498,56267,130013
+META_TRYPTOPHAN-DEGRADATION-1	L-tryptophan degradation III (eukaryotic)	38,39,3620,6999,8564,8942,23498,130013
+META_TYRFUMCAT-PWY	L-tyrosine degradation I	2184,2954,3081,3242,6898
+META_VALDEG-PWY	L-valine degradation I	18,593,594,1629,1738
+META_PWY-5177	glutaryl-CoA degradation	38,39
+META_PWY-5652	2-amino-3-carboxymuconate semialdehyde degradation to glutaryl-CoA	130013
+META_PWY0-1313	acetate conversion to acetyl-CoA	55902
+META_PYRUVDEHYD-PWY	pyruvate decarboxylation to acetyl CoA	1737,1738,5160,5162
+META_PWY-5130	2-oxobutanoate degradation I	593,594,1629,1738,4594,5095,84693
+META_PROPIONMET-PWY	propanoyl CoA degradation I	4594,5095,84693
+META_PWY-5874	heme degradation	644,3162
+META_PWY-6111	mitochondrial L-carnitine shuttle	1374,1375,1376,1384,126129
+META_PWY-6368	3-phosphoinositide degradation	3631,3633,3635,3636,4952,5728,8821,8867,8871,8897,22876,22908,27124,51763,55529,56623,64419,90809,114971
+META_PWY6666-1	anandamide degradation	2166
+META_PWY-5451	acetone degradation I (to methylglyoxal)	125,231,1571
+META_FAO-PWY	fatty acid beta-oxidation I	30,1892,1962,2180,2181,3028,3032,3033,6342,10449,11001,23205,51703,81616
+META_PWY-6313	serotonin degradation	125,217,224,4128,6799
+META_PWY-6342	noradrenaline and adrenaline degradation	125,127,217,224,1312,5409
+META_PWY-6260	thyroid hormone metabolism I (via deiodination)	1734,1735
+META_PWY-6261	thyroid hormone metabolism II (via conjugation and/or degradation)	1734,6799,6817,54576,54659
+META_PWY-4984	urea cycle	384,435,445,1373,5009
+META_PWY-5340	sulfate activation for sulfonation	9060,9061
+META_PWY-5326	sulfite oxidation IV	6821
+META_PWY0-1295	pyrimidine ribonucleosides degradation	978,7378
+META_PWY0-1296	purine ribonucleosides degradation	100,4860,55276
+META_PWY-6353	purine nucleotides degradation II (aerobic)	100,3614,3615,4860,4907,7498,9615,22978,84618
+META_PWY-4061	glutathione-mediated detoxification I	883,2938,2939,2954,56267
+META_PWY66-241	bupropion degradation	1555
+META_PWY66-201	nicotine degradation IV	316,1548,2328,11185,54657
+META_PWY66-221	nicotine degradation V	316,1548,54657
+META_PWY-4202	arsenate detoxification I (glutaredoxin)	4860,9446,57412
+META_PWY-5172	acetyl-CoA biosynthesis III (from citrate)	47
+META_ANAEROFRUCAT-PWY	homolactic fermentation	226,229,230,669,2026,2645,5211,5213,5214,5224,5230,5313,5315,26330,441531
+META_PWY-6118	glycerol-3-phosphate shuttle	2819,2820
+META_OXIDATIVEPENT-PWY	pentose phosphate pathway (oxidative branch)	2539,5226,25796
+META_PWY-3781	aerobic respiration I (cytochrome c)	6389,6390,6391,6392
+HUMAN_SER-GLYSYN-PWY	serine and glycine biosynthesis	6470,6472,51699,63826
+HUMAN_ARGININE-SYN4-PWY	ornithine de novo  biosynthesis	2747,2751,4942,5832
+HUMAN_ASPARAGINE-BIOSYNTHESIS	asparagine biosynthesis	440,2805
+HUMAN_ASPARTATESYN-PWY	aspartate biosynthesis	2805,137362
+HUMAN_HOMOCYSDEGR-PWY	cysteine biosynthesis/homocysteine degradation (trans-sulfuration)	875
+HUMAN_GLUTAMATE-SYN2-PWY	glutamate biosynthesis/degradation	2747,2751
+HUMAN_GLNSYN-PWY	glutamine biosynthesis	2752
+HUMAN_GLYSYN-ALA-PWY	glycine biosynthesis	189,64902
+HUMAN_GLYSYN-PWY	glycine/serine biosynthesis	6470,6472
+HUMAN_ADENOSYLHOMOCYSCAT-PWY	methionine salvage	635,4548,23743
+HUMAN_PWY-4361	S-methyl-5-thio-alpha-D-ribose 1-phosphate degradation	51074,55256,58478,84245
+HUMAN_PWY-4921	protein citrullination	23569,29943,51702,353238
+HUMAN_SERSYN-PWY	serine biosynthesis (phosphorylated route)	51699
+HUMAN_PWY-4821	UDP-D-xylose and UDP-D-glucuronate biosynthesis	7358,80146
+HUMAN_PWY-6	GDP-L-fucose biosynthesis II (from L-fucose)	8790,197258
+HUMAN_PWY-66	GDP-L-fucose biosynthesis I (from GDP-D-mannose)	7264
+HUMAN_PWY-5659	GDP-mannose biosynthesis	4351,5372,5373,29926
+HUMAN_MANNOSYL-CHITO-DOLICHOL-BIOSYNTHESIS	dolichyl-diphosphooligosaccharide biosynthesis	1798,8818,10195,29880,29929,54344,56052,79053,79868
+HUMAN_PWY-5067	glycogen biosynthesis	2632,2992,2997,2998,7360,8908,55276
+HUMAN_PWY-5514	UDP-N-acetyl-D-galactosamine biosynthesis II	2582,2645,6675,10007,64841,80201,91373,132789
+HUMAN_PWY-922	mevalonate pathway	38,39,3156,3157,3158,3422,4597,4598,10654,91734
+HUMAN_SAM-PWY	S-adenosyl-L-methionine biosynthesis	4143,4144,27430
+HUMAN_PWY0-1275	lipoate biosynthesis and incorporation	11019,51601
+HUMAN_PWY0-522	lipoate salvage	51601
+HUMAN_NAD-BIOSYNTHESIS-III	NAD salvage	10135,64802,349565
+HUMAN_NADSYN-PWY	NAD de novo biosynthesis	3620,6999,8564,8942,23475,23498,55191,64802,125061,169355,349565
+HUMAN_PWY-5653	NAD biosynthesis from 2-amino-3-carboxymuconate semialdehyde	23475,55191,64802,349565
+HUMAN_PWY-5123	trans, trans-farnesyl diphosphate biosynthesis	2224,3422,9453,91734
+HUMAN_HEME-BIOSYNTHESIS-II	heme biosynthesis from uroporphyrinogen-III I	1371,2235,5498
+HUMAN_GLUT-REDOX-PWY	glutathione redox reactions II	2936
+HUMAN_PWY-4041	gamma-glutamyl cycle	26873,55748
+HUMAN_PWY-4081	glutathione redox reactions I	2876,2877,2878,2879,2882,2936
+HUMAN_THIOREDOX-PWY	thioredoxin pathway	7296,10587,25824,114112
+HUMAN_PWY-5663	tetrahydrobiopterin de novo biosynthesis	2643,5805,6697
+HUMAN_PWY-5189	tetrapyrrole biosynthesis	210,211,212,3145
+HUMAN_PWY-2161	folate polyglutamylation	2356,4522,6470,6472
+HUMAN_PWY-2161B	glutamate removal from folates	8836
+HUMAN_PWY-2201	folate transformations I	4522,4548,6470,6472,10797,10840,160428,400410
+HUMAN_PLPSAL-PWY	pyridoxal 5'-phosphate salvage	250,8566,55163,57026,151230
+HUMAN_PWY66-301	catecholamine biosynthesis	1644,5409
+HUMAN_PWY-5148	acyl-CoA hydrolysis	23597
+HUMAN_PWY0-1264	biotin-carboxyl carrier protein assembly	31,32,3141
+HUMAN_TRIGLSYN-PWY	triacylglycerol biosynthesis	8611,8612,8613,8694,9890,10162,10554,10555,51099,55326,56894,56895,57678,64748,79948,84649,84803,116255,129642,137964,150763,196051,253558,254531,346606
+HUMAN_FASYN-ELONG-PWY	fatty acid elongation -- saturated	2194,4706
+HUMAN_PWY-5269	cardiolipin biosynthesis	4722,9489
+HUMAN_PWY-5667	CDP-diacylglycerol biosynthesis	1040,2710,2712,8760,10162,10554,10555,51099,55326,56894,56895,57678,84803,129642,137964,150763,253558,254531,256356
+HUMAN_PWY3O-450	phosphatidylcholine biosynthesis	1119,1375,5130,9468,10390,56994
+HUMAN_PWY4FS-6	phosphatidylethanolamine biosynthesis II	1375,5833,10390,55224,55500
+HUMAN_PWY-6132	lanosterol biosynthesis	4047
+HUMAN_PWY66-3	cholesterol biosynthesis II (via 24,25-dihydrolanosterol)	1595,1717,1718,2222,3930,4047,6307,6309,6713,7108,10682,50814,51478
+HUMAN_PWY66-341	cholesterol biosynthesis I	1595,1717,1718,2222,3930,4047,6307,6309,6713,7108,10682,50814,51478
+HUMAN_PWY66-4	cholesterol biosynthesis III (via desmosterol)	1595,1717,1718,2222,3930,4047,6307,6309,6713,7108,10682,50814,51478
+HUMAN_PWY66-5	superpathway of cholesterol biosynthesis	38,39,1595,1717,1718,2222,2224,3156,3157,3158,3422,3930,4047,4597,4598,6307,6309,6713,7108,9453,10654,10682,50814,51478,91734
+HUMAN_PWY-6121	5-aminoimidazole ribonucleotide biosynthesis	2618,5471
+HUMAN_PWY-6124	inosine-5'-phosphate biosynthesis	471,10606
+HUMAN_PWY-841	purine nucleotides de novo biosynthesis	159,203,204,205,471,498,506,509,513,521,2618,2987,3614,3615,4508,4509,4830,4831,4832,5471,6240,6241,8382,8833,9551,10201,10476,10606,10632,26289,27109,29922,50484,122481,122622,158067,267020,283458,432369,654364
+HUMAN_SALVADEHYPOX-PWY	adenosine nucleotides degradation	100,4860,4907,22978,51251,57665,84618
+HUMAN_PWY-5686	UMP biosynthesis	790,7372
+HUMAN_PWY0-162	superpathway of pyrimidine ribonucleotides de novo biosynthesis	790,1503,4830,4831,4832,7372,8382,10201,29922,51727,56474,129607,283458,654364
+HUMAN_PWY-5670	epoxysqualene biosynthesis	2222,6713
+HUMAN_PWY0-662	PRPP biosynthesis	5634,221823
+HUMAN_ARGSPECAT-PWY	spermine biosynthesis	6611
+HUMAN_BSUBPOLYAMSYN-PWY	spermidine biosynthesis	6723
+HUMAN_GLYCGREAT-PWY	creatine biosynthesis	2593
+HUMAN_CHOLINE-BETAINE-ANA-PWY	choline degradation	501,55349
+HUMAN_PWY-40	putrescine biosynthesis II	113451
+HUMAN_PWY-46	putrescine biosynthesis I	4953
+HUMAN_UDPNACETYLGALSYN-PWY	UDP-N-acetyl-D-glucosamine biosynthesis II	2673,6675,9945,64841,91373
+HUMAN_PWY-2301	myo-inositol de novo biosynthesis	3612,3613
+HUMAN_PWY66-161	oxidative ethanol degradation III	217,224,1571,22952,55902,79611
+HUMAN_PWY66-162	ethanol degradation IV	217,224,847,55902,79611
+HUMAN_PWY66-21	ethanol degradation II	125,217,224,55902,79611
+HUMAN_PWY-4261	glycerol degradation	2710,2712,2820,256356
+HUMAN_PWY-5386	methylglyoxal degradation I	2739,197257
+HUMAN_PWY-5453	methylglyoxal degradation III	231,1571,57016
+HUMAN_GLUAMCAT-PWY	N-acetylglucosamine degradation I	10007,51005,132789
+HUMAN_PWY6666-2	dopamine degradation	224,1312,4128,4129
+HUMAN_BETA-ALA-DEGRADATION-I-PWY	beta-alanine degradation	18,4329
+HUMAN_PWY-5046	2-oxoisovalerate decarboxylation to isobutanoyl-CoA	593,594,1629,1738
+HUMAN_PWY-5084	2-oxoglutarate decarboxylation to succinyl-CoA	1738,1743,4967
+HUMAN_HYDROXYPRODEG-PWY	4-hydroxyproline degradation	2806,8659,58510,112817
+HUMAN_ALANINE-DEG3-PWY	alanine biosynthesis/degradation	2875
+HUMAN_MALATE-ASPARTATE-SHUTTLE-PWY	malate-aspartate shuttle	2805,2806,4190,4191
+HUMAN_CYSTEINE-DEG-PWY	L-cysteine degradation I	1036,2805
+HUMAN_PWY-5329	L-cysteine degradation II	2805
+HUMAN_GLUDEG-I-PWY	GABA shunt	18,2747,2751,2752
+HUMAN_PWY-5030	histidine degradation	3034,4522,10841,131669,144193
+HUMAN_ILEUDEG-PWY	isoleucine degradation	36,38,39,586,587,593,594,1629,1738,1892,3028,3030
+HUMAN_LEU-DEG2-PWY	leucine degradation	549,586,587,593,594,1629,1738,3712,54511,56922,64087
+HUMAN_LYSINE-DEG1-PWY	lysine degradation I (saccharopine pathway)	501,10157
+HUMAN_METHIONINE-DEG1-PWY	methionine degradation	4143,4144,27430
+HUMAN_PWY-5328	superpathway of methionine degradation	593,594,875,1036,1629,1738,2805,4143,4144,4594,5095,6821,27430,84693
+HUMAN_PHENYLALANINE-DEG1-PWY	phenylalanine degradation/tyrosine biosynthesis	5053,5860,84105
+HUMAN_PROUT-PWY	proline degradation	8659
+HUMAN_SERDEG-PWY	L-serine degradation	113675
+HUMAN_PWY-5651	tryptophan degradation to 2-amino-3-carboxymuconate semialdehyde	3620,6999,8564,8942,23498,125061,169355
+HUMAN_TRYPTOPHAN-DEGRADATION-1	tryptophan degradation	3620,6999,8564,8942,23498,125061,130013,169355
+HUMAN_TYRFUMCAT-PWY	tyrosine degradation	2184,2954,3081,3242,6898
+HUMAN_VALDEG-PWY	valine degradation	18,586,587,593,594,1629,1738,1892,3030,4329,26275,27034
+HUMAN_MANNCAT-PWY	D-mannose degradation	4351
+HUMAN_BGALACT-PWY	lactose degradation III	2720
+HUMAN_PWY0-1182	trehalose degradation	2645,11181,130589
+HUMAN_PWY-5177	glutaryl-CoA degradation	38,39,1892,2639
+HUMAN_PWY-5652	2-amino-3-carboxymuconate semialdehyde degradation to glutaryl-CoA	130013
+HUMAN_PWY0-1313	acetate conversion to acetyl-CoA	55902,79611
+HUMAN_PYRUVDEHYD-PWY	pyruvate decarboxylation to acetyl CoA	1737,1738,5160,5161,5162
+HUMAN_PWY-5130	2-oxobutanoate degradation	593,594,1629,1738,4594,5095,84693
+HUMAN_PROPIONMET-PWY	propionyl-CoA degradation	4594,5095,84693
+HUMAN_LIPAS-PWY	triacylglycerol degradation	3990,3991,5406,5408,8228,9388,11343,26090,57104,57406,119548
+HUMAN_LIPASYN-PWY	phospholipases	5319,5320,5330,5331,5333,5335,5336,5337,5338,8399,8605,11145,23007,23646,30814,50487,50640,51196,51259,81579,84812,89869,113026,122618,123745,151056,201164,255189,283748
+HUMAN_PWY6666-1	anandamide degradation	2166,158584
+HUMAN_FAO-PWY	fatty acid beta-oxidation	33,1632,1892,2180,2181,3028,3032,3033,6342,10449,11001,23205,51703,81616
+HUMAN_PWY-5137	fatty acid beta-oxidation (unsaturated, odd number)	1632,1962
+HUMAN_PWY-4984	urea cycle	435,445,1373,5009
+HUMAN_PWY-5340	sulfate activation for sulfonation	9060,9061
+HUMAN_PWY-5326	sulfite oxidation	6821
+HUMAN_PWY0-1295	pyrimidine ribonucleosides degradation	978,7378,151531
+HUMAN_PWY0-1296	purine ribonucleosides degradation to ribose-1-phosphate	100,4860,55276
+HUMAN_PWY-4061	glutathione-mediated detoxification	290,883,2938,2941,2944,2947,2948,2949,2950,2952,2954,4257,4258,4259,8836,25774,56267,221357,373156
+HUMAN_PWY66-241	bupropion degradation	1548,1555,29785,113612,260293
+HUMAN_PWY66-201	nicotine degradation IV	316,1548,2328,2330,11185,22952,29785,54657,113612,260293
+HUMAN_PWY66-221	nicotine degradation III	316,1548,22952,29785,54657,113612,260293
+HUMAN_PWY-4101	sorbitol degradation I	6652
+HUMAN_PWY0-1305	glutamate dependent acid resistance	2752
+HUMAN_PWY-4202	arsenate detoxification I (glutaredoxin)	4860,9446,57412
+HUMAN_PWY-5172	acetyl-CoA biosynthesis from citrate	47
+HUMAN_PWY-5481	lactate fermentation (reoxidation of cytosolic NADH)	3939,3945
+HUMAN_NONOXIPENT-PWY	pentose phosphate pathway (non-oxidative branch)	6120,7086,22934
+HUMAN_PENTOSE-P-PWY	pentose phosphate pathway	2539,5226,6120,7086,22934,25796
+HUMAN_PWY-5143	fatty acid activation	2180,2181,11001,23205,51703,81616
+HUMAN_PWY-5905	hypusine biosynthesis	1725,83475
+HUMAN_PWY-6482	diphthamide biosynthesis	51611,89978
+HUMAN_PWY-5331	taurine biosynthesis	1036,51380,84890
+HUMAN_PWY-3982	uracil degradation	1806,1807,51733
+HUMAN_PWY-6292	cysteine biosynthesis	875,4143,4144,27430
+HUMAN_PWY-6138	CMP-N-acetylneuraminate biosynthesis I (eukaryotes)	54187,55907
+HUMAN_PWY-6557	glycoaminoglycan-protein linkage region biosynthesis	11285,26229,27087,64131,64132,135152
+HUMAN_PWY-6558	heparan sulfate biosynthesis (late stages)	2131,2132,2134,2135,2137,3340,8509,9348,9394,9951,9953,9955,9956,9957,26035,51146,64579,90161,222537,266722
+HUMAN_PWY-6566	chondroitin and dermatan biosynthesis	22856,55454,55790,79586,337876
+HUMAN_PWY-6567	chondroitin sulfate biosynthesis (late stages)	9435,9469,10090,22856,50515,51363,55454,55501,55790,56548,79586,166012,337876
+HUMAN_PWY-6568	dermatan sulfate biosynthesis (late stages)	10090,29940,51363,113189
+HUMAN_PWY-6564	heparan sulfate biosynthesis	2131,2132,2134,2135,2137,3340,8509,9348,9394,9951,9953,9955,9956,9957,11285,26035,26229,27087,51146,64131,64132,64579,90161,135152,222537,266722
+HUMAN_PWY-6569	chondroitin sulfate biosynthesis	9435,9469,10090,11285,22856,26229,27087,50515,51363,55454,55501,55790,56548,64131,64132,79586,135152,166012,337876
+HUMAN_PWY-6571	dermatan sulfate biosynthesis	10090,11285,22856,26229,27087,29940,51363,55454,55790,64131,64132,79586,113189,135152,337876
+HUMAN_PWY-5963	thio-molybdenum cofactor biosynthesis	55034
+HUMAN_PWY-6823	molybdenum cofactor biosynthesis	4338,9054,10243,27304
+HUMAN_PWY-5120	geranylgeranyldiphosphate biosynthesis	9453
+HUMAN_PWY-5910	superpathway of geranylgeranyldiphosphate biosynthesis I (via mevalonate)	38,39,2224,3156,3157,3158,3422,4597,4598,9453,10654,91734
+HUMAN_PWY-5920	heme biosynthesis	210,211,212,1371,2235,3145,5498
+HUMAN_PWY-5872	ubiquinol-10 biosynthesis	23590,51004,51805,57107
+HUMAN_PWY-6076	vitamin D3 biosynthesis	1594,5447
+HUMAN_PWY66-366	flavin biosynthesis	80308
+HUMAN_PWY-6857	retinol biosynthesis	1066,3990,5406,5947,5948,5950,8824,9227,9249,10170,10901,50700,51109,83758,157506,221223,283848
+HUMAN_PWY-6861	the visual cycle I (vertebrates)	5947,5948,5949,5950,5959,6017,6121,9227,9249,10170,10901,50700,51109,83758,157506
+HUMAN_PWY-6872	retinoate biosynthesis I	216,220,5947,5950,8608,8854,83758,195814
+HUMAN_PWY-6875	retinoate biosynthesis II	5947,5950,83758
+HUMAN_PWY-6030	serotonin and melatonin biosynthesis	15,438,1644,7166,121278
+HUMAN_PWY-6241	thyroid hormone biosynthesis	1509,7173
+HUMAN_PWY66-374	C20 prostanoid biosynthesis	5730,5742,5743,6916,10728,27306,80142
+HUMAN_PWY66-375	leukotriene biosynthesis	240,1800,4048,4056,64174
+HUMAN_PWY66-378	androgen biosynthesis	1586,3283,3293,6715,6716,8644
+HUMAN_PWY66-380	estradiol biosynthesis I	1548,1588,3292,51170,51478
+HUMAN_PWY66-381	glucocorticoid biosynthesis	1584,1586,1589
+HUMAN_PWY66-382	mineralocorticoid biosynthesis	1584,1585,1589
+HUMAN_PWY-6129	dolichol and dolichyl phosphate biosynthesis	79644,79947
+HUMAN_PWY3DJ-11281	sphingomyelin metabolism/ceramide salvage	6609,6610,55512,142891,166929,259230,339221
+HUMAN_PWY3DJ-12	ceramide de novo biosynthesis	2531,9517,10558,10715,123099,171546
+HUMAN_PWY-6000	gamma-linolenate biosynthesis	2180,2181,6296,9415,11001,23205,51703,54988,81616,116285,142827,341392
+HUMAN_PWY-5996	oleate biosynthesis	6319,10965,79966,122970,283985,641371
+HUMAN_PWY-5994	palmitate biosynthesis	2194,4706,10965,54995,122970,344967,641371
+HUMAN_PWY-5972	stearate biosynthesis	2180,2181,10965,11001,23205,51703,64834,79071,81616,122970,641371
+HUMAN_PWY-6352	3-phosphoinositide biosynthesis	5286,5287,5288,5289,5290,5291,5293,5294,5295,5296,5297,5298,8394,8395,8396,8503,9896,10423,22908,23396,23533,30849,55300,55361,138429,146850,200576
+HUMAN_PWY-6367	D-myo-inositol-5-phosphate metabolism	5305,5330,5331,5333,5335,5336,8897,23007,51196,51259,55529,64419,79837,84812,89869,90809,113026
+HUMAN_PWY-6061	bile acid biosynthesis, neutral pathway	570,1581,1582,1593,5447,6342,6718,8309,10449,10998,11001,80270
+HUMAN_PWY-6074	zymosterol biosynthesis	1595,3930,6307,7108,50814,51478
+HUMAN_PWY-6100	L-carnitine biosynthesis	223,8424,55217
+HUMAN_PWY-6158	creatine-phosphate biosynthesis	1152,1158,1159,1160
+HUMAN_PWY-6405	Rapoport-Luebering glycolytic shunt	669,9562
+HUMAN_PWY-6481	L-dopachrome biosynthesis	7299
+HUMAN_PWY-5695	urate biosynthesis/inosine 5'-phosphate degradation	3614,3615,4860,4907,22978
+HUMAN_PWY-6173	histamine biosynthesis	3067
+HUMAN_PWY-6358	superpathway of D-myo-inositol (1,4,5)-trisphosphate metabolism	3612,3613,3628,3632,3633,3635,3636,3706,3707,4952,5728,8867,8871,9562,22876,27124,51763,54928,80271,253430
+HUMAN_PWY-6351	D-myo-inositol (1,4,5)-trisphosphate biosynthesis	5297,5298,5305,5330,5331,5333,5335,5336,8394,8395,8396,10423,23007,23396,51196,51259,55300,55361,79837,84812,89869,113026,138429
+HUMAN_PWY-6363	D-myo-inositol (1,4,5)-trisphosphate degradation	3612,3613,3628,3632,3633,3636,4952,8867,8871,22876,27124,51763,54928
+HUMAN_PWY-6364	D-myo-inositol (1,3,4)-trisphosphate biosynthesis	3632,3633,3635,3636,3706,3707,4952,5728,8867,8871,9562,27124,51763,80271,253430
+HUMAN_PWY-6365	D-myo-inositol (3,4,5,6)-tetrakisphosphate biosynthesis	3705,253430
+HUMAN_PWY-6366	D-myo-inositol (1,4,5,6)-tetrakisphosphate biosynthesis	3705,9562,253430
+HUMAN_PWY-6369	inositol pyrophosphates biosynthesis	9677,9807,23262,51447,64768,117283,253430
+HUMAN_PWY-6362	1D-myo-inositol hexakisphosphate biosynthesis II (mammalian)	3632,3633,3635,3636,3705,3706,3707,4952,8867,8871,27124,51763,64768,80271,253430
+HUMAN_PWY-6554	1D-myo-inositol hexakisphosphate biosynthesis V (from Ins(1,3,4)P3)	3705,64768,253430
+HUMAN_PWY-6181	histamine degradation	26,3176
+HUMAN_PWY-6535	4-aminobutyrate degradation	18
+HUMAN_PWY-6517	N-acetylglucosamine degradation II	10007,51005,55577,132789
+HUMAN_PWY-0	putrescine degradation III	217,218,221,222,224,4128,4129,6303,112483
+HUMAN_PWY-6117	spermine and spermidine degradation I	6303,8639,112483,196743
+HUMAN_PWY-6334	L-dopa degradation	1312
+HUMAN_GLYCLEAV-PWY	glycine cleavage	275,1738,2731
+HUMAN_PWY-6307	tryptophan degradation via tryptamine	224,1644,4129,10327
+HUMAN_PWY-1801	formaldehyde oxidation	128,2098
+HUMAN_PWY-6370	ascorbate recycling (cytosolic)	2745,9446
+HUMAN_PWY-5874	heme degradation	644,645,3162,3163
+HUMAN_PWY66-373	sucrose degradation	226,229,230,3795,6476,26007,130589
+HUMAN_PWY-6111	mitochondrial L-carnitine shuttle	1374,1375,1376,1384,126129
+HUMAN_PWY-6368	3-phosphoinositide degradation	3631,3633,3635,3636,4952,5728,8821,8867,8871,8897,22876,22908,23203,27124,51763,55529,56623,64419,90809,93492
+HUMAN_PWY3DJ-11470	sphingosine and sphingosine-1-phosphate metabolism	427,8877,22949,56624,56848,81537,125981,130367,340485
+HUMAN_PWY-5451	acetone degradation I (to methylglyoxal)	125,231,1548,1571,29785,57016,113612,260293
+HUMAN_PWY-6313	serotonin degradation	125,130,217,224,4128,6799,6817
+HUMAN_PWY-6342	noradrenaline and adrenaline degradation	125,127,130,217,224,1312,4128,4129,5409,220074
+HUMAN_PWY-6688	thyronamine and iodothyronamine metabolism	1734,1735
+HUMAN_PWY-6398	melatonin degradation I	1544,1545,1548,1557,5447,6799,6817,29785,113612,260293
+HUMAN_PWY-6399	melatonin degradation II	4128
+HUMAN_PWY-6402	superpathway of melatonin degradation	1544,1545,1548,1557,4128,5447,6799,6817,29785,113612,260293
+HUMAN_PWY-6260	thyroid hormone metabolism I (via deiodination)	1734,1735
+HUMAN_PWY-6261	thyroid hormone metabolism II (via conjugation and/or degradation)	1734,6799,6817,54576
+HUMAN_PWY-6353	purine nucleotides degradation	100,3614,3615,4860,4907,22978,51251,57665,84618
+HUMAN_PWY-6608	guanosine nucleotides degradation	4860,22978
+HUMAN_PWY-6430	thymine degradation	1806,1807,51733
+HUMAN_PWY-6377	alpha-tocopherol degradation	8529
+HUMAN_PWY-5525	D-glucuronate degradation	51084,51181
+HUMAN_PWY-6118	glycerol-3-phosphate shuttle	2819,2820
+HUMAN_PWY66-367	ketogenesis	38,622,3158,56898
+HUMAN_PWY66-368	ketolysis	38,622,5019,56898
+HUMAN_PWY66-11	BMP Signalling Pathway	4089
+HUMAN_PWY66-14	MAP kinase cascade	2048,5604
+META_PWY-6557	glycoaminoglycan-protein linkage region biosynthesis	11285,26229,27087,64131,64132,135152
+META_PWY-6558	heparan sulfate biosynthesis (late stages)	2131,2132,2134,2135,2137,3340,8509,9348,9394,9953,9955,9956,9957,26035,64579,90161,266722
+META_PWY-6564	heparan sulfate biosynthesis	2131,2132,2134,2135,2137,3340,8509,9348,9394,9953,9955,9956,9957,11285,26035,26229,27087,64131,64132,64579,90161,135152,266722
+META_PWY-6566	chondroitin biosynthesis	22856,55454,55790,79586,337876
+META_PWY-6567	chondroitin sulfate biosynthesis (late stages)	9469,10090,50515,51363,55501,56548,166012
+META_PWY-6568	dermatan sulfate biosynthesis (late stages)	10090,29940,51363,113189
+META_PWY-6569	chondroitin sulfate biosynthesis	9469,10090,11285,22856,26229,27087,50515,51363,55454,55501,55790,56548,64131,64132,79586,135152,166012,337876
+META_PWY-6571	dermatan sulfate biosynthesis	10090,11285,22856,26229,27087,29940,51363,55454,55790,64131,64132,79586,113189,135152,337876
+META_PWY-6823	molybdenum cofactor biosynthesis	4338,9054,10243,27304
+META_PWY66-366	flavin biosynthesis IV (mammalian)	55312,80308
+META_PWY-6613	tetrahydrofolate salvage from 5,10-methenyltetrahydrofolate	2618,4522
+META_PWY-6857	retinol biosynthesis	1066,5406,5947,5948,5950,9227,9249,10170,50700,51109,53630,157506
+META_PWY-6861	the visual cycle I (vertebrates)	5947,5948,5949,5950,5959,6017,6121,9227,9249,10170,50700,51109,157506
+META_PWY-6872	retinoate biosynthesis I	216,220,5947,5950,8608,8854,195814
+META_PWY-6875	retinoate biosynthesis II	5947,5950,7498
+META_PWY66-375	leukotriene biosynthesis	240,1800,4048,4056,64174
+META_PWY66-378	androgen biosynthesis	1586,3283,3293,6715,6716,8644
+META_PWY66-380	estradiol biosynthesis I (via estrone)	1588,51478
+META_PWY-6405	Rapoport-Luebering glycolytic shunt	669,5224,9562,441531
+META_PWY-6609	adenine and adenosine salvage III	100,3251,4860
+META_PWY-6619	adenine and adenosine salvage VI	132
+META_PWY-6620	guanine and guanosine salvage	3251,4860
+META_PWY-6481	L-dopachrome biosynthesis	7299
+META_PWY-6535	4-aminobutanoate degradation I	18
+META_PWY-6370	ascorbate recycling (cytosolic)	2745,9446
+META_PWY66-373	sucrose degradation V (sucrose alpha-glucosidase)	226,229,230,3795,6476,130589
+META_PWY-6688	thyronamine and iodothyronamine metabolism	1734,1735
+META_PWY-6398	melatonin degradation I	1544,1545,1557,5447,6799
+META_PWY-6402	superpathway of melatonin degradation	1544,1545,1557,5447,6799
+META_PWY-6756	S-methyl-5'-thioadenosine degradation II	4507
+META_PWY-6608	guanosine nucleotides degradation III	4860,7498,9615,22978
+META_PWY-6377	alpha-tocopherol degradation	8529
+META_PWY-6502	oxidized GTP and dGTP detoxification	4521
+META_PWY66-367	ketogenesis	38,39,622,3157,3158
+META_PWY66-368	ketolysis	38,622,5019,56898
+HUMAN_PWY66-385	dTMP de novo biosynthesis (mitochondrial)	6472,7298,200895
+HUMAN_PWY-6755	S-methyl-5-thio-alpha-D-ribose 1-phosphate degradation	51074,55256,58478,84245
+HUMAN_PROSYN-PWY	proline biosynthesis	5831,5832
+HUMAN_PWY-5512	UDP-N-acetyl-D-galactosamine biosynthesis I	2582
+HUMAN_PWY-6613	tetrahydrofolate salvage from 5,10-methenyltetrahydrofolate	2618,4522
+HUMAN_PWY-6898	thiamin salvage III	27010
+HUMAN_PWY-6371	superpathway of inositol phosphate compounds	3632,3633,3635,3636,3705,3706,3707,4952,5286,5287,5288,5289,5290,5291,5293,5294,5295,5296,5297,5298,5305,5330,5331,5333,5335,5336,5728,8394,8395,8396,8503,8867,8871,8897,9562,9677,9807,9896,10423,22908,23007,23262,23396,23533,27124,30849,51196,51259,51447,51763,55300,55361,55529,64419,64768,79837,80271,84812,89869,90809,113026,117283,138429,146850,200576,253430
+HUMAN_P121-PWY	adenine and adenosine salvage I	353
+HUMAN_PWY-6609	adenine and adenosine salvage III	100,3251,4860
+HUMAN_PWY-6619	adenine and adenosine salvage II	132
+HUMAN_PWY-6620	guanine and guanosine salvage	3251,4860
+HUMAN_PWY-6133	(S)-reticuline biosynthesis	7299
+HUMAN_2PHENDEG-PWY	phenylethylamine degradation I	217,224,314,8639
+HUMAN_MGLDLCTANA-PWY	methylglyoxal degradation VI	197257
+HUMAN_GLUTAMINDEG-PWY	glutamine degradation/glutamate biosynthesis	2744,27165
+HUMAN_PWY-6756	S-methyl-5'-thioadenosine degradation	4507
+HUMAN_PWY-6502	oxidized GTP and dGTP detoxification	4521
+HUMAN_PWY-6938	NADH repair	128240
+META_PWY-6938	NADH repair	128240
+HUMAN_PWY-7049	icosapentaenoate biosynthesis II (metazoa)	2180,2181,6296,9415,51703,54988,60481,116285,142827,341392
+HUMAN_PWY-4983	citrulline-nitric oxide cycle	435,445,4842,4843,4846
+HUMAN_PWY66-387	fatty acid alpha-oxidation	224,5264,11001,26061
+HUMAN_PWY66-388	fatty acid alpha-oxidation III	224,26061,79152
+HUMAN_PWY-7112	4-hydroxy-2-nonenal detoxification	2938,2941,2950,221357
+META_PWY-4983	L-citrulline-nitric oxide cycle	435,445,4842,4843,4846
+META_PWY-5004	superpathway of L-citrulline metabolism	384,435,445,1373,4842,4843,4846,4942,5009,5625,5832
+META_PWY-7049	icosapentaenoate biosynthesis II (metazoa)	2180,9415,60481
+META_PWY-7112	4-hydroxy-2-nonenal detoxification	2938
+META_PWY66-388	fatty acid alpha-oxidation III	224,26061
+META_PWY66-387	fatty acid alpha-oxidation II	224,5264,11001,26061
+HUMAN_PWY-7197	pyrimidine deoxyribonucleotide phosphorylation	1841,4830,4831,4832,8382,10201,29922,51727,129607,283458,654364
+HUMAN_PWY-7184	pyrimidine deoxyribonucleotides de novo biosynthesis	1841,1854,4830,4831,4832,6240,6241,7298,8382,10201,29922,50484,84284,283458,654364
+HUMAN_PWY-7210	pyrimidine deoxyribonucleotides biosynthesis from CTP	1635,1841,4830,4831,4832,6240,6241,7298,8382,10201,29922,50484,84284,283458,654364
+HUMAN_PWY66-399	gluconeogenesis	226,229,230,669,2026,2203,4190,4191,5091,5224,5230,8789,26330,57818,92579,441531
+HUMAN_PWY66-397	resolvin D biosynthesis	240,246
+HUMAN_PWY66-395	aspirin triggered resolvin D biosynthesis	240,5743
+HUMAN_PWY66-394	aspirin triggered resolvin E biosynthesis	240,5743
+HUMAN_PWY66-393	aspirin-triggered lipoxin biosynthesis	240,5743
+HUMAN_PWY-7176	UTP and CTP de novo biosynthesis	1503,4830,4831,4832,8382,10201,29922,51727,56474,129607,283458,654364
+HUMAN_PWY-7211	superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis	790,1503,1841,1854,4830,4831,4832,6240,6241,7298,7372,8382,10201,29922,50484,51727,56474,84284,129607,283458,654364
+HUMAN_PWY-7200	superpathway of pyrimidine deoxyribonucleoside salvage	978,1633,1841,4830,4831,4832,7083,7084,7298,8382,10201,29922,51727,129607,283458,654364
+HUMAN_PWY-7199	pyrimidine deoxyribonucleosides salvage	978,1633,7083,7084,7298
+HUMAN_PWY-7205	CMP phosphorylation	4830,4831,4832,8382,10201,29922,51727,129607,283458,654364
+HUMAN_PWY-7193	pyrimidine ribonucleosides salvage I	978,7371,83549
+HUMAN_PWY-7224	purine deoxyribonucleosides salvage	1633,1716,2987,4830,4831,4832,8382,10201,26289,29922,283458,654364
+HUMAN_PWY66-400	glycolysis	226,229,230,669,2026,2645,3098,3101,5211,5213,5214,5224,5230,5313,5315,26330,441531
+HUMAN_PWY66-398	TCA cycle	50,1431,1743,2271,3419,3421,4190,4191,4967,6389,6390,6391,6392,8801,8802,8803
+HUMAN_PWY-7209	pyrimidine ribonucleosides degradation	978,1806,1807,7378,51733,151531
+HUMAN_PWY-7177	UTP and CTP dephosphorylation II	953,1503,56474,124583
+HUMAN_PWY-7185	UTP and CTP dephosphorylation I	1503,56474,84284
+HUMAN_PWY-7181	pyrimidine deoxyribonucleosides degradation	978,1890,7378,9997,151531
+HUMAN_PWY66-389	phytol degradation	224
+HUMAN_PWY66-391	fatty acid beta-oxidation (peroxisome)	30,51,1962,2180,2181,3033,3295,6342,8309,11001,23205,51703,81616
+META_PWY66-381	glucocorticoid biosynthesis	1584,1586,1589
+META_PWY66-382	mineralocorticoid biosynthesis	1584,1585,1589
+HUMAN_PWY66-392	lipoxin biosynthesis	239,240,246
+HUMAN_PWY-7226	guanosine deoxyribonucleotides de novo biosynthesis	4830,4831,4832,6240,6241,8382,10201,29922,50484,283458,654364
+HUMAN_PWY-7227	adenosine deoxyribonucleotides de novo biosynthesis	4830,4831,4832,6240,6241,8382,10201,29922,50484,283458,654364
+HUMAN_PWY-7219	adenosine ribonucleotides de novo biosynthesis	159,203,204,205,498,506,509,513,521,4508,4509,9551,10476,10632,26289,27109,122481,122622,158067,267020,432369
+HUMAN_PWY-7221	guanosine ribonucleotides de novo biosynthesis	2987,3614,3615,4830,4831,4832,8382,8833,10201,29922,283458,654364
+HUMAN_PWY66-401	superpathway of tryptophan utilization	15,125,130,217,224,438,1544,1545,1548,1557,1644,3620,4128,4129,5447,6799,6817,6999,7166,8564,8942,10327,23475,23498,29785,55191,64802,113612,121278,125061,130013,169355,260293,349565
+HUMAN_PWY66-407	superpathway of conversion of glucose to acetyl CoA and entry into the TCA cycle	50,226,229,230,669,1431,1737,1738,1743,2026,2271,2645,3098,3101,3419,3421,4190,4191,4967,5160,5161,5162,5211,5213,5214,5224,5230,5313,5315,6389,6390,6391,6392,8801,8802,8803,26330,441531
+HUMAN_PWY-6309	L-kynurenine degradation	883,2806,3620,6999,8564,8942,23498,56267,125061,130013,169355
+HUMAN_PWY-7228	guanosine nucleotides de novo biosynthesis	2987,3614,3615,4830,4831,4832,6240,6241,8382,8833,10201,29922,50484,283458,654364
+HUMAN_PWY66-409	superpathway of purine nucleotide salvage	100,132,159,203,204,205,353,498,506,509,513,521,2987,3251,3614,3615,4508,4509,4830,4831,4832,4860,6240,6241,8382,8833,9551,10201,10476,10632,26289,27109,29922,50484,122481,122622,158067,267020,283458,432369,654364
+HUMAN_PWY-7305	superpathway of steroid hormone biosynthesis	1548,1584,1585,1586,1588,1589,3283,3292,3293,6715,6716,8644,51170,51478
+HUMAN_PWY-7283	wybutosine biosynthesis	9836,55253,127253
+HUMAN_PWY-7306	estradiol biosynthesis II	1548,1588
+HUMAN_PWY-7299	progesterone biosynthesis	3283
+HUMAN_PWY-7286	7-(3-amino-3-carboxypropyl)-wyosine biosynthesis	55253,127253
+META_PWY-7224	purine deoxyribonucleosides salvage	1633,1716,2987,4830,4831,26289,654364
+META_PWY-7210	pyrimidine deoxyribonucleotides biosynthesis from CTP	1635,1841,4830,4831,6240,6241,7298,84284,654364
+META_PWY-7184	pyrimidine deoxyribonucleotides de novo biosynthesis I	1841,1854,4830,4831,6240,6241,7298,84284,654364
+META_PWY-7197	pyrimidine deoxyribonucleotide phosphorylation	1841,4830,4831,51727,654364
+META_PWY-7277	sphingolipid biosynthesis (mammals)	2531,8560,9517,10558,10715,171546
+META_PWY-7305	superpathway of steroid hormone biosynthesis	1584,1585,1586,1588,1589,3283,3293,6715,6716,8644,51478
+META_PWY-7209	superpathway of pyrimidine ribonucleosides degradation	978,1806,1807,7378,51733
+META_PWY-7228	superpathway of guanosine nucleotides de novo biosynthesis I	2987,3614,3615,4830,4831,6240,6241,654364
+META_PWY-7200	superpathway of pyrimidine deoxyribonucleoside salvage	978,1633,1841,4830,4831,7083,7084,7298,51727,654364
+META_PWY-7229	superpathway of adenosine nucleotides de novo biosynthesis I	4830,4831,6240,6241,26289,654364
+META_PWY-7211	superpathway of pyrimidine deoxyribonucleotides de novo biosynthesis	790,1503,1841,1854,4830,4831,6240,6241,7298,51727,56474,84284,654364
+META_PWY-7181	pyrimidine deoxyribonucleosides degradation	978,1890,7378,9997
+META_PWY-7185	UTP and CTP dephosphorylation I	1503,56474,84284
+META_PWY-7177	UTP and CTP dephosphorylation II	953,1503,56474
+META_PWY66-391	fatty acid beta-oxidation VI (peroxisome)	30,51,1962,2180,2181,3295,6342,8309,11001,23205,51703,81616
+META_PWY66-389	phytol degradation	224
+META_PWY66-398	TCA cycle III (animals)	50,1431,1743,2271,3419,3421,4190,4191,4967,6389,6390,6391,6392,8801,8802,8803
+META_PWY66-400	glycolysis VI (metazoan)	226,229,230,669,2026,2645,3098,3101,5211,5213,5214,5224,5230,5313,5315,26330,441531
+META_PWY-7176	UTP and CTP de novo biosynthesis	1503,4830,4831,51727,56474,654364
+META_PWY-7205	CMP phosphorylation	4830,4831,51727,654364
+META_PWY-7193	pyrimidine ribonucleosides salvage I	978,7371,83549
+META_PWY-7199	pyrimidine deoxyribonucleosides salvage	978,1633,7083,7084,7298
+META_PWY-7227	adenosine deoxyribonucleotides de novo biosynthesis	4830,4831,6240,6241,654364
+META_PWY-7226	guanosine deoxyribonucleotides de novo biosynthesis I	4830,4831,6240,6241,654364
+META_PWY-7219	adenosine ribonucleotides de novo biosynthesis	26289
+META_PWY-7221	guanosine ribonucleotides de novo biosynthesis	2987,3614,3615,4830,4831,654364
+META_PWY66-399	gluconeogenesis III	226,229,230,669,2026,2203,4190,4191,5091,5224,5230,8789,26330,57818,92579,441531
+META_PWY-7344	UDP-D-galactose biosynthesis	2582
+META_PWY-7343	UDP-glucose biosynthesis	7360,55276
+META_PWY66-392	lipoxin biosynthesis	239,240,246
+META_PWY66-397	resolvin D biosynthesis	240,246
+META_PWY-7299	progesterone biosynthesis	3283
+META_PWY66-393	aspirin-triggered lipoxin biosynthesis	240,5743
+META_PWY66-374	C20 prostanoid biosynthesis	5730,5742,5743,6916,10728,27306,80142
+META_PWY66-395	aspirin triggered resolvin D biosynthesis	240,5743
+META_PWY-7306	estradiol biosynthesis II	1588
+META_PWY66-394	aspirin triggered resolvin E biosynthesis	240,5743
+META_PWY-7250	[2Fe-2S] iron-sulfur cluster biosynthesis	9054
+META_PWY66-409	superpathway of purine nucleotide salvage	100,132,2987,3251,3614,3615,4830,4831,4860,6240,6241,26289,654364
+META_PWY-6012-1	acyl carrier protein metabolism II (mammalian)	60496
+META_NADPHOS-DEPHOS-PWY-1	NAD phosphorylation and dephosphorylation II (mammalian)	23530
+META_PWY-7435	mucin core 3 and core 4 O-glycosylation	2589
+META_PWY-7434	terminal O-glycans residues modification	2651,6487,10690,11041
+META_PWY-7433	mucin core 1 and core 2 O-glycosylation	2589,2650,6482,10331,56913
+META_PWY-7437	protein O-[N-acetyl]-glucosylation	8473,10724
+HUMAN_PWY-5754	4-hydroxybenzoate biosynthesis	6898
+HUMAN_PWY-7527	methionine salvage cycle III	4143,4144,4507,6723,27430,51074,55256,58478,84245
+HUMAN_PWY-5661-1	GDP-glucose biosynthesis II	2645,3098,3101,55276
+HUMAN_PWY-6012-1	acyl carrier protein metabolism	4706,60496
+HUMAN_PWY-7250	[2Fe-2S] iron-sulfur cluster biosynthesis	9054
+HUMAN_COA-PWY-1	coenzyme A biosynthesis	53354,60490,79646,79717,80347
+HUMAN_NADPHOS-DEPHOS-PWY-1	NAD phosphorylation and dephosphorylation	23530
+HUMAN_PWY-5966-1	fatty acid biosynthesis initiation	31,32,2194,4706,27349
+HUMAN_PWY-7501	phosphatidylserine biosynthesis I	9791
+HUMAN_PWY-7506	phosphatidylserine biosynthesis II	81490
+HUMAN_PWY-7455	allopregnanolone biosynthesis	1109,1645,1646,6715,6716,8644
+HUMAN_PWY66-420	carnosine biosynthesis	57571
+HUMAN_PWY66-423	fructose 2,6-bisphosphate synthesis	5208,5209,5210,57103
+HUMAN_PWY66-421	homocarnosine biosynthesis	57571
+HUMAN_PWY66-425	lysine degradation II (pipecolate pathway)	501,1428,5831,51268
+HUMAN_PWY66-426	hydrogen sulfide biosynthesis (trans-sulfuration)	875
+HUMAN_PWY66-414	superpathway of choline degradation to L-serine	501,635,1757,6470,6472,29958,55349
+HUMAN_PWY-3661-1	glycine betaine degradation	635,1757,6470,6472,29958
+HUMAN_ASPARAGINE-DEG1-PWY-1	asparagine degradation	175,2805,80150,374569
+HUMAN_PWY66-428	threonine degradation	593,594,1629,1738,10993,113675
+HUMAN_PWY-7180	2'-deoxy-alpha-D-ribose 1-phosphate degradation	218,221,222,51071,55276
+HUMAN_PWY66-422	D-galactose degradation V (Leloir pathway)	2582,2584,2592,55276,130589
+HUMAN_PWY-7179-1	purine deoxyribonucleosides degradation	100,4860
+HUMAN_DETOX1-PWY-1	reactive oxygen species degradation	847,2876,2877,2878,2882,6647,6648,6649,257202,493869
+HUMAN_OXIDATIVEPENT-PWY-1	pentose phosphate pathway (oxidative branch)	2539,5226,25796
+HUMAN_PWY-7433	mucin core 1 and core 2 O-glycosylation	2589,2590,2591,2650,6482,6483,6484,8693,9245,10331,11226,11227,26290,50614,51301,51809,55568,56913,57452,63917,79695,114805,117248,374378,442117
+HUMAN_PWY-7437	protein O-[N-acetyl]-glucosylation	8473,10724
+HUMAN_PWY-7434	terminal O-glycans residues modification	2651,6487,8128,8703,8704,9245,10690,11041
+META_PWY66-425	L-lysine degradation II (L-pipecolate pathway)	501,1428,5831
+META_ASPARAGINE-DEG1-PWY-1	L-asparagine degradation III (mammalian)	175,2805,374569
+META_PWY66-428	L-threonine degradation V	593,594,1629,1738,10993,113675
+META_PWY-7466	acetone degradation III (to propane-1,2-diol)	125,231,1571
+META_PWY-3661-1	glycine betaine degradation II (mammalian)	635,1757,6470,6472,29958
+META_PWY66-422	D-galactose degradation V (Leloir pathway)	2582,55276,130589
+META_PWY-7179-1	purine deoxyribonucleosides degradation	100,4860
+META_PWY-7511	protein ubiquitylation	7317,55284
+META_PWY-7426	mannosyl-glycoprotein N-acetylglucosaminyltransferases	4122,4124,4245,4247,4249,11282,11320,25834
+META_PWY-7527	L-methionine salvage cycle III	883,4507,6723
+META_COA-PWY-1	coenzyme A biosynthesis II (mammalian)	53354,60490,79646,79717,80347
+META_PWY66-423	fructose 2,6-bisphosphate biosynthesis	5208,5209,5210,57103
+META_PWY66-420	carnosine biosynthesis	57571
+META_PWY66-421	homocarnosine biosynthesis	57571
+META_PWY-7506	phosphatidylserine biosynthesis II	81490
+META_PWY-7501	phosphatidylserine biosynthesis I	9791
+META_PWY-7455	allopregnanolone biosynthesis	1109,1645,1646,6715,6716,8644
+META_DETOX1-PWY-1	reactive oxygen species degradation	847,2876,2877,2878,6647,6648,6649
+HUMAN_PWY-7511	protein ubiquitylation	997,7317,7318,7321,7323,7325,7327,7336,9039,9246,10477,27338,29089,51465,51619,54476,54926,55236,55284,55293,55585,65264,79876,92912,118424,134111,148581,389898
+META_PWY-7592	arachidonate biosynthesis III (metazoa)	60481
+META_PWY-7606	docosahexaenoate biosynthesis III (mammals)	9415,54898,60481
+META_PWY-7625	phosphatidylinositol biosynthesis II (eukaryotes)	10423
+HUMAN_PWY-7606	docosahexaenoate biosynthesis III (mammals)	9415,54898,60481
+HUMAN_PWY-7592	arachidonate biosynthesis III (metazoa)	60481

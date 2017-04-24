@@ -1,0 +1,10 @@
+#Organism	Mset
+human	vertebrates
+mouse	vertebrates
+rat	vertebrates
+frog	vertebrates
+zebrafish	vertebrates
+fly	insects
+worm	worms
+yeast	yeast
+arabidopsis	plants

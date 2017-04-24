@@ -1,0 +1,16 @@
+# Homer Configuration File (automatically generated)
+#
+# This file is updated from the Homer website and contains information about data available for
+# use with the program.
+#
+# Each section has the same format, which is <tab> separated values specifying:
+# package name <tab> version <tab> description <tab> url <tab> optional parameters (, separated)
+#
+SOFTWARE
+homer	v4.8.2	Code/Executables, ontologies, motifs for HOMER	http://homer.salk.edu/homer/data/software/homer.v4.8.2.zip	./	
+ORGANISMS
+human	v5.8	Homo sapiens (human) accession and ontology information	http://homer.salk.edu/homer/data/organisms/human.v5.8.zip	data/accession/	9606,NCBI Gene
+PROMOTERS
+GENOMES
+hg19	v5.7	human genome and annotation for UCSC hg19	http://homer.salk.edu/homer/data/genomes/hg19.v5.7.zip	data/genomes/hg19/	human,default
+SETTINGS

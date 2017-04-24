@@ -1,0 +1,77 @@
+# Homer Update File
+#
+# This file is updated from the Homer website and contains information about data available for
+# use with the program.
+#
+# This file has been further modified by the local update script
+#
+# Each section has the same format, which is <tab> separated values specifying:
+# package name <tab> version <tab> description <tab> url <tab> optional parameters (, separated)
+#
+
+SOFTWARE
+homer	v4.8.2	Code/Executables, ontologies, motifs for HOMER	http://homer.salk.edu/homer/data/software/homer.v4.8.2.zip	./	
+
+ORGANISMS
+arabidopsis	v5.8	Arabidopsis thaliana (arabidopsis) accession and ontology information	http://homer.salk.edu/homer/data/organisms/arabidopsis.v5.8.zip	data/accession/	3702,NCBI Gene
+chicken	v5.8	Gallus gallus (chicken) accession and ontology information	http://homer.salk.edu/homer/data/organisms/chicken.v5.8.zip	data/accession/	9031,NCBI Gene
+ciona	v5.7	Ciona intestinalis (ciona) accession and ontology information	ciona.v5.7.zip	data/accession/	7719,NCBI Gene
+cow	v5.8	Bos taurus (cow) accession and ontology information	http://homer.salk.edu/homer/data/organisms/cow.v5.8.zip	data/accession/	9913,NCBI Gene
+dog	v5.8	Canis lupus familiaris (dog) accession and ontology information	http://homer.salk.edu/homer/data/organisms/dog.v5.8.zip	data/accession/	9615,NCBI Gene
+fly	v5.8	Drosophila melanogaster (fly) accession and ontology information	http://homer.salk.edu/homer/data/organisms/fly.v5.8.zip	data/accession/	7227,NCBI Gene
+frog	v5.8	Xenopus tropicalis (frog) accession and ontology information	http://homer.salk.edu/homer/data/organisms/frog.v5.8.zip	data/accession/	8364,NCBI Gene
+human	v5.8	Homo sapiens (human) accession and ontology information	http://homer.salk.edu/homer/data/organisms/human.v5.8.zip	data/accession/	9606,NCBI Gene
+laevis	v5.8	Xenopus laevis (laevis) accession and ontology information	http://homer.salk.edu/homer/data/organisms/laevis.v5.8.zip	data/accession/	8355,NCBI Gene
+mouse	v5.8	Mus musculus (mouse) accession and ontology information	http://homer.salk.edu/homer/data/organisms/mouse.v5.8.zip	data/accession/	10090,NCBI Gene
+pig	v5.8	Sus scrofa (pig) accession and ontology information	http://homer.salk.edu/homer/data/organisms/pig.v5.8.zip	data/accession/	9823,NCBI Gene
+pombe	v5.8	Schizosaccharomyces pombe (pombe) accession and ontology information	http://homer.salk.edu/homer/data/organisms/pombe.v5.8.zip	data/accession/	284812,NCBI Gene
+rat	v5.8	Rattus norvegicus (rat) accession and ontology information	http://homer.salk.edu/homer/data/organisms/rat.v5.8.zip	data/accession/	10116,NCBI Gene
+rhesus	v5.8	Macaca mulatta (rhesus) accession and ontology information	http://homer.salk.edu/homer/data/organisms/rhesus.v5.8.zip	data/accession/	9544,NCBI Gene
+rice	v5.8	Oryza sativa (rice) accession and ontology information	http://homer.salk.edu/homer/data/organisms/rice.v5.8.zip	data/accession/	39947,NCBI Gene
+worm	v5.8	Caenorhabditis elegans (worm) accession and ontology information	http://homer.salk.edu/homer/data/organisms/worm.v5.8.zip	data/accession/	6239,NCBI Gene
+yeast	v5.8	Saccharomyces cerevisiae (yeast) accession and ontology information	http://homer.salk.edu/homer/data/organisms/yeast.v5.8.zip	data/accession/	559292,NCBI Gene
+zebrafish	v5.8	Danio rerio (zebrafish) accession and ontology information	http://homer.salk.edu/homer/data/organisms/zebrafish.v5.8.zip	data/accession/	7955,NCBI Gene
+
+PROMOTERS
+arabidopsis	v5.0	Arabidopsis Ensembl Promoters (tair10)	http://homer.salk.edu/homer/data/promoters/arabidopsis.v5.0.zip	data/promoters/	arabidopsis,tair10,orf,-2000,2000
+chicken	v5.5	chicken promoters (chicken)	http://homer.salk.edu/homer/data/promoters/chicken.v5.5.zip	data/promoters/	chicken,galGal4,refseq,-2000,2000
+fly	v5.5	fly promoters (fly)	http://homer.salk.edu/homer/data/promoters/fly.v5.5.zip	data/promoters/	fly,dm3,refseq,-2000,2000
+frog	v5.5	frog promoters (frog)	http://homer.salk.edu/homer/data/promoters/frog.v5.5.zip	data/promoters/	frog,xenTro2,refseq,-2000,2000
+human	v5.5	human promoters (human)	http://homer.salk.edu/homer/data/promoters/human.v5.5.zip	data/promoters/	human,hg19,refseq,-2000,2000
+mouse	v5.5	mouse promoters (mouse)	http://homer.salk.edu/homer/data/promoters/mouse.v5.5.zip	data/promoters/	mouse,mm9,refseq,-2000,2000
+rat	v5.5	rat promoters (rat)	http://homer.salk.edu/homer/data/promoters/rat.v5.5.zip	data/promoters/	rat,rn5,refseq,-2000,2000
+worm	v5.5	worm promoters (worm)	http://homer.salk.edu/homer/data/promoters/worm.v5.5.zip	data/promoters/	worm,ce10,refseq,-2000,2000
+yeast	v5.5	yeast promoters (yeast)	http://homer.salk.edu/homer/data/promoters/yeast.v5.5.zip	data/promoters/	yeast,sacCer3,orf,-2000,2000
+zebrafish	v5.5	zebrafish promoters (zebrafish)	http://homer.salk.edu/homer/data/promoters/zebrafish.v5.5.zip	data/promoters/	zebrafish,danRer7,refseq,-2000,2000
+
+GENOMES
+canFam3	v5.7	dog genome and annotation for UCSC canFam3	http://homer.salk.edu/homer/data/genomes/canFam3.v5.7.zip	data/genomes/canFam3/	dog,default
+ce10	v5.7	worm genome and annotation for UCSC ce10	http://homer.salk.edu/homer/data/genomes/ce10.v5.7.zip	data/genomes/ce10/	worm,default
+ce6	v5.7	worm genome and annotation for UCSC ce6	http://homer.salk.edu/homer/data/genomes/ce6.v5.7.zip	data/genomes/ce6/	worm,default
+ci2	v5.7	ciona genome and annotation for UCSC ci2	http://homer.salk.edu/homer/data/genomes/ci2.v5.7.zip	data/genomes/ci2/	ciona,default
+danRer10	v5.7	zebrafish genome and annotation for UCSC danRer10	http://homer.salk.edu/homer/data/genomes/danRer10.v5.7.zip	data/genomes/danRer10/	zebrafish,default
+danRer7	v5.7	zebrafish genome and annotation for UCSC danRer7	http://homer.salk.edu/homer/data/genomes/danRer7.v5.7.zip	data/genomes/danRer7/	zebrafish,default
+dm3	v5.7	fly genome and annotation for UCSC dm3	http://homer.salk.edu/homer/data/genomes/dm3.v5.7.zip	data/genomes/dm3/	fly,default
+dm6	v5.7	fly genome and annotation for UCSC dm6	http://homer.salk.edu/homer/data/genomes/dm6.v5.7.zip	data/genomes/dm6/	fly,default
+galGal4	v5.7	chicken genome and annotation for UCSC galGal4	http://homer.salk.edu/homer/data/genomes/galGal4.v5.7.zip	data/genomes/galGal4/	chicken,default
+gorGor3	v5.7	human genome and annotation for UCSC gorGor3	http://homer.salk.edu/homer/data/genomes/gorGor3.v5.7.zip	data/genomes/gorGor3/	human,default
+hg17	v5.7	human genome and annotation for UCSC hg17	http://homer.salk.edu/homer/data/genomes/hg17.v5.7.zip	data/genomes/hg17/	human,default
+hg18	v5.7	human genome and annotation for UCSC hg18	http://homer.salk.edu/homer/data/genomes/hg18.v5.7.zip	data/genomes/hg18/	human,default
+hg19	v5.7	human genome and annotation for UCSC hg19	http://homer.salk.edu/homer/data/genomes/hg19.v5.7.zip	data/genomes/hg19/	human,default
+hg38	v5.7	human genome and annotation for UCSC hg38	http://homer.salk.edu/homer/data/genomes/hg38.v5.7.zip	data/genomes/hg38/	human,default
+mm10	v5.7	mouse genome and annotation for UCSC mm10	http://homer.salk.edu/homer/data/genomes/mm10.v5.7.zip	data/genomes/mm10/	mouse,default
+mm8	v5.7	mouse genome and annotation for UCSC mm8	http://homer.salk.edu/homer/data/genomes/mm8.v5.7.zip	data/genomes/mm8/	mouse,default
+mm9	v5.7	mouse genome and annotation for UCSC mm9	http://homer.salk.edu/homer/data/genomes/mm9.v5.7.zip	data/genomes/mm9/	mouse,default
+panTro4	v5.7	human genome and annotation for UCSC panTro4	http://homer.salk.edu/homer/data/genomes/panTro4.v5.7.zip	data/genomes/panTro4/	human,default
+papAnu2	v5.7	human genome and annotation for UCSC papAnu2	http://homer.salk.edu/homer/data/genomes/papAnu2.v5.7.zip	data/genomes/papAnu2/	human,default
+rheMac2	v5.7	rhesus genome and annotation for UCSC rheMac2	http://homer.salk.edu/homer/data/genomes/rheMac2.v5.7.zip	data/genomes/rheMac2/	rhesus,default
+rheMac3	v5.7	rhesus genome and annotation for UCSC rheMac3	http://homer.salk.edu/homer/data/genomes/rheMac3.v5.7.zip	data/genomes/rheMac3/	rhesus,default
+rn4	v5.7	rat genome and annotation for UCSC rn4	http://homer.salk.edu/homer/data/genomes/rn4.v5.7.zip	data/genomes/rn4/	rat,default
+rn5	v5.7	rat genome and annotation for UCSC rn5	http://homer.salk.edu/homer/data/genomes/rn5.v5.7.zip	data/genomes/rn5/	rat,default
+rn6	v5.7	rat genome and annotation for UCSC rn6	http://homer.salk.edu/homer/data/genomes/rn6.v5.7.zip	data/genomes/rn6/	rat,default
+sacCer2	v5.7	yeast genome and annotation for UCSC sacCer2	http://homer.salk.edu/homer/data/genomes/sacCer2.v5.7.zip	data/genomes/sacCer2/	yeast,default
+sacCer3	v5.7	yeast genome and annotation for UCSC sacCer3	http://homer.salk.edu/homer/data/genomes/sacCer3.v5.7.zip	data/genomes/sacCer3/	yeast,default
+susScr3	v5.7	pig genome and annotation for UCSC susScr3	http://homer.salk.edu/homer/data/genomes/susScr3.v5.7.zip	data/genomes/susScr3/	pig,default
+tair10	v5.0	Arabidopsis genome tair10	http://homer.salk.edu/homer/data/genomes/tair10.v5.0.zip	data/genomes/tair10/	arabidopsis,default
+xenTro2	v5.7	frog genome and annotation for UCSC xenTro2	http://homer.salk.edu/homer/data/genomes/xenTro2.v5.7.zip	data/genomes/xenTro2/	frog,default
+xenTro3	v5.7	frog genome and annotation for UCSC xenTro3	http://homer.salk.edu/homer/data/genomes/xenTro3.v5.7.zip	data/genomes/xenTro3/	frog,default

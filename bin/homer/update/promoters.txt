@@ -1,0 +1,13 @@
+#promoterSet	Genome(UCSC version)	Organism(Should match taxids.txt file)	Single FASTA File(Yes/No)	Repeats(Yes/Single/No)	Version(start with 'v' for homer version, other for custom)
+human	hg19	human	refseq	UCSC	v5.5
+mouse	mm9	mouse	refseq	UCSC	v5.5
+rat	rn5	rat	UCSC	refseq	v5.5
+chicken	galGal4	chicken	refseq	UCSC	v5.5
+frog	xenTro2	frog	refseq	UCSC	v5.5
+zebrafish	danRer7	zebrafish	refseq	UCSC	v5.5
+fly	dm3	fly	refseq	UCSC	v5.5
+worm	ce10	worm	refseq	UCSC	v5.5
+yeast	sacCer3	yeast	orf	UCSC	v5.5
+#pombe	ASM294v1	pombe	custom	v5.3
+#arabidopsis	tair10	arabidopsis	custom	v5.3
+#rice	msu6	rice	custom	v5.3

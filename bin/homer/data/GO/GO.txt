@@ -1,0 +1,22 @@
+#Name	Ontology File Suffix	Result File	Description	Link	LinkName
+biological process	biological_process.genes	biological_process.txt	Functional groupings of proteins	http://www.geneontology.org	Gene Ontology
+molecular function	molecular_function.genes	molecular_function.txt	Mechanistic actions of proteins	http://www.geneontology.org	Gene Ontology
+cellular component	cellular_component.genes	cellular_component.txt	Protein localization	http://www.geneontology.org	Gene Ontology
+chromosome location	chromosome.genes	chromosome.txt	Genes with similar chromosome localization	http://www.ncbi.nlm.nih.gov/gene	NCBI Gene
+KEGG pathways	KEGG.biosystems.genes	kegg.txt	Groups of proteins in the same pathways	http://www.genome.jp/kegg/pathway.html	KEGG
+protein interactions	interactions.genes	interactions.txt	"Proteins interacting with a common protein (BIND, EcoCyc, HPRD)"	http://www.ncbi.nlm.nih.gov/gene	NCBI Gene
+interpro domains	interpro.genes	interpro.txt	Proteins with similar domains and features	http://www.ebi.ac.uk/interpro/	Interpro
+pfam domains	pfam.genes	pfam.txt	Proteins with similar domains and features	http://www.sanger.ac.uk/Software/Pfam/	Pfam
+smart domains	smart.genes	smart.txt	Proteins with similar domains and features	http://smart.embl-heidelberg.de/	SMART
+gene3d domains	gene3d.genes	gene3d.txt	Proteins with similar domains and features	http://cathwww.biochem.ucl.ac.uk:8080/Gene3D	Gene3D
+prosite domains	prosite.genes	prosite.txt	Proteins with similar domains and features	http://ca.expasy.org/prosite/	Prosite
+prints domains	prints.genes	prints.txt	Proteins with similar domains and features	http://www.bioinf.manchester.ac.uk/dbbrowser/PRINTS/	PRINTS
+MSigDB lists	msigdb.genes	msigdb.txt	"Genes sets for pathways, factor/miRNA target predictions, expression patterns, etc."	http://www.broadinstitute.org/gsea/msigdb/index.jsp	MSigDB
+BIOCYC pathways	BIOCYC.biosystems.genes	biocyc.txt	Groups of proteins in the same pathways	http://biocyc.org/	BIOCYC
+COSMIC cancer mutations	cosmic.genes	cosmic.txt	Genes mutated in similar cancers	http://cancer.sanger.ac.uk/cancergenome/projects/cosmic/	COSMIC
+GWAS genes	gwas.genes	gwas.txt	Genes mutated in similar diseases	http://www.genome.gov/26525384	GWAS Catalog
+Lipid Maps pathways	LIPID_MAPS.biosystems.genes	lipidmaps.txt	Groups of proteins in the same lipid pathways	http://www.ncbi.nlm.nih.gov/biosystems/	Lipid Maps/Biosystems
+Pathway Interaction DB	Pathway_Interaction_Database.biosystems.genes	pathwayInteractionDB.txt	Groups of proteins in the same pathways	http://pid.nci.nih.gov/	Pathway Interaction Database
+REACTOME pathways	REACTOME.biosystems.genes	reactome.txt	Groups of proteins in the same pathways	http://www.reactome.org/PathwayBrowser/	REACTOME
+SMPDB pathways	smpdb.genes	smpdb.txt	Groups of proteins in the same pathways	http://www.smpdb.ca/	SMPDB
+WikiPathways	WikiPathways.biosystems.genes	wikipathways.txt	Groups of proteins in the same pathways	http://www.wikipathways.org/index.php/Special:BrowsePathwaysPage	Wikipathways

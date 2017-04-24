@@ -31,21 +31,24 @@
  	log.info '--config			Configuration file with sample information. Check README for more information.'
  	log.info '--fasta				Reference genome in FASTA format.'
  	log.info '--gtf				Reference genome in GTF format.'
- 	log.info '--lib				Library information. s for single-stranded data, p for pair-ended data.'
+ 	log.info '--lib				Library information. "s" for single-stranded data, "p" for pair-ended data.'
  	log.info '--readLen			The length of your reads.'
  	log.info ''
- 	log.info 'RNA-seq ONLY:'
- 	log.info '--strandInfo			Strandedness information. Choose from "unstranded", "frFirstStrand", "frSecondStrand".'
+ 	log.info 'RNA-seq MODE ONLY:'
+ 	log.info '--strandInfo			Strandedness information. Choose from "unstranded", "frFirstStrand", or "frSecondStrand".'
  	log.info '--expInfo			Experiment config file for RNA-seq data DGE analysis. Check README for more information.'
+ 	log.info ''
+ 	log.info 'ANALYSIS MODE ONLY:'
+ 	log.info '--analysis			Choose from available: "predictEnhancers".'
  	log.info ''
  	log.info 'OPTIONAL PARAMETERS:'
  	log.info '--threads			Number of threads. (Default: 1)'
- 	log.info '--minid				Minimum alignment identity to look for. Higher is faster and less sensitive. (Default: 0.76)'
- 	log.info '--qvalue			Minimum FDR cutoff for peak detection. (Default: 0.05)'
+ 	log.info '--minid				Minimum alignment identity to look for during mapping. Higher is faster and less sensitive. (Default: 0.76)'
+ 	log.info '--qvalue			Minimum FDR cutoff for peak detection in MACS2 and EPIC. (Default: 0.05)'
  	log.info '--epic_w			Size of the windows used to scan the genome for peak detection in EPIC. (Default: 200)'
  	log.info '--epic_g			A multiple of epic_w used to determine the gap size in EPIC. (Default: 3)'
- 	log.info '--maxindel			Maximum indel length searched. 200k recommended for vertebrate genomes. (Default: 200k)'
- 	log.info '--intronlen			Maximum intron length. 20 recommended for vertebrate genomes. (Default: 20)'
+ 	log.info '--maxindel			Maximum indel length searched during mapping. 200k recommended for vertebrate genomes. (Default: 200k)'
+ 	log.info '--intronlen			Maximum intron length during mapping. 20 recommended for vertebrate genomes. (Default: 20)'
  	log.info '--outdir			Name of output directory. (Default: results)'
  	log.info ''
  	log.info '--subsample			Set this flag to subsample reads for testing.'
@@ -77,6 +80,10 @@
 
  if (!params.lib) {
  	exit 1, "Please specify the strandedness of your experiment. 's' for single-ended and 'p' for pair-ended data"
+ }
+
+ if (params.mode != 'analysis' && params.analysis) {
+ 	exit 1, "--analysis should only be used when running in analysis mode (--mode analysis)"
  }
 
  // SET UP FILES
@@ -3577,6 +3584,12 @@
  	}
 
  	} // closing bracket PE RNA
+
+ 	// ANALYSIS MODE
+ 	if (params.mode == 'analysis' && params.analysis == 'predictEnhancers') {
+
+ 		// Parse config file
+ 	} // closing bracket ANALYSIS mode
 
  // ON COMPLETION
  workflow.onComplete {

@@ -1,0 +1,44 @@
+
+	Usage: makeUCSCfile <tag directory> [options]
+
+	Creates a bedgraph file for visualization using the UCSC Genome Browser
+
+	General Options:
+		-fsize <#> (Size of file, when gzipped, default: 5e7)
+		-strand <both|separate|+|-> (control if reads are separated by strand, default: both)
+		-fragLength <# | auto | given> (Approximate fragment length, default: auto)
+		-adjust <#> (Adjust edge of tag 3' by # bp, negative for 5', default: none[good for dnase])
+		-tbp <#> (Maximum tags per bp to count, default: no limit)
+		-mintbp <#> (Minimum tags per bp to count, default: no limit)
+		-res <#> (Resolution, in bp, of file, default: 1)
+			-avg (report average coverage if resolution is larger than 1bp, default: max is reported)
+		-lastTag (To keep ucsc happy, last mapped tag is NOT extended by default
+			Using this option will allow extending of data past the last tag position)
+		-norm <#> (Total number of tags to normalize experiment to, default: 1e7)
+		-normLength <#> (Expected length of fragment to normalize to [0=off], default: 100)
+		-noadj (Do not normalize tag counts)
+		-neg (plot negative values, i.e. for - strand transcription)
+		-CpG (Show unmethylated CpG ratios)
+		-color <(0-255),(0-255),(0-255)> (no spaces, rgb color for UCSC track, default: random)
+		-i <input tag directory> (normalize bedGraph to input data)
+			-pseudo <#> (Number of pseudo counts used to smooth out low coverage areas, default: 5)
+			-log (report log2 ratio instead of linear ratio)
+			-inputtbp <#>, -inputFragLength <#>, -inputAdjust <#> can also be set
+		-bigWig <chrom.size file> (creates a full resolution bigWig file and track line file)
+			This requires bedGraphToBigWig to be available in your executable path
+			Also, because how how bigWig files work, use "-strand -" and "-strand +"
+			in separate runs to make strand specific files: "-strand separate" will not work
+			Consider using makeBigWig.pl and makeMultiWigHub.pl if interested in bigWigs
+		-o <filename|auto> (send output to this file - will be gzipped, default: prints to stdout)
+			auto: this will place an appropriately named file in the tag directory
+		-name <...> (Name of UCSC track, default: auto generated)
+		-style <option> (See options below:)
+			chipseq (standard, default)
+			rnaseq (strand specific, if unstranded add '-strand both' to end of command)
+			tss (strand specific, single bp fragment length)
+			dnase (fragments centered on tag position instead of downstream)
+			methylated (single bp resolution of cytosine methylation)
+			unmethylated (single bp resolution of unmethylated cytosines)
+			damid (2kb fragments centered on 5' end of reads)
+		-circos <chrN:XXX-YYY|genome> (output only a specific region for circos[no header])
+
