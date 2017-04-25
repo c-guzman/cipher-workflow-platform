@@ -54,8 +54,6 @@ OPTIONAL PARAMETERS:
 
 **IMPORTANTLY** if your analysis is running out of memory / RAM you will need to make use of the **-qs** flag. This specifies the number of processes that can be run at one time in parallel. For smaller RAM computers I suggest to decrease the number to something more appopriate. On a 128gb of RAM local desktop, I typically use a -qs flag of 10.
 
-Available genomes will be added. Please submit an issue to request a new genome addition.
-
 ## INSTALLATION
 
 The CIPHER program requires no manual installation. Just download and unzip the tar file from GitHub or the link at the top of the page. The download may be large.
@@ -160,7 +158,7 @@ git clone https://github.com/c-guzman/cipher-workflow-platform.git
 4) Run the CIPHER ChIP-seq workflow for single-stranded human sample data.
 
 ```
-nextflow run /path/to/main.nf --mode chip --config config.txt --fasta genome.fa --gtf genome.gtf --SE --genome hg19
+nextflow run /path/to/main.nf --mode chip --config config.txt --fasta genome.fa --gtf genome.gtf --lib s --readLeng 75 --threads 10
 ```
 
 This command will run the ChIP-seq workflow for the samples specified in your config.txt using the reference fasta and gtf files you provided for single-ended data in the hg19 human genome. Other genomes are available (hg38, mm9, mm10), and custom genomes can be set using the **--macs_size** and **--epic_size** flags.
