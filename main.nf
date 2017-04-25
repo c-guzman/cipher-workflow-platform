@@ -370,7 +370,7 @@
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReadss
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -521,7 +521,7 @@
 
  		input:
  		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_chipqc
- 		set mergeid, id, file(np), mark, fragLen np_WI_chipqc
+ 		set mergeid, id, file(np), mark, fragLen from np_WI_chipqc
 
  		output:
  		file("${id}/*")
@@ -796,7 +796,7 @@
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReadss
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -947,7 +947,7 @@
 
  		input:
  		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_chipqc
- 		set mergeid, id, file(np), mark, fragLen np_WI_chipqc
+ 		set mergeid, id, file(np), mark, fragLen from np_WI_chipqc
 
  		output:
  		file("${id}/*")
