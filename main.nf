@@ -3032,7 +3032,7 @@
 
  		script:
  		"""
- 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --unstranded --title ${id} --randomseed 111 --outfilePrefix ${id}  --singleEnded --rawfastq ${read1} ${bam} ${gtf_file} QC
+ 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --outfilePrefix ${id}  --singleEnded --rawfastq ${read1} ${bam} ${gtf_file} QC
  		"""
  	}
 
@@ -3101,7 +3101,7 @@
 
  	if (params.strandInfo == 'frFirstStrand') {
 
- 		process featurecounts_unstranded {
+ 		process featurecounts_frFirstStrand {
 
  			publishDir "${params.outdir}/featurecounts", mode: 'copy'
 
@@ -3126,7 +3126,7 @@
 
  	if (params.strandInfo == 'frSecondStrand') {
 
- 		process featurecounts_unstranded {
+ 		process featurecounts_frSecondStrand {
 
  			publishDir "${params.outdir}/featurecounts", mode: 'copy'
 
@@ -3426,7 +3426,7 @@
 
  		script:
  		"""
- 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --unstranded --title ${id} --randomseed 111 --outfilePrefix ${id} --rawfastq ${read1},${read2} ${bam} ${gtf_file} QC
+ 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --outfilePrefix ${id} --rawfastq ${read1},${read2} ${bam} ${gtf_file} QC
  		"""
  	}
 
@@ -3495,7 +3495,7 @@
 
  	if (params.strandInfo == 'frFirstStrand') {
 
- 		process featurecounts_unstranded {
+ 		process featurecounts_frFirstStrand {
 
  			publishDir "${params.outdir}/featurecounts", mode: 'copy'
 
@@ -3520,7 +3520,7 @@
 
  	if (params.strandInfo == 'frSecondStrand') {
 
- 		process featurecounts_unstranded {
+ 		process featurecounts_frSecondStrand {
 
  			publishDir "${params.outdir}/featurecounts", mode: 'copy'
 

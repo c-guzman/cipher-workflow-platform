@@ -4,7 +4,7 @@
 # Process epic-effective output
 
 args <- commandArgs(trailingOnly=TRUE)
-egs_file <- args[-1]
+egs_file <- args[1]
 
 data = read.table(egs_file,
                   header = F, sep = ":", stringsAsFactors = F)
