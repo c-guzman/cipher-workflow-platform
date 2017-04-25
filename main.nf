@@ -2987,7 +2987,7 @@
  		publishDir "${params.outdir}/tracks", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bam_deeptools_fwd
+ 		set mergeid, id, file(bam), file(bam_index) from bam_deeptools_fwd
  		val egs_size from egs_size_deeptools_fwd
 
  		output:
@@ -3004,7 +3004,7 @@
  		publishDir "${params.outdir}/tracks", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), controlid, mark, fragLen, file(bam_index) from bam_deeptools_rev
+ 		set mergeid, id, file(bam), file(bam_index) from bam_deeptools_rev
  		val egs_size from egs_size_deeptools_rev
 
  		output:
@@ -3381,7 +3381,7 @@
  		publishDir "${params.outdir}/tracks", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from bam_deeptools_fwd
+ 		set mergeid, id, file(bam), file(bam_index) from bam_deeptools_fwd
  		val egs_size from egs_size_deeptools_fwd
 
  		output:
@@ -3398,7 +3398,7 @@
  		publishDir "${params.outdir}/tracks", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), controlid, mark, fragLen, file(bam_index) from bam_deeptools_rev
+ 		set mergeid, id, file(bam), file(bam_index) from bam_deeptools_rev
  		val egs_size from egs_size_deeptools_rev
 
  		output:
