@@ -284,7 +284,7 @@
  		file("ref/*") from bbmap_index.first()
 
  		output:
- 		set mergeid, id, file("${id}.sorted.mapped.bam"), controlid, mark, file("${id}.sorted.mapped.bam.bai") into bam_grouping
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), controlid, mark, file("${id}.sorted.mapped.bam.bai") into bam_grouping, bam_spp
  		file("${id}.alignmentReport.txt")
  		file("${id}.unmapped.bam") into unmapped_bams
 
@@ -297,11 +297,11 @@
  	}
 
  	// SEPARATE CHIP AND INPUT FILES
- 	//treat = Channel.create()
- 	//control = Channel.create()
- 	//bam_grouping.choice(treat, control) {
- 	//	it[4] == 'input' ? 1 : 0
- 	//}
+ 	treat = Channel.create()
+ 	control = Channel.create()
+ 	bam_grouping.choice(treat, control) {
+ 		it[4] == 'input' ? 1 : 0
+ 	}
 
  	// STEP 5 ESTIMATE FRAGMENT SIZE SPP
  	process estimate_fragment_size {
@@ -309,7 +309,7 @@
  		publishDir "${params.outdir}/fragment_sizes", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bam_grouping
+ 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bam_spp
 
  		output:
  		set mergeid, id, file("${id}.params.out") into modelParams
@@ -710,7 +710,7 @@
  		file("ref/*") from bbmap_index.first()
 
  		output:
- 		set mergeid, id, file("${id}.sorted.mapped.bam"), controlid, mark, file("${id}.sorted.mapped.bam.bai") into bam_grouping
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), controlid, mark, file("${id}.sorted.mapped.bam.bai") into bam_grouping, bam_spp
  		file("${id}.alignmentReport.txt")
  		file("${id}.unmapped.bam") into unmapped_bams
 
@@ -723,11 +723,11 @@
  	}
 
  	// SEPARATE CHIP AND INPUT FILES
- 	//treat = Channel.create()
- 	//control = Channel.create()
- 	//bam_grouping.choice(treat, control) {
- 	//	it[4] == 'input' ? 1 : 0
- 	//}
+ 	treat = Channel.create()
+ 	control = Channel.create()
+ 	bam_grouping.choice(treat, control) {
+ 		it[4] == 'input' ? 1 : 0
+ 	}
 
  	// STEP 5 ESTIMATE FRAGMENT SIZE SPP
  	process estimate_fragment_size {
@@ -735,7 +735,7 @@
  		publishDir "${params.outdir}/fragment_sizes", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bam_grouping
+ 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bam_pp
 
  		output:
  		set mergeid, id, file("${id}.params.out") into modelParams
