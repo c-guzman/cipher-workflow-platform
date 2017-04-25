@@ -339,7 +339,7 @@
  		it[3] != '-'
  	}
  	.cross(allBams) { it[3] }.map{ c, t ->
- 		[t[0], t[1], t[2], c[2], t[4], t[5], t[6], c[6]]
+ 		[t[0], t[1], t[2], c[2], t[4], t[5], t[6]]
  	}
 
  	// CREATE MORE BAM CHANELS WITH INPUT
@@ -362,7 +362,7 @@
  		publishDir "${params.outdir}/tracks", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_bigwigs
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from bamsWI_bigwigs
  		val egs_size from egs_size_deeptools_WI
 
  		output:
@@ -399,7 +399,7 @@
 
  		input:
  		file chromSizes from chrom_sizes_WI.val
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_macs
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from bamsWI_macs
  		val egs_size from egs_size_macs_WI
 
  		output:
@@ -440,7 +440,7 @@
 
  		input:
  		file chromSizes from chrom_sizes_epic.val
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_epic
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from bamsWI_epic
  		val egs_ratio from egs_ratio_epic_WI
 
  		output:
@@ -520,7 +520,7 @@
  		publishDir "${params.outdir}/chipqc", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_chipqc
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from bamsWI_chipqc
  		set mergeid, id, file(np), mark, fragLen from np_WI_chipqc
 
  		output:
@@ -788,7 +788,7 @@
  		publishDir "${params.outdir}/tracks", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_bigwigs
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from bamsWI_bigwigs
  		val egs_size from egs_size_deeptools_WI
 
  		output:
@@ -825,7 +825,7 @@
 
  		input:
  		file chromSizes from chrom_sizes_WI.val
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_macs
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from bamsWI_macs
  		val egs_size from egs_size_macs_WI
 
  		output:
@@ -866,7 +866,7 @@
 
  		input:
  		file chromSizes from chrom_sizes_epic.val
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_epic
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from bamsWI_epic
  		val egs_ratio from egs_ratio_epic_WI
 
  		output:
@@ -946,7 +946,7 @@
  		publishDir "${params.outdir}/chipqc", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index), file(control_index) from bamsWI_chipqc
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from bamsWI_chipqc
  		set mergeid, id, file(np), mark, fragLen from np_WI_chipqc
 
  		output:

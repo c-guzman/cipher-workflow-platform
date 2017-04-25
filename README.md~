@@ -122,18 +122,18 @@ sample1 sample1_run2  /path/to/sample1_run2_R1.fastq.gz /path/to/sample1_run2_R2
 3. **Path1**: The path to the first fastq file to be processed. Must include _R1 at the end of file prefixes in order to differentiate between pair ended files.
 4. **Path2**: The path to the second fastq file to be processed. Must include _R2 at the end of the file prefixes in order to differentiate between pair ended files.
 
-**RNA-Seq Experiment Information File**
+**RNA-Seq Experiment File**
 
 RNA-seq experiments require a text file with metadata regarding your samples and conditions. Currently, CIPHER only really supports 2 condition DGE (such as WT/KO). The experiment file should look like this:
 
 ```
 sample	condition
-Ctrl1   WT
+Ctrl1 WT
 Ctrl2	WT
 Ctrl3	WT
-KO1 	KO
-KO2	    KO
-KO3	    KO
+KO1	KO
+KO2	KO
+KO3	KO
 ```
 
 The headers sample and condition must be included.
