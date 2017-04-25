@@ -49,6 +49,7 @@
  	log.info '--epic_g			A multiple of epic_w used to determine the gap size in EPIC. (Default: 3)'
  	log.info '--maxindel			Maximum indel length searched during mapping. 200k recommended for vertebrate genomes. (Default: 200k)'
  	log.info '--intronlen			Maximum intron length during mapping. 20 recommended for vertebrate genomes. (Default: 20)'
+ 	log.info '--egs				The effective genome size of your species. (Default: Automatically calculated - requires approximately 80GB of RAM)'
  	log.info '--outdir			Name of output directory. (Default: results)'
  	log.info ''
  	log.info '--subsample			Set this flag to subsample reads for testing.'
@@ -2866,7 +2867,8 @@
  	}
 
  	// Calculate effective genome size
- 	process calculate_egs {
+ 	if (!params.egs) {
+ 		process calculate_egs {
 
  		input:
  		file fasta_file
@@ -2890,6 +2892,7 @@
  			egs_size_deeptools_fwd
  			egs_size_deeptools_rev
  		}
+ 	}
 
  	// Generate BBMap Index
  	process create_mapping_index {
@@ -2982,7 +2985,8 @@
  	}
 
  	// STEP 5 CREATE BIGWIGS WITH DEEPTOOLS
- 	process create_fwd_coverage_tracks {
+ 	if (!params.egs) {
+ 		process create_fwd_coverage_tracks {
 
  		publishDir "${params.outdir}/tracks", mode: 'copy'
 
@@ -3015,6 +3019,41 @@
  		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --filterRNAstrand reverse
  		"""
  	}
+ }
+
+ if (params.egs == '*') {
+ 		process create_fwd_coverage_tracks {
+
+ 		publishDir "${params.outdir}/tracks", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), file(bam_index) from bam_deeptools_fwd
+
+ 		output:
+ 		file("${id}.RPGCnorm.fwd.bigWig") into fwd_bigwigs
+
+ 		script:
+ 		"""
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${params.egs} --filterRNAstrand forward
+ 		"""
+ 	}
+
+ 	process create_rev_coverage_tracks {
+
+ 		publishDir "${params.outdir}/tracks", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(bam), file(bam_index) from bam_deeptools_rev
+
+ 		output:
+ 		file("${id}.RPGCnorm.rev.bigWig") into rev_bigwigs
+
+ 		script:
+ 		"""
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${params.egs} --filterRNAstrand reverse
+ 		"""
+ 	}
+ }
 
  	// STEP 6 QUALITY CONTROL WITH QORTS
  	process qorts {
