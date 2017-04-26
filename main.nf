@@ -16,6 +16,8 @@
  params.epic_g = 3
  params.maxindel = '200k'
  params.intronlen = 20
+ params.egs = false
+ params.egs_ratio = false
  //params.binSize = 10
  //params.smoothLen = 50
  //params.aligner = 'bbmap'
@@ -50,6 +52,7 @@
  	log.info '--maxindel			Maximum indel length searched during mapping. 200k recommended for vertebrate genomes. (Default: 200k)'
  	log.info '--intronlen			Maximum intron length during mapping. 20 recommended for vertebrate genomes. (Default: 20)'
  	log.info '--egs				The effective genome size of your species. (Default: Automatically calculated - requires approximately 80GB of RAM)'
+ 	log.info '--egs_ratio		Effective genome as fraction of the genome size. Must be between 0 and 1. Check EPIC GitHub for more information. (Default: Automatically calculated - requires approximately 80GB of RAM)'
  	log.info '--outdir			Name of output directory. (Default: results)'
  	log.info ''
  	log.info '--subsample			Set this flag to subsample reads for testing.'
@@ -169,7 +172,8 @@
  	}
 
  	// Calculate effective genome size
- 	process calculate_egs {
+ 	if (!params.egs && !params.egs_ratio) {
+ 		process calculate_egs {
 
  		input:
  		file fasta_file
@@ -205,6 +209,7 @@
  			egs_ratio.into {
  				egs_ratio_epic_WI
  			}
+ 		}
 
  	// Generate BBMap Index
  	process create_mapping_index {

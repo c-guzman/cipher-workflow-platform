@@ -132,8 +132,8 @@ Ctrl1   WT
 Ctrl2	WT
 Ctrl3	WT
 KO1 	KO
-KO2	    KO
-KO3	    KO
+KO2	   KO
+KO3	   KO
 ```
 
 The headers sample and condition must be included.
@@ -166,8 +166,6 @@ This command will run the ChIP-seq workflow for the samples specified in your co
 ## Annotation Files
 
 Annotation files are typically FASTA and GTF files for various genomes / species.
-
-CIPHER's ChIP-seq pipeline does not work with Ensembl chromosome names (eg. 1, 2, 3 instead of chr1, chr2, chr3) and thus must be converted before use.
 
 **Gencode**: http://www.gencodegenes.org/ (human and mouse genomes)
 
