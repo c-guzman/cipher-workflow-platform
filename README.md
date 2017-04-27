@@ -30,7 +30,7 @@ REQUIRED PARAMETERS:
 --lib				Library information. "s" for single-stranded data, "p" for pair-ended data.
 --readLen			The length of your reads.
 
-RNA-seq ONLY:
+RNA-seq MODE ONLY:
 --strandInfo			Strandedness information. Choose from "unstranded", "frFirstStrand", or "frSecondStrand".
 --expInfo			Experiment config file for RNA-seq data DGE analysis. Check README for more information.
 
@@ -45,6 +45,8 @@ OPTIONAL PARAMETERS:
 --epic_g			A multiple of epic_w used to determine the gap size in EPIC. (Default: 3)
 --maxindel			Maximum indel length searched during mapping. 200k recommended for vertebrate genomes. (Default: 200k)
 --intronlen			Maximum intron length during mapping. 20 recommended for vertebrate genomes. (Default: 20)
+--egs				The effective genome size of your species. (Default: Automatically calculated - requires approximately 80GB of RAM)
+--egs_ratio		Effective genome as fraction of the genome size. Must be between 0 and 1. Check EPIC GitHub for more information. (Default: Automatically calculated - requires approximately 80GB of RAM)
 --outdir			Name of output directory. (Default: results)
 
 --subsample			Set this flag to subsample reads for testing.
@@ -179,7 +181,7 @@ The analysis mode in CIPHER is meant to streamline more sophisticated and comple
 
 **De-Novo Enhancer Prediction**
 
-CIPHER is able to predict potential enhancer elements via a machine learning model using bedGraph files for DNase, H3K4me1, H3K4me3, and H3K27Ac markers. The bedGraph files must be RPKM normalized, but running CIPHER automatically outputs RPKM normalized bedGraphs.
+CIPHER is able to predict potential enhancer elements via a machine learning model using bedGraph files for DNase, H3K4me1, H3K4me3, and H3K27Ac markers. The bedGraph files must be SPMR normalized (MACS2 output).
 
 To identify enhancers you will need a **config** file with marker information, and a reference genome **FASTA** file.
 
@@ -192,12 +194,12 @@ H3K4me1	  /path/to/H3K4me1.bdg
 H3K4me3	  /path/to/H3K4me3.bdg
 ```
 
-Where column one indicates the marker ID **(THESE MUST ALWAYS BE THE SAME, THE PIPELINE WILL FAIL IF YOU DO NOT INCLUDE THE APPROPRIATE IDs)** and column 2 indicates the path to the individual bedGraph file.
+Where column one indicates the marker ID **(THESE MUST ALWAYS BE IDENTICAL TO THE EXAMPLE ABOVE, THE PIPELINE WILL FAIL IF YOU DO NOT INCLUDE THE APPROPRIATE IDs)** and column 2 indicates the path to the individual bedGraph file.
 
 Once you have the necessary files, you can identify enhancers by running:
 
 ```
-nextflow run /path/to/main.nf --mode analysis --config config.txt --fasta genome.fa --predictEnhancers
+nextflow run /path/to/main.nf --mode analysis --config config.txt --fasta genome.fa --analysis predictEnhancers
 
 ```
 ## Cluster support
