@@ -132,8 +132,8 @@ Ctrl1   WT
 Ctrl2	WT
 Ctrl3	WT
 KO1 	KO
-KO2	   KO
-KO3	   KO
+KO2		KO
+KO3		KO
 ```
 
 The headers sample and condition must be included.

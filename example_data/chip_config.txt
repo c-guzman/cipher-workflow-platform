@@ -1,2 +1,0 @@
-POL2A	POL2A.subsampled_1	/dataB/code/cipher-main/example_data/Input.subsampled_1.fastq.gz	control1	POL2A
-Input	Input.subsampled_1	/dataB/code/cipher-main/example_data/POL2A.subsampled_1.fastq.gz	control1	input

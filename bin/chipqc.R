@@ -1,16 +1,16 @@
 #!/usr/bin/env Rscript
 
-args <- commandArgs(trailingOnly = FALSE)
+args <- commandArgs(trailingOnly = T)
 # args[1] = bam
 # args[2] = narrow peaks
 # args[3] = id
 
 # Load ChIPQC package
-if (!require("ChIPQC")){
-  source("http://bioconductor.org/biocLite.R")
-  biocLite("ChIPQC", suppressUpdates=TRUE)
-  library("ChIPQC")
-    }
+library(ChIPQC)
 
-sample = ChIPQCsample(args[1], peaks = args[2])
-ChIPQCreport(sample, reportName=args[3], reportFolder=args[3])
+bam = args[1]
+peak_file = args[2]
+id = args[3]
+
+sample = ChIPQCsample(bam, peaks = peak_file)
+ChIPQCreport(sample, reportName=id, reportFolder=id)
