@@ -87,7 +87,7 @@
  }
 
  if (params.mode != 'analysis' && params.analysis) {
- 	exit 1, "--analysis should only be used when running in analysis mode (--mode analysis)"
+ 	exit 1, "--analysis should only be used when running analysis mode (--mode analysis)"
  }
 
  // SET UP FILES
@@ -1950,8 +1950,7 @@
  		}
 
  		egs_size.into {
- 			egs_size_deeptools_fwd
- 			egs_size_deeptools_rev
+ 			egs_size_deeptools_NI
  		}
 
  	// Generate BBMap Index
