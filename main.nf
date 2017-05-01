@@ -52,7 +52,7 @@
  	log.info '--maxindel			Maximum indel length searched during mapping. 200k recommended for vertebrate genomes. (Default: 200k)'
  	log.info '--intronlen			Maximum intron length during mapping. 20 recommended for vertebrate genomes. (Default: 20)'
  	log.info '--egs				The effective genome size of your species. (Default: Automatically calculated - requires approximately 80GB of RAM)'
- 	log.info '--egs_ratio		Effective genome as fraction of the genome size. Must be between 0 and 1. Check EPIC GitHub for more information. (Default: Automatically calculated - requires approximately 80GB of RAM)'
+ 	log.info '--egs_ratio			Effective genome as fraction of the genome size. Must be between 0 and 1. Check EPIC GitHub for more information. (Default: Automatically calculated - requires approximately 80GB of RAM)'
  	log.info '--outdir			Name of output directory. (Default: results)'
  	log.info ''
  	log.info '--subsample			Set this flag to subsample reads for testing.'

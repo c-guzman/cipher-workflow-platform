@@ -160,7 +160,7 @@ git clone https://github.com/c-guzman/cipher-workflow-platform.git
 4) Run the CIPHER ChIP-seq workflow for single-stranded human sample data.
 
 ```
-nextflow run /path/to/main.nf --mode chip --config config.txt --fasta genome.fa --gtf genome.gtf --lib s --readLeng 75 --threads 10
+nextflow run /path/to/main.nf --mode chip --config config.txt --fasta genome.fa --gtf genome.gtf --lib s --readLen 75 --threads 10
 ```
 
 This command will run the ChIP-seq workflow for the samples specified in your config.txt using the reference fasta and gtf files you provided for single-ended data in the hg19 human genome. Other genomes are available (hg38, mm9, mm10), and custom genomes can be set using the **--macs_size** and **--epic_size** flags.
@@ -173,7 +173,7 @@ Annotation files are typically FASTA and GTF files for various genomes / species
 
 **UCSC**: https://genome.ucsc.edu/cgi-bin/hgTables (very comphrensive list of genomes)
 
-**Ensembl**: http://useast.ensembl.org/info/data/ftp/index.html (very comphrensive list of genomes .. ChIP-seq requires you to format chromosome names into UCSC based chromosomes (chr1, chr2, chr3, chr ... etc))
+**Ensembl**: http://useast.ensembl.org/info/data/ftp/index.html (very comphrensive list of genomes)
 
 ## Analysis Mode
 
