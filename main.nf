@@ -3075,7 +3075,7 @@
 
  		script:
  		"""
- 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --stopAfterNReads 5000000 --outfilePrefix ${id}  --singleEnded --rawfastq ${read1} ${bam} ${gtf_file} QC
+ 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --stopAfterNReads 5000000 --nameSorted --outfilePrefix ${id}  --singleEnded --rawfastq ${read1} ${bam} ${gtf_file} QC
  		"""
  	}
 
@@ -3469,7 +3469,7 @@
 
  		script:
  		"""
- 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --stopAfterNReads 5000000 --outfilePrefix ${id} --rawfastq ${read1},${read2} ${bam} ${gtf_file} QC
+ 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --stopAfterNReads 5000000 --nameSorted --outfilePrefix ${id} --rawfastq ${read1},${read2} ${bam} ${gtf_file} QC
  		"""
  	}
 
