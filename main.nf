@@ -3632,6 +3632,161 @@
  	if (params.mode == 'analysis' && params.analysis == 'predictEnhancers') {
 
  		// Parse config file
+ 		bedgraphs = Channel
+ 		.from(config_file.readLines())
+ 		.map { line ->
+ 			list = line.split()
+ 			id = list[0]
+ 			bedgraph = file(list[1])
+ 			[ id, bedgraph ]
+ 		}
+
+ 		// Step 1. FASTA index
+ 		process fasta_index {
+
+ 			input:
+ 			file fasta_file
+
+ 			output:
+ 			file "chromSizes.txt" into chromSizes
+
+ 			script:
+ 			"""
+ 			samtools faidx ${fasta_file}
+			awk -v OFS='\t' '{print \$1, \$2}' ${fasta_file}.fai > chromSizes.txt
+			"""
+ 		}
+
+ 		// Step 2. Split genome into 200bp windows
+ 		process generate_genome_bins {
+
+ 			input:
+ 			file chromSizes from chomSizes.val
+
+ 			output:
+ 			file("split_genome.txt") into genome
+
+ 			script:
+ 			"""
+ 			bedtools makewindows -w 200 -g ${chromSizes} | sort-bed - | awk -v OFS='\t' '{if (\$1 ~ /chr/) print \$0}' > split_genome.txt
+ 			"""
+ 		}
+
+ 		genome.into {
+ 			genome1
+ 			genome2
+ 		}
+
+ 		// Step 3. Convert bedgraphs into beds
+ 		process bedgraph_to_bed {
+
+			input:
+			set id, file(bedgraph) from bedgraphs
+
+			output:
+			set id, file("${id}.bed") into beds
+
+			script:
+			"""
+			awk '{print \$1"\t"\$2"\t"\$3"\t.\t"\$4}' ${bedgraph} | sort-bed - | awk -v OFS='\t' '{if (\$1 ~ /chr/) print \$0}' > ${id}.bed
+			"""
+		}
+
+		// Step 4. Calculate Mean Coverage
+		process mean_coverage_over_genome {
+
+			input:
+			set id, file(bed) from beds
+			file genome from genome1.val
+
+			output:
+			set id, file("${id}.coverage_only.txt") into coverage_files
+
+			script:
+			"""
+			bedmap --echo --mean --delim '\t' ${genome} ${bed} > ${id}.coverages.txt
+			awk -v OFS='\t' '{print \$4}' ${id}.coverages.txt > ${id}.coverage_only.txt
+			"""
+		}
+
+		coverage_files.into {
+		coverage_files_1
+		coverage_files_2
+		coverage_files_3
+		coverage_files_4
+		}
+
+		dnase = Channel.create()
+		dnase = coverage_files_1.filter {
+			it[0] == "DNase"
+		}
+
+		h3k1 = Channel.create()
+		h3k1 = coverage_files_2.filter {
+			it[0] == "H3K4me1"
+		}
+
+		h3k27ac = Channel.create()
+		h3k27ac = coverage_files_3.filter {
+			it[0] == "H3K27Ac"
+		}
+
+		h3k3 = Channel.create()
+		h3k3 = coverage_files_4.filter {
+			it[0] == "H3K4me3"
+		}
+
+		// Step 5. Combine coverages into one final dataset
+		process merge_coverages {
+
+			input:
+			set id, file(dnase_file) from dnase
+			set id, file(h3k1_file) from h3k1
+			set id, file(h3k27ac_file) from h3k27ac
+			set id, file(h3k3_file) from h3k3
+			file genome from genome2.val
+
+			output:
+			file("final.dataset.txt") into final_dataset
+
+			script:
+			"""
+			paste ${genome} ${dnase_file} ${h3k27ac_file} ${h3k1_file} ${h3k3_file} > final.dataset.txt
+			"""
+		}
+
+		// Step 6: Generate list of putative enhancers
+		process predict_enhancers {
+
+			input:
+			file(data) from final_dataset
+
+			output:
+			file("predicted.enhancers.txt") into enhancers
+
+			script:
+			"""
+			Rscript '$baseDir/bin/enhancer_prediction.R' ${data} '$baseDir/bin/mlModel.rds'
+			"""
+		}
+
+		// Step 7. Merge putative enhancers
+		process stitching {
+
+			publishDir "${params.outdir}/predicted_enhancers", mode: 'copy'
+
+			input:
+			file(enhancer_file) from enhancers
+
+			output:
+			file("predicted_enhancers.txt")
+
+			script:
+			"""
+			sort-bed ${enhancer_file} | bedops --merge - | awk -v OFS='\t' '{print \$1, \$2, \$3, "Enhancer.Prediction." NR}' > predicted_enhancers.txt
+			"""
+		}
+
  	} // closing bracket ANALYSIS mode
 
  // ON COMPLETION
