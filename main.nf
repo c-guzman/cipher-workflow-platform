@@ -1823,7 +1823,7 @@
  		script:
  		"""
  		bam2bed --do-not-sort < ${bam} > ${id}.sorted.mapped.bam.bed
- 		python $baseDir/bin/danpos/danpos.py dpos ${bed} -m 0 -o ${id} --frsz ${fragLen} -jw 40 -jd 150
+ 		python $baseDir/bin/danpos/danpos.py dpos ${id}.sorted.mapped.bam.bed -m 0 -o ${id} --frsz ${fragLen} -jw 40 -jd 150
  		mv ${id}/pooled/${id}.sorted.mapped.bam.positions.xls ${id}/pooled/${id}.sorted.mapped.bam.positions.txt
  		"""
  	}
@@ -2111,7 +2111,7 @@
  		script:
  		"""
  		bam2bed --do-not-sort < ${bam} > ${id}.sorted.mapped.bam.bed
- 		python $baseDir/bin/danpos/danpos.py dpos ${bed} -m 1 -o ${id} --frsz ${fragLen} -jw 40 -jd 150
+ 		python $baseDir/bin/danpos/danpos.py dpos ${id}.sorted.mapped.bam.bed -m 1 -o ${id} --frsz ${fragLen} -jw 40 -jd 150
  		mv ${id}/pooled/${id}.sorted.mapped.bam.positions.xls ${id}/pooled/${id}.sorted.mapped.bam.positions.txt
  		"""
  	}
@@ -2983,7 +2983,7 @@
  		script:
  		"""
  		bbmap.sh in=${read1} outm=${id}.mapped.bam outu=${id}.unmapped.bam keepnames=t trd sam=1.3 intronlen=${params.intronlen} maxindel=${params.maxindel} ambig=random statsfile=${id}.alignmentReport.txt minid=${params.minid} usemodulo
- 		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.bam
+ 		sambamba sort --tmpdir $baseDir -N -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.bam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  	}
@@ -3075,7 +3075,7 @@
 
  		script:
  		"""
- 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --outfilePrefix ${id}  --singleEnded --rawfastq ${read1} ${bam} ${gtf_file} QC
+ 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --stopAfterNReads 5000000 --outfilePrefix ${id}  --singleEnded --rawfastq ${read1} ${bam} ${gtf_file} QC
  		"""
  	}
 
@@ -3413,7 +3413,7 @@
  		script:
  		"""
  		bbmap.sh in=${read1} in2=${read2} outm=${id}.mapped.bam outu=${id}.unmapped.bam keepnames=t trd sam=1.3 intronlen=${params.intronlen} maxindel=${params.maxindel} ambig=random statsfile=${id}.alignmentReport.txt minid=${params.minid} usemodulo
- 		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.bam
+ 		sambamba sort --tmpdir $baseDir -N -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.bam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  	}
@@ -3449,7 +3449,7 @@
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --filterRNAstrand reverse
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.rev.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --filterRNAstrand reverse
  		"""
  	}
 
@@ -3469,7 +3469,7 @@
 
  		script:
  		"""
- 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --outfilePrefix ${id} --rawfastq ${read1},${read2} ${bam} ${gtf_file} QC
+ 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --randomSeed 111 --stopAfterNReads 5000000 --outfilePrefix ${id} --rawfastq ${read1},${read2} ${bam} ${gtf_file} QC
  		"""
  	}
 
