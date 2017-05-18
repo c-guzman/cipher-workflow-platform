@@ -21,15 +21,19 @@
  params.aligner = 'bbmap'
  //params.binSize = 10
  //params.smoothLen = 50
- //params.aligner = 'bbmap'
+ params.aligner = 'bbmap'
+
+ // bwa defaults
+ params.bwa_T = 30
 
  // PRINT HELP
  if (params.help) {
  	log.info ''
- 	log.info '~ C I P H E R ~ Version 1.0.0'
+ 	log.info '~ C I P H E R ~ Version 1.1.0'
  	log.info '**************************************************************'
  	log.info ''
  	log.info 'REQUIRED PARAMETERS:'
+ 	log.info '===================='
  	log.info '--mode				Choose from available: chip, rna, gro, mnase, dnase, analysis.'
  	log.info '--config			Configuration file with sample information. Check README for more information.'
  	log.info '--fasta				Reference genome in FASTA format.'
@@ -38,16 +42,19 @@
  	log.info '--readLen			The length of your reads.'
  	log.info ''
  	log.info 'RNA-seq MODE ONLY:'
+ 	log.info '=================='
  	log.info '--strandInfo			Strandedness information. Choose from "unstranded", "frFirstStrand", or "frSecondStrand".'
  	log.info '--expInfo			Experiment config file for RNA-seq data DGE analysis. Check README for more information.'
  	log.info ''
  	log.info 'ANALYSIS MODE ONLY:'
+ 	log.info '==================='
  	log.info '--analysis			Choose from available: "predictEnhancers".'
  	log.info ''
  	log.info 'OPTIONAL PARAMETERS:'
+ 	log.info '===================='
  	log.info '--threads			Number of threads. (Default: 1)'
- 	log.info '--aligner			The alignment software your workflow will use. Available: bbmap, bowtie2, bwa, hisat2, star. (Default: BBMap)'
- 	log.info '--minid				Minimum alignment identity to look for during mapping. Higher is faster and less sensitive. (Default: 0.76)'
+ 	log.info '--aligner			The alignment software your workflow will use. Available: bbmap, bowtie2, bwa, hisat2, star. (Default: bbmap)'
+ 	log.info '--minid				Minimum alignment identity to look for during BBMap mapping. Higher is faster and less sensitive. (Default: 0.76)'
  	log.info '--qvalue			Minimum FDR cutoff for peak detection in MACS2 and EPIC. (Default: 0.05)'
  	log.info '--epic_w			Size of the windows used to scan the genome for peak detection in EPIC. (Default: 200)'
  	log.info '--epic_g			A multiple of epic_w used to determine the gap size in EPIC. (Default: 3)'
@@ -57,6 +64,62 @@
  	log.info '--egs_ratio			Effective genome as fraction of the genome size. Must be between 0 and 1. Check EPIC GitHub for more information. (Default: Automatically calculated - requires approximately 80GB of RAM)'
  	log.info '--outdir			Name of output directory. (Default: results)'
  	log.info ''
+ 	log.info 'ALIGNER-SPECIFIC OPTIONAL PARAMETERS:'
+ 	log.info '====================================='
+ 	log.info ''
+ 	log.info 'BWA:'
+ 	log.info '--bwa_k				See -k option in BWA user manual for more information. (Default: 19)'
+ 	log.info '--bwa_w				See -w option in BWA user manual for more information. (Default: 100)'
+ 	log.info '--bwa_d				See -d option in BWA user manual for more information. (Default: 100)'
+ 	log.info '--bwa_r				See -r option in BWA user manual for more information. (Default: 1.5)'
+ 	log.info '--bwa_c				See -c option in BWA user manual for more information. (Default: 10000)'
+ 	log.info '--bwa_A				See -A option in BWA user manual for more information. (Default: 1)'
+ 	log.info '--bwa_B				See -B option in BWA user manual for more information. (Default: 4)'
+ 	log.info '--bwa_O				See -O option in BWA user manual for more information. (Default: 6)'
+ 	log.info '--bwa_E				See -E option in BWA user manual for more information. (Default: 1)'
+ 	log.info '--bwa_L				See -L option in BWA user manual for more information. (Default: 5)'
+ 	log.info '--bwa_U				See -U option in BWA user manual for more information. (Default: 9)'
+ 	log.info '--bwa_T				See -T option in BWA user manual for more information. (Default: 30)'
+ 	log.info ''
+ 	log.info 'BOWTIE2:'
+ 	log.info '--bt2_D				See -D option in Bowtie2 user manual for more information. (Default: 20)'
+ 	log.info '--bt2_R				See -R option in Bowtie2 user manual for more information. (Default: 3)'
+ 	log.info '--bt2_N				See -N option in Bowtie2 user manual for more information. (Default: 0)'
+ 	log.info '--bt2_L				See -L option in Bowtie2 user manual for more information. (Default: 20)'
+ 	log.info '--bt2_i				See -i option in Bowtie2 user manual for more information. (Default: 5,1,0.50)'
+ 	log.info '--bt2_trim5			See --trim5 option in Bowtie2 user manual for more information. (Default: 0)'
+ 	log.info '--bt2_trim3			See --trim3 option in Bowtie2 user manual for more information. (Default: 0)'
+ 	log.info '--local				Set this parameter to map alignments in local mode. (Default: false)'
+ 	log.info ''
+ 	log.info 'HISAT2:'
+ 	log.info '--hs_k				See -k option in HISAT2 user manual for more information. (Default: 5)'
+ 	log.info '--hs_trim5			See --trim5 option in HISAT2 user manual for more information. (Default: 0)'
+ 	log.info '--hs_trim3			See --trim3 option in HISAT2 user manual for more information. (Default: 0)'
+ 	log.info '--hs_mp				See --mp option in HISAT2 user manual for more information. (Default: 6,2)'
+ 	log.info '--hs_sp				See --sp option in HISAT2 user manual for more information. (Default: 2,1)'
+ 	log.info '--hs_np				See --np option in HISAT2 user manual for more information. (Default: 1)'
+ 	log.info '--hs_rdg			See --rdg option in HISAT2 user manual for more information. (Default: 5,3)'
+ 	log.info '--hs_rfg			See --rfg option in HISAT2 user manual for more information. (Default: 5,3)'
+ 	log.info '--hs_pen-cansplice		See --pen-cansplice option in HISAT2 user manual for more information. (Default: 0)'
+ 	log.info '--hs_pen-noncansplice		See --pen-nonansplice option in HISAT2 user manual for more information. (Default: 12)'
+ 	log.info '--hs_min-intronlen		See --min-intronlen option in HISAT2 user manual for more information. (Default: 20)'
+ 	log.info '--hs_max-intronlen		See --max-intronlen option in HISAT2 user manual for more information. (Default: 500000)'
+ 	log.info '--hs_max-seeds			See --max-seeds option in HISAT2 user manual for more information. (Default: 5)'
+ 	log.info ''
+ 	log.info 'STAR:'
+ 	log.info '--star_clip3pNbases		See --clip3pNbases option in STAR user manual for more information. (Default: 0)'
+ 	log.info '--star_clip5pNbases		See --clip5pNbases option in STAR user manual for more information. (Default: 0)'
+ 	log.info '--star_outFilterMultimapScoreRange	See --outFilterMultimapScoreRange option in STAR user manual for more information. (Default: 1)'
+ 	log.info '--star_outFilterMultimapNmax		See --outFilterMultimapNmax option in STAR user manual for more information. (Default: 10)'
+ 	log.info '--star_outFilterMismatchNmax		See --outFilterMismatchNmax option in STAR user manual for more information. (Default: 10)'
+ 	log.info '--star_outFilterScoreMin		See --outFilterScoreMin option in STAR user manual for more information. (Default: 0)'
+ 	log.info '--star_alignEndsType			See --alignEndsType option in STAR user manual for more information. (Default: Local)'
+ 	log.info '--star_winAnchorMultimapNmax		See --winAnchorMultimapNmax option in STAR user manual for more information. (Default: 50)'
+ 	log.info '--star_quantMode			See --quantMode option in STAR user manual for more information. (Default: -)'
+ 	log.info '--star_twopassMode			See --twopassMode option in STAR user manual for more information. (Default: None)'
+ 	log.info ''
+ 	log.info 'FOR TESTING AND OPTIMIZING:'
+ 	log.info '==========================='
  	log.info '--subsample			Set this flag to subsample reads for testing.'
  	log.info ''
  	log.info '**************************************************************'
@@ -370,13 +433,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -890,13 +953,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -1397,13 +1460,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -1799,13 +1862,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -2200,13 +2263,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -2582,13 +2645,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -2964,13 +3027,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -3382,13 +3445,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -3833,7 +3896,7 @@ if (params.aligner == 'hisat2') {
 
  		script:
  		"""
- 		STAR --genomeDir indexFiles --runThreadN ${params.threads} --readFilesIn ${read1} --readFilesCommand zcat --clip3pNbases ${params.star_clip3pNbases} --clip5pNbases ${params.star_clip5pNbases} --outFileNamePrefix ${id} --outFilterMultipmapScoreRange ${params.star_outFilterMultimapScoreRange} --outFilterMultimapNmax ${params.star_outFilterMultimapNmax} --outFilterMismatchNmax ${params.star_outFilterMismatchNmax} --outFilterScoreMin ${params.star_outFilterScoreMin} --alignEndsType ${params.star_alignEndsType} --winAnchorMultimapNmax ${params.star_winAnchorMultipmapNmax} --outSAMtype BAM SortedByCoordinate --quantMode ${params.star_quantMode} --twopassMode ${params.star_twopassMode}
+ 		STAR --genomeDir indexFiles --runThreadN ${params.threads} --readFilesIn ${read1} --readFilesCommand zcat --clip3pNbases ${params.star_clip3pNbases} --clip5pNbases ${params.star_clip5pNbases} --outFileNamePrefix ${id} --outFilterMultipmapScoreRange ${params.star_outFilterMultimapScoreRange} --outFilterMultimapNmax ${params.star_outFilterMultimapNmax} --outFilterMismatchNmax ${params.star_outFilterMismatchNmax} --outFilterScoreMin ${params.star_outFilterScoreMin} --alignEndsType ${params.star_alignEndsType} --winAnchorMultimapNmax ${params.star_winAnchorMultimapNmax} --outSAMtype BAM SortedByCoordinate --quantMode ${params.star_quantMode} --twopassMode ${params.star_twopassMode}
  		sambamba sort --tmpdir $baseDir -N -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}Aligned.sortedByCoord.out.bam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -4352,7 +4415,7 @@ if (params.aligner == 'hisat2') {
 
  		script:
  		"""
- 		STAR --genomeDir indexFiles --runThreadN ${params.threads} --readFilesIn ${read1} ${read2} --readFilesCommand zcat --clip3pNbases ${params.star_clip3pNbases} --clip5pNbases ${params.star_clip5pNbases} --outFileNamePrefix ${id} --outFilterMultipmapScoreRange ${params.star_outFilterMultimapScoreRange} --outFilterMultimapNmax ${params.star_outFilterMultimapNmax} --outFilterMismatchNmax ${params.star_outFilterMismatchNmax} --outFilterScoreMin ${params.star_outFilterScoreMin} --alignEndsType ${params.star_alignEndsType} --winAnchorMultimapNmax ${params.star_winAnchorMultipmapNmax} --outSAMtype BAM SortedByCoordinate --quantMode ${params.star_quantMode} --twopassMode ${params.star_twopassMode}
+ 		STAR --genomeDir indexFiles --runThreadN ${params.threads} --readFilesIn ${read1} ${read2} --readFilesCommand zcat --clip3pNbases ${params.star_clip3pNbases} --clip5pNbases ${params.star_clip5pNbases} --outFileNamePrefix ${id} --outFilterMultipmapScoreRange ${params.star_outFilterMultimapScoreRange} --outFilterMultimapNmax ${params.star_outFilterMultimapNmax} --outFilterMismatchNmax ${params.star_outFilterMismatchNmax} --outFilterScoreMin ${params.star_outFilterScoreMin} --alignEndsType ${params.star_alignEndsType} --winAnchorMultimapNmax ${params.star_winAnchorMultimapNmax} --outSAMtype BAM SortedByCoordinate --quantMode ${params.star_quantMode} --twopassMode ${params.star_twopassMode}
  		sambamba sort --tmpdir $baseDir -N -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}Aligned.sortedByCoord.out.bam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
