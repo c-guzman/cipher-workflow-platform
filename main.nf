@@ -18,6 +18,7 @@
  params.intronlen = 20
  params.egs = false
  params.egs_ratio = false
+ params.aligner = 'bbmap'
  //params.binSize = 10
  //params.smoothLen = 50
  //params.aligner = 'bbmap'
@@ -45,6 +46,7 @@
  	log.info ''
  	log.info 'OPTIONAL PARAMETERS:'
  	log.info '--threads			Number of threads. (Default: 1)'
+ 	log.info '--aligner			The alignment software your workflow will use. Available: bbmap, bowtie2, bwa, hisat2, star. (Default: BBMap)'
  	log.info '--minid				Minimum alignment identity to look for during mapping. Higher is faster and less sensitive. (Default: 0.76)'
  	log.info '--qvalue			Minimum FDR cutoff for peak detection in MACS2 and EPIC. (Default: 0.05)'
  	log.info '--epic_w			Size of the windows used to scan the genome for peak detection in EPIC. (Default: 200)'
@@ -90,6 +92,10 @@
  	exit 1, "--analysis should only be used when running analysis mode (--mode analysis)"
  }
 
+ if (params.aligner != 'bbmap' || params.aligner != 'bowtie2' || params.aligner != 'bwa' || params.aligner != 'hisat2' || params.aligner != 'star') {
+ 	exit 1, "--aligner should be one of the following: bbmap, bowtie2, bwa, hisat2, star"
+ }
+
  // SET UP FILES
  config_file = file(params.config)
  fasta_file = file(params.fasta)
@@ -106,6 +112,8 @@
  log.info "gtf:		${gtf_file}"
  log.info "read-length:	${params.readLen}"
  log.info "library:	${params.lib}"
+ log.info ""
+ log.info "aligner:		${params.aligner}"
  log.info ''
  log.info "subsample:	${params.subsample}"
  log.info ''
@@ -213,7 +221,9 @@
  			}
  		}
 
- 	// Generate BBMap Index
+
+ 	if (params.aligner == 'bbmap') {
+ 	   // Generate BBMap Index
  	process create_mapping_index {
 
  		publishDir "${params.outdir}/bbmap_index", mode: 'copy'
@@ -229,6 +239,45 @@
  		bbmap.sh ref=${fasta_file} usemodulo
  		"""
  	}
+ }
+
+ if (params.aligner == 'bowtie2') {
+	// Generate Bowtie2 Index
+ 	process create_mapping_index {
+
+ 		publishDir "${params.outdir}/bowtie2_index", mode: 'copy'
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file("*") into bowtie2_index
+
+ 		script:
+ 		"""
+ 		bowtie2-build --threads ${params.threads} ${fasta_file} genome
+ 		"""
+ 	}
+}
+
+if (params.aligner == 'bwa') {
+	// Generate BWA Index
+ 	process create_mapping_index {
+
+ 		publishDir "${params.outdir}/bwa_index", mode: 'copy'
+
+ 		input:
+ 		file fasta_file
+
+ 		output:
+ 		file("*") into bwa_index
+
+ 		script:
+ 		"""
+ 		bwa index -p genome ${fasta_file}
+ 		"""
+ 	}
+}
 
  	// STEP 1 PRE TRIM FASTQC
  	process fastqc_preTrim {
@@ -282,6 +331,7 @@
  	}
 
  	// STEP 4 MAPPING WITH BBMAP
+ 	if (params.aligner == 'bbmap') {
  	process mapping {
 
  		publishDir "${params.outdir}/alignments", mode: 'copy'
@@ -302,6 +352,59 @@
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  	}
+ }
+
+ 	if (params.aligner == 'bowtie2') {
+	// STEP 4 MAPPING WITH Bowtie2
+ 	process mapping {
+
+ 		publishDir "${params.outdir}/alignments", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), controlid, mark from bbmap_trimmed_fastqs
+ 		file("*") from bowtie2_index
+
+ 		output:
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), controlid, mark, file("${id}.sorted.mapped.bam.bai") into bam_grouping, bam_spp
+
+ 		script:
+ 		if (params.local = true) {
+ 		"""
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
+ 		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
+ 		"""
+ 		} else {
+ 		"""
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.mismatches} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
+ 		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
+ 		"""
+ 		}
+ 	}
+ }
+
+ 	if (params.aligner == 'bwa') {
+ 	// STEP 4 MAPPING WITH BWA
+ 	process mapping {
+
+ 		publishDir "${params.outdir}/alignments", mode: 'copy'
+
+ 		input:
+ 		set mergeid, id, file(read1), controlid, mark from bbmap_trimmed_fastqs
+ 		file("*") from bwa_index
+
+ 		output:
+ 		set mergeid, id, file("${id}.sorted.mapped.bam"), controlid, mark, file("${id}.sorted.mapped.bam.bai") into bam_grouping, bam_spp
+
+ 		script:
+ 		"""
+ 		bwa mem -t ${params.threads} -k ${params.bwa_k} -w ${params.bwa_w} -d ${params.bwa_d} -r ${params.bwa_r} -c ${params.bwa_c} -A ${params.bwa_A} -B ${params.bwa_B} -O ${params.bwa_O} -E ${params.bwa_E} -L ${params.bwa_L} -U ${params.bwa_U} -T ${params.bwa_T} -M genome ${read1} > ${id}.mapped.sam
+ 		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
+ 		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
+ 		"""
+ 	}
+ }
 
  	// SEPARATE CHIP AND INPUT FILES
  	treat = Channel.create()
@@ -640,6 +743,7 @@
  			}
 
  	// Generate BBMap Index
+ 	if (params.aligner == 'bbmap') {
  	process create_mapping_index {
 
  		publishDir "${params.outdir}/bbmap_index", mode: 'copy'
@@ -655,6 +759,7 @@
  		bbmap.sh ref=${fasta_file} usemodulo
  		"""
  	}
+ }
 
  	// STEP 1 PRE TRIM FASTQC
  	process fastqc_preTrim {
