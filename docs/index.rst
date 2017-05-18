@@ -1,12 +1,3 @@
-.. cipher documentation master file, created by
-   sphinx-quickstart on Wed May 17 20:41:36 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
 =============================================================================================================================
 cipher: a workflow platform for ChIP-seq, RNA-seq, DNase-seq, MNase-seq, and GRO-seq data processing and integrative analysis
 =============================================================================================================================
