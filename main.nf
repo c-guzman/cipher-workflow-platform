@@ -25,6 +25,54 @@
 
  // bwa defaults
  params.bwa_T = 30
+ params.bwa_k = 19
+ params.bwa_w = 100
+ params.bwa_d = 100
+ params.bwa_r = 1.5
+ params.bwa_c = 10000
+ params.bwa_A = 1
+ params.bwa_B = 4
+ params.bwa_O = 6
+ params.bwa_E = 1
+ params.bwa_L = 5
+ params.bwa_U = 9
+
+ // bowtie2 defaults
+ params.bt2_D = 20
+ params.bt2_R = 3
+ params.bt2_N = 0
+ params.bt2_L = 20
+ params.bt2_i = '5,1,0.50'
+ params.bt2_trim5 = 0
+ params.bt2_trim3 = 0
+ params.local = false
+
+ // hisat2 defaults
+ params.hs_trim5 = 0
+ params.hs_trim3 = 0
+ params.hs_mp = '6,2'
+ params.hs_sp = '2,1'
+ params.hs_np = 1
+ params.hs_rdg = '5,3'
+ params.hs_rfg = '5,3'
+ params.hs_pen-cansplice = 0
+ params.hs_pen-noncansplice = 12
+ params.hs_min-intronlen = 20
+ params.hs_max-intronlen = 500000
+ params.hs_k = 5
+ params.hs_max-seeds = 5
+
+ // star defaults
+ params.star_clip3pNbases = 0
+ params.star_clip5pNbases = 0
+ params.star_outFilterMultimapScoreRange = 1
+ params.star_outFilterMultimapNmax = 10
+ params.star_outFilterMismatchNmax = 10
+ params.star_outFilterScoreMin = 0
+ params.star_alignEndsType = 'Local'
+ params.star_winAnchorMultimapNmax = 50
+ params.star_quantMode = '-'
+ params.star_twopassMode = 'None'
 
  // PRINT HELP
  if (params.help) {
