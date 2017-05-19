@@ -82,7 +82,7 @@
  	log.info ''
  	log.info 'REQUIRED PARAMETERS:'
  	log.info '===================='
- 	log.info '--mode				Choose from available: chip, rna, gro, mnase, dnase, analysis.'
+ 	log.info '--mode				Choose from available: chip, rna, gro, mnase, dnase, atac, analysis.'
  	log.info '--config			Configuration file with sample information. Check README for more information.'
  	log.info '--fasta				Reference genome in FASTA format.'
  	log.info '--gtf				Reference genome in GTF format.'
@@ -5062,7 +5062,7 @@ if (params.mode == 'atac' && params.lib == 's') {
  	} // closing bracket SE atac
 
  	// PE ATAC
- if (params.mode == 'dnase' && params.lib == 'p') {
+ if (params.mode == 'atac' && params.lib == 'p') {
 
  	// Parse config file
  	fastqs = Channel
