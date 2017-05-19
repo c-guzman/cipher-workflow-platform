@@ -37,29 +37,26 @@ sampleTable <- (condition = factor(exp_file$condition))
 # Filter out non-expressed genes, require more than 5 reads in at least two samples
 filter <- apply(data, 1, function(x) length(x[x>5])>=2)
 filtered <- data[filter,]
+genes <- rownames(filtered)
 
 x <- sampleTable
 set <- newSeqExpressionSet(as.matrix(filtered),
                            phenoData = data.frame(x, row.names=colnames(filtered)))
 set <- betweenLaneNormalization(set, which="upper")
 
-# Obtain a set of empirical negative controls (i.e. the least significantly DE genes based on first pass DGE)
-design <- model.matrix(~x, data=pData(set))
-y <- DGEList(counts=counts(set), group=x)
-y <- calcNormFactors(y, method="upperquartile")
-y <- estimateGLMCommonDisp(y, design)
-y <- estimateGLMTagwiseDisp(y, design)
+# Use RUVs method to estimate the factors of undwanted variation using replicate/negative control samples
+differences = makeGroups(x)
+set2 = RUVs(set, genes, k=1, differences) # do QC
 
-fit <- glmFit(y, design)
-lrt <- glmLRT(fit, coef=2)
+# Differential gene expression analysis using edgeR
+design = model.matrix(~x + W_1, data = pData(set_ruvs))
+y = DGEList(counts=counts(set_ruvs), group=x)
+y = calcNormFactors(y, method="upperquartile")
+y = estimateGLMCommonDisp(y, design)
+y = estimateGLMTagwiseDisp(y, design)
 
-top <- topTags(lrt, n=nrow(set))$table
-empirical <- rownames(set)[which(!(rownames(set) %in% rownames(top)[1:5000]))] # By default the top 5000 least DEG are used as empirical controls, change this number
-
-set2 <- RUVg(set, empirical, k=1) # Alter k = number of variances also
-
-# Plot some PCA and RLE datasets for QC
-colors <- brewer.pal(3, "Set2")
+fit = glmFit(y, design)
+lrt = glmLRT(fit, coef=2)
 
 pdf('RLE_plot.pdf')
 rleplot <- plotRLE(set2, outline=F, ylim=c(4,-4), col=colors[x])

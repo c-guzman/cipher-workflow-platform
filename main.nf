@@ -55,12 +55,12 @@
  params.hs_np = 1
  params.hs_rdg = '5,3'
  params.hs_rfg = '5,3'
- params.hs_pen-cansplice = 0
- params.hs_pen-noncansplice = 12
- params.hs_min-intronlen = 20
- params.hs_max-intronlen = 500000
+ params.hs_pen_cansplice = 0
+ params.hs_pen_noncansplice = 12
+ params.hs_min_intronlen = 20
+ params.hs_max_intronlen = 500000
  params.hs_k = 5
- params.hs_max-seeds = 5
+ params.hs_max_seeds = 5
 
  // star defaults
  params.star_clip3pNbases = 0
@@ -78,7 +78,7 @@
  if (params.help) {
  	log.info ''
  	log.info '~ C I P H E R ~ Version 1.1.0'
- 	log.info '**************************************************************'
+ 	log.info '********************************************************************************************************************************************************'
  	log.info ''
  	log.info 'REQUIRED PARAMETERS:'
  	log.info '===================='
@@ -148,11 +148,11 @@
  	log.info '--hs_np				See --np option in HISAT2 user manual for more information. (Default: 1)'
  	log.info '--hs_rdg			See --rdg option in HISAT2 user manual for more information. (Default: 5,3)'
  	log.info '--hs_rfg			See --rfg option in HISAT2 user manual for more information. (Default: 5,3)'
- 	log.info '--hs_pen-cansplice		See --pen-cansplice option in HISAT2 user manual for more information. (Default: 0)'
- 	log.info '--hs_pen-noncansplice		See --pen-nonansplice option in HISAT2 user manual for more information. (Default: 12)'
- 	log.info '--hs_min-intronlen		See --min-intronlen option in HISAT2 user manual for more information. (Default: 20)'
- 	log.info '--hs_max-intronlen		See --max-intronlen option in HISAT2 user manual for more information. (Default: 500000)'
- 	log.info '--hs_max-seeds			See --max-seeds option in HISAT2 user manual for more information. (Default: 5)'
+ 	log.info '--hs_pen_cansplice		See --pen-cansplice option in HISAT2 user manual for more information. (Default: 0)'
+ 	log.info '--hs_pen_noncansplice		See --pen-nonansplice option in HISAT2 user manual for more information. (Default: 12)'
+ 	log.info '--hs_min_intronlen		See --min-intronlen option in HISAT2 user manual for more information. (Default: 20)'
+ 	log.info '--hs_max_intronlen		See --max-intronlen option in HISAT2 user manual for more information. (Default: 500000)'
+ 	log.info '--hs_max_seeds			See --max-seeds option in HISAT2 user manual for more information. (Default: 5)'
  	log.info ''
  	log.info 'STAR:'
  	log.info '--star_clip3pNbases		See --clip3pNbases option in STAR user manual for more information. (Default: 0)'
@@ -170,7 +170,7 @@
  	log.info '==========================='
  	log.info '--subsample			Set this flag to subsample reads for testing.'
  	log.info ''
- 	log.info '**************************************************************'
+ 	log.info '********************************************************************************************************************************************************'
  	exit 1
  }
 
@@ -3923,7 +3923,7 @@ if (params.aligner == 'hisat2') {
 
  		script:
  		"""
- 		hisat2 -5 ${params.hs_trim5} -3 ${params.hs_trim3} --mp ${params.hs_mp} --sp ${params.hs_sp} --np ${params.hs_np} --rdg ${params.hs_rdg} --rfg ${params.hs_rfg} --pen-cansplice ${params.hs_pen-cansplice} --pen-noncansplice ${params.hs_pen-noncansplice} --min-intronlen ${params.hs_min-intronlen} --max-intronlen ${params.hs_max-intronlen} -k ${params.hs_k} --max-seeds ${params.hs_max-seeds} --met-file ${id}.hs2.metricsFile.txt -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		hisat2 -5 ${params.hs_trim5} -3 ${params.hs_trim3} --mp ${params.hs_mp} --sp ${params.hs_sp} --np ${params.hs_np} --rdg ${params.hs_rdg} --rfg ${params.hs_rfg} --pen-cansplice ${params.hs_pen_cansplice} --pen-noncansplice ${params.hs_pen_noncansplice} --min-intronlen ${params.hs_min_intronlen} --max-intronlen ${params.hs_max_intronlen} -k ${params.hs_k} --max-seeds ${params.hs_max_seeds} --met-file ${id}.hs2.metricsFile.txt -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -N -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -4442,7 +4442,7 @@ if (params.aligner == 'hisat2') {
 
  		script:
  		"""
- 		hisat2 -5 ${params.hs_trim5} -3 ${params.hs_trim3} --mp ${params.hs_mp} --sp ${params.hs_sp} --np ${params.hs_np} --rdg ${params.hs_rdg} --rfg ${params.hs_rfg} --pen-cansplice ${params.hs_pen-cansplice} --pen-noncansplice ${params.hs_pen-noncansplice} --min-intronlen ${params.hs_min-intronlen} --max-intronlen ${params.hs_max-intronlen} -k ${params.hs_k} --max-seeds ${params.hs_max-seeds} --met-file ${id}.hs2.metricsFile.txt -p ${params.threads} -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		hisat2 -5 ${params.hs_trim5} -3 ${params.hs_trim3} --mp ${params.hs_mp} --sp ${params.hs_sp} --np ${params.hs_np} --rdg ${params.hs_rdg} --rfg ${params.hs_rfg} --pen-cansplice ${params.hs_pen_cansplice} --pen-noncansplice ${params.hs_pen_noncansplice} --min-intronlen ${params.hs_min_intronlen} --max-intronlen ${params.hs_max_intronlen} -k ${params.hs_k} --max-seeds ${params.hs_max_seeds} --met-file ${id}.hs2.metricsFile.txt -p ${params.threads} -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -N -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
