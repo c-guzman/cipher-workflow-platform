@@ -9,6 +9,8 @@ CIPHER ~ Version 1.1.0
    :maxdepth: 2
    :caption: Contents:
 
+   installation
+
 
 
 Indices and tables
