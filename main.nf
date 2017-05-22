@@ -21,7 +21,6 @@
  params.aligner = 'bbmap'
  //params.binSize = 10
  //params.smoothLen = 50
- params.aligner = 'bbmap'
 
  // bwa defaults
  params.bwa_T = 30
