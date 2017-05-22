@@ -74,6 +74,9 @@
  params.star_quantMode = '-'
  params.star_twopassMode = 'None'
 
+ // analysis mode defaults
+ params.function = false
+
  // PRINT HELP
  if (params.help) {
  	log.info ''
@@ -96,7 +99,7 @@
  	log.info ''
  	log.info 'ANALYSIS MODE ONLY:'
  	log.info '==================='
- 	log.info '--analysis			Choose from available: "predictEnhancers".'
+ 	log.info '--function			Choose from available: "predictEnhancers", "geneExpressionNearPeaks". For more information on how to run these analysis mode, please go to cipher.readthedocs.io'
  	log.info ''
  	log.info 'OPTIONAL PARAMETERS:'
  	log.info '===================='
@@ -5443,8 +5446,8 @@ if (params.mode == 'atac' && params.lib == 's') {
 
  	} // closing bracket PE atac
 
- 	// ANALYSIS MODE
- 	if (params.mode == 'analysis' && params.analysis == 'predictEnhancers') {
+ 	// ANALYSIS MODE Enhancers
+ 	if (params.mode == 'analysis' && params.function == 'predictEnhancers') {
 
  		// Parse config file
  		bedgraphs = Channel
@@ -5588,7 +5591,7 @@ if (params.mode == 'atac' && params.lib == 's') {
 		// Step 7. Merge putative enhancers
 		process stitching {
 
-			publishDir "${params.outdir}/predicted_enhancers", mode: 'copy'
+			publishDir "${params.outdir}/analysis", mode: 'copy'
 
 			input:
 			file(enhancer_file) from enhancers
@@ -5602,7 +5605,33 @@ if (params.mode == 'atac' && params.lib == 's') {
 			"""
 		}
 
- 	} // closing bracket ANALYSIS mode
+ 	} // closing bracket ANALYSIS mode predictEnhancers
+
+ 	// ANALYSIS MODE Peak-Gene Expression
+ 	if (params.mode == 'analysis' && params.function == 'geneExpressionNearPeaks') {
+
+ 		peak_file = file(params.peak_file)
+ 		stringtie_file = file(params.stringtie_file)
+
+ 		process calculate_gene_expression_near_peaks {
+
+ 			publishDir "${params.outdir}/analysis", mode: 'copy'
+
+ 			input:
+ 			gtf_file
+ 			peak_file
+ 			stringtie_file
+
+ 			output:
+ 			file("geneExpression_near_ChIPseq_peaks.txt")
+
+ 			script:
+ 			"""
+ 			Rscript '$baseDir/bin/calculate_gene_expression_near_peaks.R' ${gtf_file} ${peak_file} ${stringtie_file}
+ 			"""
+ 		}
+
+ 	} // closing bracket ANALYSIS mode geneExpressionNearPeaks
 
  // ON COMPLETION
  workflow.onComplete {
