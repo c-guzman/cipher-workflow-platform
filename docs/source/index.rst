@@ -10,6 +10,7 @@ CIPHER
    :caption: Contents:
 
    installation
+   parameters
 
 
 
