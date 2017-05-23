@@ -98,7 +98,7 @@
  	log.info ''
  	log.info 'ANALYSIS MODE ONLY:'
  	log.info '==================='
- 	log.info '--function			Choose from available: "predictEnhancers", "geneExpressionNearPeaks". For more information on how to run these analysis mode, please go to cipher.readthedocs.io'
+ 	log.info '--function			Choose from available: "predictEnhancers", "geneExpressionNearPeaks". For more information on how to run these analyses, please go to cipher.readthedocs.io'
  	log.info ''
  	log.info 'OPTIONAL PARAMETERS:'
  	log.info '===================='
