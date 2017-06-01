@@ -483,13 +483,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -1003,13 +1003,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -1510,13 +1510,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -1912,13 +1912,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -2313,13 +2313,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -2695,13 +2695,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -3077,13 +3077,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -3495,13 +3495,13 @@ if (params.aligner == 'bwa') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -4915,13 +4915,13 @@ if (params.mode == 'atac' && params.lib == 's') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
@@ -5297,13 +5297,13 @@ if (params.mode == 'atac' && params.lib == 's') {
  		script:
  		if (params.local == true) {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""
  		} else {
  		"""
- 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -k ${params.bt2_k} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
+ 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} -5 ${params.bt2_trim5} -3 ${params.bt2_trim3} -p ${params.threads} -x genome -U ${read1} -S ${id}.mapped.sam
  		sambamba sort --tmpdir $baseDir -t ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
  		sambamba index -t ${params.threads} ${id}.sorted.mapped.bam
  		"""

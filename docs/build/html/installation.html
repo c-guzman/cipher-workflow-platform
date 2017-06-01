@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &#8212; cipher 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Parameters" href="parameters.html" />
+    <link rel="prev" title="CIPHER" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameters"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CIPHER"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">cipher 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>CIPHER requires no manual installation. Just download and unzip the tar file from our GitHub or git clone the repository. The download may be large.</p>
+<p>The only required manual software installation on your local computer / cluster are Docker and Nextflow.</p>
+<p>By default, CIPHER will run off a Docker container, but this can be optionally turned off by removing the option in the config file. For more information, please read the &#8216;Nextflow Config File&#8217; documentation.</p>
+</div>
+<div class="section" id="installing-nextflow">
+<h1>Installing Nextflow<a class="headerlink" href="#installing-nextflow" title="Permalink to this headline">¶</a></h1>
+<p>For Linux:</p>
+<ol class="arabic simple">
+<li><dl class="first docutils">
+<dt>We recommend installing Nextflow through the Anaconda package manager.</dt>
+<dd>wget <a class="reference external" href="https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh">https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh</a>
+bash Anaconda2-4.3.1-Linux-x86_64.sh</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Install Nextflow</dt>
+<dd>conda install -c bioconda nextflow</dd>
+</dl>
+</li>
+</ol>
+<p>For macOS:</p>
+<ol class="arabic simple">
+<li><dl class="first docutils">
+<dt>We recommend installing Nextflow through the Anaconda package manager.</dt>
+<dd>wget <a class="reference external" href="https://repo.continuum.io/archive/Anaconda2-4.3.1-MacOSX-x86_64.sh">https://repo.continuum.io/archive/Anaconda2-4.3.1-MacOSX-x86_64.sh</a>
+bash Anaconda2-4.3.1-Linux-x86_64.sh</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Install Nextflow</dt>
+<dd>conda install -c bioconda nextflow</dd>
+</dl>
+</li>
+</ol>
+<p>For Windows:</p>
+<p>CIPHER has not been tested on the Windows operating system. However, Windows 10 has introduced the &#8216;Ubuntu Bash Shell&#8217; sub-system, which potentially can be used to run CIPHER.</p>
+<ol class="arabic simple">
+<li>Install Ubuntu Bash on your Windows 10 computer. Follow the instructions here: <a class="reference external" href="https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/">https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/</a></li>
+<li><dl class="first docutils">
+<dt>Using the Ubuntu Bash terminal we recommend installing nextflow through the Anaconda package manager.</dt>
+<dd>wget <a class="reference external" href="https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh">https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh</a>
+bash Anaconda2-4.3.1-Linux-x86_64.sh</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Install Nextflow</dt>
+<dd>conda install -c bioconda nextflow</dd>
+</dl>
+</li>
+</ol>
+</div>
+<div class="section" id="installing-docker">
+<h1>Installing Docker<a class="headerlink" href="#installing-docker" title="Permalink to this headline">¶</a></h1>
+<p>Installing Docker can be tricky. Because the instructions for correct installation are constantly changing, we provide links to Docker&#8217;s official installation process. You&#8217;ll want to use Linux&#8217;s installation instructions for Windows via the Ubuntu Bash terminal.</p>
+<p>For Linux:</p>
+<p><a class="reference external" href="https://docs.docker.com/engine/installation/#supported-platforms">https://docs.docker.com/engine/installation/#supported-platforms</a></p>
+<p>For macS:</p>
+<p><a class="reference external" href="https://docs.docker.com/docker-for-mac/">https://docs.docker.com/docker-for-mac/</a></p>
+</div>
+<div class="section" id="manual-installation">
+<h1>Manual Installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h1>
+<p>Some universities may not want to install Docker for security reasons. And others may not want to use Docker at all on their local desktop. This section lists how to manually install all the dependencies for CIPHER.</p>
+<p>We recommend using the Anaconda package manager.</p>
+<p>For Linux:</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>We recommend installing Nextflow through the Anaconda package manager.</dt>
+<dd><p class="first last">wget <a class="reference external" href="https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh">https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh</a>
+bash Anaconda2-4.3.1-Linux-x86_64.sh</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Install bioconda packages</dt>
+<dd><p class="first last">conda install -c bioconda nextflow fastqc bbmap star hisat2 bowtie2 bwa multiqc macs2 deeptools epic preseq samtools sambamba bedtools bedops stringtie subread</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Install R packages</dt>
+<dd><p class="first">R</p>
+<p class="last">install.packages(c(&#8220;data.table&#8221;, &#8220;ggplot2&#8221;, &#8220;gplots&#8221;))
+install.packages(&#8220;<a class="reference external" href="http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz">http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz</a>&#8221;, repos=NULL, type=&#8221;source&#8221;)
+source(&#8220;<a class="reference external" href="https://bioconductor.org/biocLite.R">https://bioconductor.org/biocLite.R</a>&#8221;)
+biocLite()
+biocLite(c(&#8220;ChIPQC&#8221;, &#8220;RUVSeq&#8221;))</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>For macOS:</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>We recommend installing Nextflow through the Anaconda package manager.</dt>
+<dd><p class="first last">wget <a class="reference external" href="https://repo.continuum.io/archive/Anaconda2-4.3.1-MacOSX-x86_64.sh">https://repo.continuum.io/archive/Anaconda2-4.3.1-MacOSX-x86_64.sh</a>
+bash Anaconda2-4.3.1-Linux-x86_64.sh</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Install bioconda packages</dt>
+<dd><p class="first last">conda install -c bioconda nextflow fastqc bbmap star hisat2 bowtie2 bwa multiqc macs2 deeptools epic preseq samtools sambamba bedtools bedops stringtie subread</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Install R packages</dt>
+<dd><p class="first">R</p>
+<p class="last">install.packages(c(&#8220;data.table&#8221;, &#8220;ggplot2&#8221;, &#8220;gplots&#8221;))
+install.packages(&#8220;<a class="reference external" href="http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz">http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz</a>&#8221;, repos=NULL, type=&#8221;source&#8221;)
+source(&#8220;<a class="reference external" href="https://bioconductor.org/biocLite.R">https://bioconductor.org/biocLite.R</a>&#8221;)
+biocLite()
+biocLite(c(&#8220;ChIPQC&#8221;, &#8220;RUVSeq&#8221;))</p>
+</dd>
+</dl>
+</li>
+</ol>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Installation</a></li>
+<li><a class="reference internal" href="#installing-nextflow">Installing Nextflow</a></li>
+<li><a class="reference internal" href="#installing-docker">Installing Docker</a></li>
+<li><a class="reference internal" href="#manual-installation">Manual Installation</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">CIPHER</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parameters.html"
+                        title="next chapter">Parameters</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/installation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameters"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="CIPHER"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">cipher 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Carlos Guzman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+    </div>
+  </body>
+</html>
