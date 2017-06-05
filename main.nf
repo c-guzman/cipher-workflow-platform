@@ -41,7 +41,7 @@
  params.bt2_R = 3
  params.bt2_N = 0
  params.bt2_L = 20
- params.bt2_i = '5,1,0.50'
+ params.bt2_i = 'S,5,1,0.50'
  params.bt2_trim5 = 0
  params.bt2_trim3 = 0
  params.local = false

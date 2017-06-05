@@ -13,21 +13,29 @@ Installing Nextflow
 For Linux:
 
 1. We recommend installing Nextflow through the Anaconda package manager.
-    wget https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh
-    bash Anaconda2-4.3.1-Linux-x86_64.sh
+    ::
+
+        wget https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh
+        bash Anaconda2-4.3.1-Linux-x86_64.sh
 
 2. Install Nextflow
-    conda install -c bioconda nextflow
+    ::
+    
+        conda install -c bioconda nextflow
 
 
 For macOS:
 
 1. We recommend installing Nextflow through the Anaconda package manager.
-    wget https://repo.continuum.io/archive/Anaconda2-4.3.1-MacOSX-x86_64.sh
-    bash Anaconda2-4.3.1-Linux-x86_64.sh
+    ::
+
+        wget https://repo.continuum.io/archive/Anaconda2-4.3.1-MacOSX-x86_64.sh
+        bash Anaconda2-4.3.1-Linux-x86_64.sh
 
 2. Install Nextflow
-    conda install -c bioconda nextflow
+    ::
+
+        conda install -c bioconda nextflow
 
 For Windows:
 
@@ -36,11 +44,15 @@ CIPHER has not been tested on the Windows operating system. However, Windows 10 
 1. Install Ubuntu Bash on your Windows 10 computer. Follow the instructions here: https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/
 
 2. Using the Ubuntu Bash terminal we recommend installing nextflow through the Anaconda package manager.
-    wget https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh
-    bash Anaconda2-4.3.1-Linux-x86_64.sh
+    ::
+
+        wget https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh
+        bash Anaconda2-4.3.1-Linux-x86_64.sh
 
 3. Install Nextflow
-    conda install -c bioconda nextflow
+    ::
+
+        conda install -c bioconda nextflow
 
 Installing Docker
 =================
@@ -65,36 +77,48 @@ We recommend using the Anaconda package manager.
 For Linux:
 
 1. We recommend installing Nextflow through the Anaconda package manager.
-    wget https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh
-    bash Anaconda2-4.3.1-Linux-x86_64.sh
+    ::
+
+        wget https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh
+        bash Anaconda2-4.3.1-Linux-x86_64.sh
 
 2. Install bioconda packages
-    conda install -c bioconda nextflow fastqc bbmap star hisat2 bowtie2 bwa multiqc macs2 deeptools epic preseq samtools sambamba bedtools bedops stringtie subread
+    ::
+
+        conda install -c bioconda nextflow fastqc bbmap star hisat2 bowtie2 bwa multiqc macs2 deeptools epic preseq samtools sambamba bedtools bedops stringtie subread
 
 3. Install R packages
-    R
+    ::
 
-    install.packages(c("data.table", "ggplot2", "gplots"))
-    install.packages("http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz", repos=NULL, type="source")
-    source("https://bioconductor.org/biocLite.R")
-    biocLite()
-    biocLite(c("ChIPQC", "RUVSeq"))
+        R
+
+        install.packages(c("data.table", "ggplot2", "gplots"))
+        install.packages("http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz", repos=NULL, type="source")
+        source("https://bioconductor.org/biocLite.R")
+        biocLite()
+        biocLite(c("ChIPQC", "RUVSeq", "ChIPseeker"))
 
 
 For macOS:
 
 1. We recommend installing Nextflow through the Anaconda package manager.
-    wget https://repo.continuum.io/archive/Anaconda2-4.3.1-MacOSX-x86_64.sh
-    bash Anaconda2-4.3.1-Linux-x86_64.sh
+    ::
+
+        wget https://repo.continuum.io/archive/Anaconda2-4.3.1-MacOSX-x86_64.sh
+        bash Anaconda2-4.3.1-Linux-x86_64.sh
 
 2. Install bioconda packages
-    conda install -c bioconda nextflow fastqc bbmap star hisat2 bowtie2 bwa multiqc macs2 deeptools epic preseq samtools sambamba bedtools bedops stringtie subread
+    ::
+
+        conda install -c bioconda nextflow fastqc bbmap star hisat2 bowtie2 bwa multiqc macs2 deeptools epic preseq samtools sambamba bedtools bedops stringtie subread
 
 3. Install R packages
-    R
+    ::
 
-    install.packages(c("data.table", "ggplot2", "gplots"))
-    install.packages("http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz", repos=NULL, type="source")
-    source("https://bioconductor.org/biocLite.R")
-    biocLite()
-    biocLite(c("ChIPQC", "RUVSeq"))
+        R
+
+        install.packages(c("data.table", "ggplot2", "gplots"))
+        install.packages("http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz", repos=NULL, type="source")
+        source("https://bioconductor.org/biocLite.R")
+        biocLite()
+        biocLite(c("ChIPQC", "RUVSeq", "ChIPseeker"))
