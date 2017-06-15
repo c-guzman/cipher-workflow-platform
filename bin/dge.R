@@ -77,7 +77,7 @@ fit <- glmFit(y, design)
 lrt <- glmLRT(fit, coef=2)
 
 # Select all top genes dge with a p-value of 1
-top.df <- topTags(lrt, n=Inf, sort.by="logFC", p.value = 1)
+top.df <- topTags(lrt, n=Inf, sort.by="logFC")
 
 # DGE DESeq2
 dds <- DESeqDataSetFromMatrix(countData = counts(set2), colData = pData(set2), design = ~ W_1 + x)
