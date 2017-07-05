@@ -68,14 +68,14 @@ The columns represent:
 **Simple RNA-seq Tutorial (single-end, 75 length reads, frFirstStrand)**
     ::
 
-      nextflow run /path/to/main.nf --mode mnase --config /path/to/config.txt --fasta /path/to/fasta.fa --gtf /path/to/gtf.gtf --lib s --readLen 75 --strandInfo frFirstStrand --expInfo exp_config.txt
+      nextflow run /path/to/main.nf --mode rna --config /path/to/config.txt --fasta /path/to/fasta.fa --gtf /path/to/gtf.gtf --lib s --readLen 75 --strandInfo frFirstStrand --expInfo exp_config.txt
 
 **Simple RNA-seq Tutorial (pair-end, 75 length reads)**
     ::
 
-      nextflow run /path/to/main.nf --mode mnase --config /path/to/config.txt --fasta /path/to/fasta.fa --gtf /path/to/gtf.gtf --lib p --readLen 75 --strandInfo frFirstStrand --expInfo exp_config.txt
+      nextflow run /path/to/main.nf --mode rna --config /path/to/config.txt --fasta /path/to/fasta.fa --gtf /path/to/gtf.gtf --lib p --readLen 75 --strandInfo frFirstStrand --expInfo exp_config.txt
 
 **Simple RNA-seq Tutorial (single-end, 75 length reads, use star aligner instead of default bbmap, use 5 threads)**
     ::
     
-      nextflow run /path/to/main.nf --mode mnase --config /path/to/config.txt --fasta /path/to/fasta.fa --gtf /path/to/gtf.gtf --lib s --readLen 75 --strandInfo frFirstStrand --expInfo exp_config.txt --aligner star --threads 5
+      nextflow run /path/to/main.nf --mode rna --config /path/to/config.txt --fasta /path/to/fasta.fa --gtf /path/to/gtf.gtf --lib s --readLen 75 --strandInfo frFirstStrand --expInfo exp_config.txt --aligner star --threads 5

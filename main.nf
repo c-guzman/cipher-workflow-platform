@@ -20,7 +20,8 @@
  params.egs_ratio = false
  params.aligner = 'bbmap'
  //params.binSize = 10
- //params.smoothLen = 50
+ params.smoothLen = 50
+ params.dge = false
 
  // bwa defaults
  params.bwa_T = 30
@@ -95,6 +96,7 @@
  	log.info '=================='
  	log.info '--strandInfo			Strandedness information. Choose from "unstranded", "frFirstStrand", or "frSecondStrand".'
  	log.info '--expInfo			Experiment config file for RNA-seq data DGE analysis. Check README for more information.'
+ 	log.info '--dge				Set this parameter to have CIPHER automatically run downstream analysis. (Default: off)'
  	log.info ''
  	log.info 'ANALYSIS MODE ONLY:'
  	log.info '==================='
@@ -109,6 +111,7 @@
  	log.info '--epic_w			Size of the windows used to scan the genome for peak detection in EPIC. (Default: 200)'
  	log.info '--epic_g			A multiple of epic_w used to determine the gap size in EPIC. (Default: 3)'
  	log.info '--maxindel			Maximum indel length searched during mapping. 200k recommended for vertebrate genomes. (Default: 200k)'
+ 	log.info '--smoothLen		The smoothing bin number that is used when generating coverage files. Used to create cleaner looking peaks for some workflows. (Default: 50)'
  	log.info '--intronlen			Maximum intron length during mapping. 20 recommended for vertebrate genomes. (Default: 20)'
  	log.info '--egs				The effective genome size of your species. (Default: Automatically calculated - requires approximately 80GB of RAM)'
  	log.info '--egs_ratio			Effective genome as fraction of the genome size. Must be between 0 and 1. Check EPIC GitHub for more information. (Default: Automatically calculated - requires approximately 80GB of RAM)'
@@ -593,7 +596,7 @@ if (params.aligner == 'bwa') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -611,7 +614,7 @@ if (params.aligner == 'bwa') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -1113,7 +1116,7 @@ if (params.aligner == 'bwa') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -1131,7 +1134,7 @@ if (params.aligner == 'bwa') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -1997,7 +2000,7 @@ if (params.aligner == 'bwa') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -3163,7 +3166,7 @@ if (params.aligner == 'bwa') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --filterRNAstrand forward --Offset 1
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --filterRNAstrand forward --Offset 1
  		"""
  	}
 
@@ -3181,7 +3184,7 @@ if (params.aligner == 'bwa') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.rev.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --filterRNAstrand reverse --Offset 1
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.rev.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --filterRNAstrand reverse --Offset 1
  		"""
  	}
 
@@ -3581,7 +3584,7 @@ if (params.aligner == 'bwa') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --filterRNAstrand forward --Offset 1
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.fwd.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --filterRNAstrand forward --Offset 1
  		"""
  	}
 
@@ -3599,7 +3602,7 @@ if (params.aligner == 'bwa') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.rev.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --filterRNAstrand reverse --Offset 1
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.rev.bigWig -of bigwig -bs 10 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --filterRNAstrand reverse --Offset 1
  		"""
  	}
 
@@ -4158,6 +4161,7 @@ if (params.aligner == 'hisat2') {
  	}
 
  	// STEP 10 DGE with RUVSeq and EdgeR annd DESeq2
+ 	if (params.dge) {
  	process dge {
 
  		publishDir "${params.outdir}/dge", mode: 'copy'
@@ -4174,6 +4178,7 @@ if (params.aligner == 'hisat2') {
  		Rscript $baseDir/bin/dge.R ${exp_file} $input_files
  		"""
  	}
+ }
 
  	// STEP 11 MULTIQC
  	process multiqc {
@@ -4641,6 +4646,7 @@ if (params.aligner == 'hisat2') {
  	}
 
  	// STEP 10 DGE with RUVSeq and EdgeR annd DESeq2
+ 	if (params.dge) {
  	process dge {
 
  		publishDir "${params.outdir}/dge", mode: 'copy'
@@ -4657,6 +4663,7 @@ if (params.aligner == 'hisat2') {
  		Rscript $baseDir/bin/dge.R ${exp_file} $input_files
  		"""
  	}
+ }
 
  	// STEP 11 MULTIQC
  	process multiqc {
@@ -5000,7 +5007,7 @@ if (params.mode == 'atac' && params.lib == 's') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 1 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 1 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
@@ -5382,7 +5389,7 @@ if (params.mode == 'atac' && params.lib == 's') {
 
  		script:
  		"""
- 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 1 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength 50 -e ${fragLen} --ignoreDuplicates --centerReads
+ 		bamCoverage -b ${bam} -o ${id}.RPGCnorm.bigWig -of bigwig -bs 1 -p ${params.threads} --normalizeTo1x ${egs_size} --smoothLength ${params.smoothLen} -e ${fragLen} --ignoreDuplicates --centerReads
  		"""
  	}
 
