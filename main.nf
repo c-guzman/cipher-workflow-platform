@@ -77,6 +77,9 @@
  // analysis mode defaults
  params.function = false
 
+ // testing defaults
+ params.sample = 100000
+
  // PRINT HELP
  if (params.help) {
  	log.info ''
@@ -174,6 +177,7 @@
  	log.info 'FOR TESTING AND OPTIMIZING:'
  	log.info '==========================='
  	log.info '--subsample			Set this flag to subsample reads for testing.'
+ 	log.info '--sample				Number of reads to subsample. (Default: 100k)'
  	log.info ''
  	log.info '********************************************************************************************************************************************************'
  	exit 1
@@ -266,7 +270,7 @@
 
  			script:
  			"""
- 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -789,7 +793,7 @@ if (params.aligner == 'bwa') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -1308,7 +1312,7 @@ if (params.aligner == 'bwa') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -1710,7 +1714,7 @@ if (params.aligner == 'bwa') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -2111,7 +2115,7 @@ if (params.aligner == 'bwa') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -2494,7 +2498,7 @@ if (params.aligner == 'bwa') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -2875,7 +2879,7 @@ if (params.aligner == 'bwa') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -3293,7 +3297,7 @@ if (params.aligner == 'bwa') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -3718,7 +3722,7 @@ if (params.aligner == 'bwa') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -4241,7 +4245,7 @@ if (params.aligner == 'hisat2') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -4717,7 +4721,7 @@ if (params.mode == 'atac' && params.lib == 's') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} out=${id}.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
@@ -5099,7 +5103,7 @@ if (params.mode == 'atac' && params.lib == 's') {
 
  			script:
  			"""
- 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=100000
+ 			reformat.sh in=${read1} in2=${read2} out=${id}_1.subsampled.fastq.gz out2=${id}_2.subsampled.fastq.gz sample=${params.sample}
  			"""
  		}
 
