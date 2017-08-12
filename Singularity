@@ -5,6 +5,9 @@ From: bioconductor/release_core2
 Maintainer cag104@ucsd.edu
 Version 1.0
 
+%environment
+export PATH="/opt/anaconda2/bin:$PATH"
+
 %post
 
 	apt-get update
@@ -34,7 +37,6 @@ Version 1.0
 	R --slave -e 'install.packages("http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz", repos=NULL, type="source")'
 
 	wget https://repo.continuum.io/archive/Anaconda2-4.4.0-Linux-x86_64.sh
-	bash Anaconda2-4.4.0-Linux-x86_64.sh -b -p $HOME/anaconda2
-	export PATH="$HOME/anaconda2/bin:$PATH"
+	bash Anaconda2-4.4.0-Linux-x86_64.sh -b -p /opt/anaconda2
 
-	conda install -c bioconda --yes  bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc
+	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs preseq

@@ -1,2 +1,2 @@
-H3K4me3 H3K4me3_Rep1        control1    H3K4me3
-Input   Input_Rep1      control1    input
+H3K4me3	H3K4me3_Rep1	/home/carlos/workspace/code/cipher-workflow-platform/example_data/H3K4me3.500k_reads.fastq.gz	control1	H3K4me3
+Input	Input_Rep1	/home/carlos/workspace/code/cipher-workflow-platform/example_data/Input.500k_reads.fastq.gz	control1	input
