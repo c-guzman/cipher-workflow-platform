@@ -2,6 +2,7 @@
 Version 1.0.0 | Updated August 2017
 
 Author: Carlos Guzman
+
 E-mail: cag104@ucsd.edu
 
 CIPHER is a data processing workflow platform for next generation sequencing data including ChIP-seq, RNA-seq, DNase-seq, MNase-seq, ATAC-seq and GRO-seq. By taking advantage of the Nextflow language, and Singularity containers, CIPHER is an extremely easy to use, and reproducible pre-processing workflow toolkit.
