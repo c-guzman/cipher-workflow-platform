@@ -41,7 +41,7 @@ sample1		sample1_rep1	/path/to/fastq_R1.gz 	/path/to/fastq_R2.gz	control1	sample
 sample2		sample2_rep1	/path/to/fastq_R1.gz  	/path/to/fastq_R2.gz	control1	input
 ```
 
-** DO NOT MIX AND MATCH SINGLE AND PAIR ENDED DATA INTO THE SAME CONFIG FILE. CIPHER DOES NOT HANDLE THIS USE-CASE YET. **
+**DO NOT MIX AND MATCH SINGLE AND PAIR ENDED DATA INTO THE SAME CONFIG FILE. CIPHER DOES NOT HANDLE THIS USE-CASE YET.**
 
 Where columns refer to:
 
