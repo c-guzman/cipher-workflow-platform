@@ -39,6 +39,14 @@ The only required dependencies to run CIPHER is:
 
 3) Run your workflow
 
+	```
+	nextflow run cipher.nf -with-singularity <cipher.img> --mode <MODE> --config <CONFIG> --fa <FASTA> --gtf <GTF> --lib <LIB> --readLen <LENGTH> [options]
+	```
+
+## Example Data
+
+Some example data to test CIPHER's workflows can be found in the `example_data` folder. The user should alter the config file fastq paths before running the workflow otherwise the run will fail.
+
 ## Running CIPHER on a Cluster
 
 CIPHER is possible to execute it on your computer or any cluster resource
