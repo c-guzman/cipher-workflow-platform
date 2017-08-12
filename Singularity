@@ -39,4 +39,4 @@ export PATH="/opt/anaconda2/bin:$PATH"
 	wget https://repo.continuum.io/archive/Anaconda2-4.4.0-Linux-x86_64.sh
 	bash Anaconda2-4.4.0-Linux-x86_64.sh -b -p /opt/anaconda2
 
-	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs preseq
+	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs preseq nucleoatac

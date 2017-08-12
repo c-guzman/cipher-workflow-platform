@@ -23,6 +23,35 @@ The only required dependencies to run CIPHER is:
   + Nextflow (https://www.nextflow.io/)
   + Singularity (http://singularity.lbl.gov/index.html)
 
+## CONFIG Files
+
+Config files are tab separated text files with 5 columns for single-ended data and 6 columns for pair ended data.
+
+Single-ended CONFIG:
+
+```
+sample1		sample1_rep1	/path/to/fastq.gz 	control1	sample1
+sample2		sample2_rep1	/path/to/fastq.gz 	control1	input
+```
+
+Pair-ended CONFIG:
+
+```
+sample1		sample1_rep1	/path/to/fastq_R1.gz 	/path/to/fastq_R2.gz	control1	sample1
+sample2		sample2_rep1	/path/to/fastq_R1.gz  	/path/to/fastq_R2.gz	control1	input
+```
+
+** DO NOT MIX AND MATCH SINGLE AND PAIR ENDED DATA INTO THE SAME CONFIG FILE. CIPHER DOES NOT HANDLE THIS USE-CASE YET.
+
+Where columns refer to:
+
+* 1. MergeID - Prefix used for naming files that are merged together.
+* 2. SampleID - Prefix used for naming files that are not merged together. Typically includes replicate information.
+* 3. Path 1 - The file path to first FASTQ file. Typically the R1 file in pair-ended data.
+* 4. Path 2 - The file path to second FASTQ file. Only required for pair-ended data. Typically the R2 file in pair-ended data.
+* 5. InputID - Used to pair sample and input files for various types of sequencing data. Use `-` if no input file is available or needed (as is the case in RNA-seq/GRO-seq/MNase-seq/etc.
+* 6. Mark - Used to differentiate sample files from input files. Use the keyword `input` if that sample corresponds to an input file. Otherwise use `MergeID`.
+
 ## Running CIPHER
 
 1) Install required dependencies
