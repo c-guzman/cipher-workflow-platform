@@ -161,6 +161,21 @@ if (params.help == true) {
 	log.info '--mapping			Set this to false if you would like to skip the alignment step. (Default: true)'
 	log.info '--aligner			The aligner to map your data to the reference genome. Choose from: bbmap, bowtie2, bwa, hisat2, star. (Default: bbmap)'
 	log.info ''
+	log.info '--bwa_T			See T flag in BWA user manual for more information. (Default: 30)'
+	log.info '--bwa_k			See k flag in BWA user manual for more information. (Default: 19)'
+	log.info '--bwa_w			See w flag in BWA user manual for more information. (Default: 100)'
+	log.info '--bwa_d			See d flag in BWA user manual for more information. (Default: 100'
+	log.info '--bwa_r			See r flag in BWA user manual for more information. (Default: 1.5)'
+	log.info '--bwa_c			See c flag in BWA user manual for more information. (Default: 10000)'
+	log.info '--bwa_A			See A flag in BWA user manual for more information. (Default: 1)'
+	log.info '--bwa_B			See B flag in BWA user manual for more information. (Default: 4)'
+	log.info '--bwa_O			See O flag in BWA user manual for more information. (Default: 6)'
+	log.info '--bwa_E			See E flag in BWA user manual for more information. (Default: 1)'
+	log.info '--bwa_L			See L flag in BWA user manual for more information. (Default: 5)'
+	log.info '--bwa_U			See U flag in BWA user manual for more information. (Default: 9)'
+	log.info ''
+	log.info '--bt2_D'
+	log.info ''
 	log.info 'BAMCOVERAGE FLAGS:'
 	log.info ''
 	log.info '--bamcoverage			Set this to false if you would like to skip the bamCoverage bigwig creation step. (Default: true)'
@@ -507,7 +522,7 @@ if (params.clumpify == true && params.lib == "s") {
 	set mergeid, id, file(read1), controlid, mark from clumpify_fqs_s
 
 	output:
-	set mergeid, id, file("${id}.clumped.fq.gz"), controlid, mark into pre_fastqc_fqs, bbduk_fqs
+	set mergeid, id, file("${id}.clumped.fq.gz"), controlid, mark into pre_fastqc_fqs_s, bbduk_fqs_s
 	file("clumpify_parameters_${id}.txt")
 
 	script:
@@ -521,7 +536,7 @@ if (params.clumpify == true && params.lib == "s") {
 		clumpify_fqs_s.into {
 
 			pre_fastqc_fqs_s
-			bbduk_fqs
+			bbduk_fqs_s
 		}
 	}
 
@@ -533,7 +548,7 @@ if (params.clumpify == true && params.lib == "p") {
 	set mergeid, id, file(read1), file(read2), controlid, mark from clumpify_fqs_p
 
 	output:
-	set mergeid, id, file("${id}_R1.clumped.fq.gz"), file("${id}_R2.clumped.fq.gz"), controlid, mark into pre_fastqc_fqs, bbduk_fqs
+	set mergeid, id, file("${id}_R1.clumped.fq.gz"), file("${id}_R2.clumped.fq.gz"), controlid, mark into pre_fastqc_fqs_p, bbduk_fqs_p
 	file("clumpify_parameters_${id}.txt")
 
 	script:
@@ -547,7 +562,7 @@ if (params.clumpify == true && params.lib == "p") {
 		clumpify_fqs_p.into {
 
 			pre_fastqc_fqs_p
-			bbduk_fqs
+			bbduk_fqs_p
 		}
 	}
 
@@ -572,7 +587,7 @@ if (params.bbduk == true && params.lib == "s") {
 		"""
 	}
 } else if (params.bbduk == false && params.lib == "s") {
-	bbduk_fqs.into {
+	bbduk_fqs_s.into {
 
 		post_fastqc_fqs_s
 		mapping_fqs
@@ -600,7 +615,7 @@ if (params.bbduk == true && params.lib == "p") {
 		"""
 	}
 } else if (params.bbduk == false && params.lib == "p") {
-	bbduk_fqs.into {
+	bbduk_fqs_p.into {
 
 		post_fastqc_fqs_p
 		mapping_fqs
@@ -617,7 +632,7 @@ if (params.fastqc == true && params.lib == "s") {
 		set mergeid, id, file(read1), controlid, mark from pre_fastqc_fqs_s
 
 		output:
-		file("*.{zip, html}") into pre_fastqc_multiqc
+		file("*.{zip, html}") into pre_fastqc_multiqc_s
 
 		script:
 		"""
@@ -636,7 +651,7 @@ if (params.fastqc == true && params.lib == "p") {
 		set mergeid, id, file(read1), file(read2), controlid, mark from pre_fastqc_fqs_p
 
 		output:
-		file("*.{zip, html}") into pre_fastqc_multiqc
+		file("*.{zip, html}") into pre_fastqc_multiqc_p
 
 		script:
 		"""
@@ -647,15 +662,15 @@ if (params.fastqc == true && params.lib == "p") {
 
 // step post fastqc for single end data
 if (params.fastqc == true && params.lib == "s" && params.bbduk == true) {
-	process pre_fastqc {
+	process post_fastqc {
 
 		publishDir "${params.outdir}/${params.mode}/${id}/fastqc", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), controlid, mark from post_fastqc_fqs
+		set mergeid, id, file(read1), controlid, mark from post_fastqc_fqs_s
 
 		output:
-		file("*.{zip, html}") into pre_fastqc_multiqc
+		file("*.{zip, html}") into pre_fastqc_multiqc_s
 
 		script:
 		"""
@@ -666,15 +681,15 @@ if (params.fastqc == true && params.lib == "s" && params.bbduk == true) {
 
 // step post fastqc for pair end data
 if (params.fastqc == true && params.lib == "p" && params.bbduk == true) {
-	process pre_fastqc {
+	process post_fastqc {
 
 		publishDir "${params.outdir}/${params.mode}/${id}/fastqc", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), file(read2), controlid, mark from post_fastqc_fqs
+		set mergeid, id, file(read1), file(read2), controlid, mark from post_fastqc_fqs_p
 
 		output:
-		file("*.{zip, html}") into pre_fastqc_multiqc
+		file("*.{zip, html}") into pre_fastqc_multiqc_p
 
 		script:
 		"""
@@ -1028,15 +1043,36 @@ if (params.bamcoverage == true) {
 }
 
 // multiqc general results with bbduk
-if (params.multiqc == true && params.bbduk == true) {
+if (params.multiqc == true && params.bbduk == true && params.lib == "s") {
 
 	process multiqc {
 
  		publishDir "${params.outdir}/${params.mode}/multiqc", mode: 'copy'
 
  		input:
- 		file ('fastqc/*') from post_fastqc_multiqc.flatten().toList()
- 		file ('fastqc/*') from pre_fastqc_multiqc.flatten().toList()
+ 		file ('fastqc/*') from post_fastqc_multiqc_s.flatten().toList()
+ 		file ('fastqc/*') from pre_fastqc_multiqc_s.flatten().toList()
+
+ 		output:
+ 		file "*multiqc_report.html"
+ 		file "*multiqc_data"
+
+ 		script:
+ 		"""
+ 		multiqc -f .
+ 		"""
+	}
+}
+
+if (params.multiqc == true && params.bbduk == true && params.lib == "p") {
+
+	process multiqc {
+
+ 		publishDir "${params.outdir}/${params.mode}/multiqc", mode: 'copy'
+
+ 		input:
+ 		file ('fastqc/*') from post_fastqc_multiqc_p.flatten().toList()
+ 		file ('fastqc/*') from pre_fastqc_multiqc_p.flatten().toList()
 
  		output:
  		file "*multiqc_report.html"
@@ -1050,14 +1086,34 @@ if (params.multiqc == true && params.bbduk == true) {
 }
 
 // multiqc general without bbduk
-if (params.multiqc == true && params.bbduk == false) {
+if (params.multiqc == true && params.bbduk == false && params.lib == "s") {
 
 	process multiqc {
 
  		publishDir "${params.outdir}/${params.mode}/multiqc", mode: 'copy'
 
  		input:
- 		file ('fastqc/*') from pre_fastqc_multiqc.flatten().toList()
+ 		file ('fastqc/*') from pre_fastqc_multiqc_s.flatten().toList()
+
+ 		output:
+ 		file "*multiqc_report.html"
+ 		file "*multiqc_data"
+
+ 		script:
+ 		"""
+ 		multiqc -f .
+ 		"""
+	}
+}
+
+if (params.multiqc == true && params.bbduk == false && params.lib == "p") {
+
+	process multiqc {
+
+ 		publishDir "${params.outdir}/${params.mode}/multiqc", mode: 'copy'
+
+ 		input:
+ 		file ('fastqc/*') from pre_fastqc_multiqc_p.flatten().toList()
 
  		output:
  		file "*multiqc_report.html"
@@ -1142,7 +1198,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		val egs_size from egs_size_macs_input
 
  		output:
- 		set mergeid, id, file("${id}_peaks.narrowPeak"), mark, fragLen into narrow_peaks_anno
+ 		set mergeid, id, file("${id}_peaks.narrowPeak"), mark, fragLen into narrow_peaks_anno_WI
  		file("${id}.macs2_report.txt")
  		file("macs2_parameters_${id}.txt")
  		file("*")
@@ -1185,7 +1241,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		val egs_size from egs_size_macs_no_input
 
  		output:
- 		set mergeid, id, file("${id}_peaks.narrowPeak"), mark, fragLen into narrow_peaks_anno
+ 		set mergeid, id, file("${id}_peaks.narrowPeak"), mark, fragLen into narrow_peaks_anno_NI
  		file("${id}.macs2_report.txt")
  		file("macs2_parameters_${id}.txt")
  		file("*")
@@ -1229,7 +1285,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		val egs_ratio from egs_ratio_epic
 
  		output:
- 		set mergeid, id, file("${id}_epic.bed"), mark, fragLen into narrow_peaks_anno
+ 		set mergeid, id, file("${id}_epic.bed"), mark, fragLen into broad_peaks_anno
  		file("${id}.epic_report.txt")
  		file("epic_parameters_${id}.txt")
  		file("*")
