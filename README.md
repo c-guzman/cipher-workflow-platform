@@ -43,6 +43,8 @@ The only required dependencies to run CIPHER is:
 	nextflow run cipher.nf -with-singularity <cipher.img> --mode <MODE> --config <CONFIG> --fa <FASTA> --gtf <GTF> --lib <LIB> --readLen <LENGTH> [options]
 	```
 
+**NOTE:** If not running on a cluster please set the `-qs <INT>` flag in order to control the number of processes that CIPHER parallelizes. Too many and the workflow will abruptly end because it runs out of memory. `nextflow run -qs <INT> cipher.nf ...`
+
 ## Example Data
 
 Some example data to test CIPHER's workflows can be found in the `example_data` folder. The user should alter the config file fastq paths before running the workflow otherwise the run will fail.
