@@ -1407,16 +1407,16 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		"""
  		bedtools bamtobed -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -i ${control} > ${id}_control.bed
- 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} > ${id}_epic.bed 2> ${id}.epic_report.txt
- 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
+ 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} > ${id}_epic.bed 2> ${id}.epic_report.txt
+ 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
  		"""
 
  		else if (params.lib == "p" && !params.macs_g && !params.epic_egs)
  		"""
  		bedtools bamtobed -bedpe -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -bedpe -i ${control} > ${id}_control.bed
- 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end > ${id}_epic.bed 2> ${id}.epic_report.txt
- 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end' > epic_parameters_${id}.txt
+ 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end > ${id}_epic.bed 2> ${id}.epic_report.txt
+ 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end' > epic_parameters_${id}.txt
  		"""
 		}
 	}
