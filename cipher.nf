@@ -1273,25 +1273,25 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		if(params.lib == "s" && params.mode == "chip")
  		"""
  		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.lib == "p" && params.mode == "chip")
  		"""
  		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
  		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
  		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
  		"""
  	}
  }
@@ -1362,25 +1362,25 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		if(params.lib == "s" && params.mode == "chip")
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.lib == "p" && params.mode == "chip")
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mdoe == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
  		"""
  	}
  }
@@ -1408,7 +1408,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		bedtools bamtobed -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -i ${control} > ${id}_control.bed
  		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} > ${id}_epic.bed 2> ${id}.epic_report.txt
- 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
+ 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
  		"""
 
  		else if (params.lib == "p" && !params.macs_g && !params.epic_egs)
@@ -1416,7 +1416,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		bedtools bamtobed -bedpe -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -bedpe -i ${control} > ${id}_control.bed
  		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end > ${id}_epic.bed 2> ${id}.epic_report.txt
- 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end' > epic_parameters_${id}.txt
+ 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end' > epic_parameters_${id}.txt
  		"""
 		}
 	}
@@ -1443,7 +1443,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		bedtools bamtobed -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -i ${control} > ${id}_control.bed
  		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${params.epic_egs} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} > ${id}_epic.bed 2> ${id}.epic_report.txt
- 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
+ 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${params.epic_egs} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
  		"""
 
  		else if (params.lib == "p" && !params.macs_g && !params.epic_egs)
@@ -1451,7 +1451,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		bedtools bamtobed -bedpe -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -bedpe -i ${control} > ${id}_control.bed
  		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${params.epic_egs} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end > ${id}_epic.bed 2> ${id}.epic_report.txt
- 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end' > epic_parameters_${id}.txt
+ 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${params.epic_egs} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end' > epic_parameters_${id}.txt
  		"""
 		}
 	}

@@ -37,9 +37,9 @@ export PATH="/opt/anaconda2/bin:$PATH"
 	R --slave -e 'install.packages("http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz", repos=NULL, type="source")'
 
 	R --slave -e 'require(devtools); \
-	                  devtools::install_github('hms-dbmi/spp', build_vignettes = FALSE)'
+	                  devtools::install_github("hms-dbmi/spp", build_vignettes = FALSE)'
 
 	wget https://repo.continuum.io/archive/Anaconda2-4.4.0-Linux-x86_64.sh
 	bash Anaconda2-4.4.0-Linux-x86_64.sh -b -p /opt/anaconda2
 
-	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs preseq nucleoatac
+	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs nucleoatac
