@@ -161,6 +161,8 @@ if (params.help == true) {
 	log.info '--mapping			Set this to false if you would like to skip the alignment step. (Default: true)'
 	log.info '--aligner			The aligner to map your data to the reference genome. Choose from: bbmap, bowtie2, bwa, hisat2, star. (Default: bbmap)'
 	log.info ''
+	log.info '--bbmap_maxindel	See maxindel flag in BBMap user manual for more information. Set to 200k for RNA-seq. (Default: 1)'
+	log.info ''
 	log.info '--bwa_T			See T flag in BWA user manual for more information. (Default: 30)'
 	log.info '--bwa_k			See k flag in BWA user manual for more information. (Default: 19)'
 	log.info '--bwa_w			See w flag in BWA user manual for more information. (Default: 100)'
@@ -174,7 +176,13 @@ if (params.help == true) {
 	log.info '--bwa_L			See L flag in BWA user manual for more information. (Default: 5)'
 	log.info '--bwa_U			See U flag in BWA user manual for more information. (Default: 9)'
 	log.info ''
-	log.info '--bt2_D'
+	log.info '--bt2_D			See D flag in Bowtie2 user manual for more information. (Default: 20)'
+	log.info '--bt2_R			See R flag in Bowtie2 user manual for more information. (Default: 3)'
+	log.info '--bt2_N			See N flag in Bowtie2 user manual for more information. (Default: 0)'
+	log.info '--bt2_L			See L flag in Bowtie2 user manual for more information. (Default: 20)'
+	log.info '--bt2_i			See i flag in Bowtie2 user manual for more information. (Default: S,5,1,0.50)'
+	log.info '--bt2_trim5			See trim5 flag in Bowtie2 user manual for more information. (Default: 0)'
+	log.info '--bt2_trim3			See trim3 flag in Bowtie2 user manual for more information. (Default: 0)'
 	log.info ''
 	log.info 'BAMCOVERAGE FLAGS:'
 	log.info ''
@@ -184,11 +192,13 @@ if (params.help == true) {
 	log.info ''
 	log.info '--threads			The number of threads run per process. (Default: 1)'
 	log.info '--outdir			The name of the output directory. (Default: ./results)'
-	log.info '--egs				The effective genome size. (Default: automatically calculated)'
 	log.info ''
 	log.info 'CHIP-SEQ FLAGS:'
 	log.info ''
 	log.info '--downstream_analysis		Set this to false if you would like CIPHER to skip the downstream analysis. (Default: true)'
+	log.info ''
+	log.info '--macs_g					See g flag in MACS2 user manual for more information. (Default: automatically calculated)'
+	log.info '--epic_egs				See egs flag in EPIC user manual for more information. (Default: automatically calculated)'
 	log.info ''
 	log.info 'DNASE-SEQ FLAGS:'
 	log.info ''
@@ -257,7 +267,7 @@ log.info ''
 log.info "mode:				${params.mode}"
 log.info "config:				${config_file}"
 log.info "fasta:				${fasta_file}"
-log.info "gtf:					${gtf_file}"
+log.info "gtf:				${gtf_file}"
 log.info "library:			${params.lib}"
 log.info "read-length:			${params.readLen}"
 log.info ""
@@ -378,7 +388,7 @@ if (params.downstream_analysis == true)
  	}
 
 // Calculate effective genome size
-if (!params.egs && params.downstream_analysis == true) {
+if (!params.macs_g && !params.epic_egs && params.downstream_analysis == true) {
 	process calculate_egs {
 
  		input:
@@ -410,7 +420,7 @@ egs_ratio.map{ file ->
  				egs_ratio
  			}
 
- 			egs_ratio.into {
+ 			egs_ratio.set {
  				egs_ratio_epic
  			}
  		}
@@ -670,7 +680,7 @@ if (params.fastqc == true && params.lib == "s" && params.bbduk == true) {
 		set mergeid, id, file(read1), controlid, mark from post_fastqc_fqs_s
 
 		output:
-		file("*.{zip, html}") into pre_fastqc_multiqc_s
+		file("*.{zip, html}") into post_fastqc_multiqc_s
 
 		script:
 		"""
@@ -689,7 +699,7 @@ if (params.fastqc == true && params.lib == "p" && params.bbduk == true) {
 		set mergeid, id, file(read1), file(read2), controlid, mark from post_fastqc_fqs_p
 
 		output:
-		file("*.{zip, html}") into pre_fastqc_multiqc_p
+		file("*.{zip, html}") into post_fastqc_multiqc_p
 
 		script:
 		"""
@@ -712,6 +722,7 @@ if (params.mapping == true && params.aligner == "bbmap" && params.lib == "s") {
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, spp_bams, bam_grouping, bam_danpos, bam_qorts, bam_featurecounts, bam_stringtie
 		file("${id}.bbmap_alignmentReport.txt")
 		file("${id}.unmapped.bam")
+		file("bbmap_parameters_${id}.txt")
 
 		script:
 		"""
@@ -737,6 +748,7 @@ if (params.mapping == true && params.aligner == "bbmap" && params.lib == "p") {
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, spp_bams, bam_grouping, bam_danpos, bam_qorts, bam_featurecounts, bam_stringtie
 		file("${id}.bbmap_alignmentReport.txt")
 		file("${id}.unmapped.bam")
+		file("bbmap_parameters_${id}.txt")
 
 		script:
 		"""
@@ -762,6 +774,7 @@ if (params.mapping == true && params.aligner == "bowtie2" && params.lib == "s") 
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, spp_bams, bam_grouping, bam_danpos, bam_qorts, bam_featurecounts, bam_stringtie
 		file("bowtie2_parameters_${id}.txt")
 		file("${id}.bowtie2_alignmentReport.txt")
+		file("bowtie2_parameters_${id}.txt")
 
 		script:
 		"""
@@ -787,6 +800,7 @@ if (params.mapping == true && params.aligner == "bowtie2" && params.lib == "p") 
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, spp_bams, bam_grouping, bam_danpos, bam_qorts, bam_featurecounts, bam_stringtie
 		file("bowtie2_parameters_${id}.txt")
 		file("${id}.bowtie2_alignmentReport.txt")
+		file("bowtie2_parameters_${id}.txt")
 
 		script:
 		"""
@@ -812,6 +826,7 @@ if (params.mapping == true && params.aligner == "bwa" && params.lib == "s") {
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, spp_bams, bam_grouping, bam_danpos, bam_qorts, bam_featurecounts, bam_stringtie
 		file("bwa_parameters_${id}.txt")
 		file("${id}.bwa_alignmentReport.txt")
+		file("bwa_parameters_${id}.txt")
 
 		script:
 		"""
@@ -837,6 +852,7 @@ if (params.mapping == true && params.aligner == "bwa" && params.lib == "p") {
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, spp_bams, bam_grouping, bam_danpos, bam_qorts, bam_featurecounts, bam_stringtie
 		file("bwa_parameters_${id}.txt")
 		file("${id}.bwa_alignmentReport.txt")
+		file("bwa_parameters_${id}.txt")
 
 		script:
 		"""
@@ -862,6 +878,7 @@ if (params.mapping == true && params.aligner == "hisat2" && params.lib == "s") {
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, bam_grouping, bam_danpos, bam_preseq, bam_qorts, bam_featurecounts, bam_stringtie
 		file("hisat2_parameters_${id}.txt")
 		file("${id}.hisat2_alignmentReport.txt")
+		file("hisat2_parameters_${id}.txt")
 
 		script:
 		"""
@@ -887,6 +904,7 @@ if (params.mapping == true && params.aligner == "hisat2" && params.lib == "p") {
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, bam_grouping, bam_danpos, bam_preseq, bam_featurecounts, bam_qorts, bam_stringtie
 		file("hisat2_parameters_${id}.txt")
 		file("${id}.hisat2_alignmentReport.txt")
+		file("hisat2_parameters_${id}.txt")
 
 		script:
 		"""
@@ -912,6 +930,7 @@ if (params.mapping == true && params.aligner == "star" && params.lib == "s") {
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, bam_grouping, bam_danpos, bam_preseq, bam_featurecounts, bam_qorts, bam_stringtie
 		file("star_parameters_${id}.txt")
 		file("${id}.star_alignmentReport.txt")
+		file("star_parameters_${id}.txt")
 
 		script:
 		"""
@@ -937,6 +956,7 @@ if (params.mapping == true && params.aligner == "star" && params.lib == "p") {
 		set mergeid, id, file("*.sorted.mapped.bam"), controlid, mark, file("*.bam.bai") into bamcoverage_bams, bam_grouping, bam_danpos, bam_preseq, bam_featurecounts, bam_qorts, bam_stringtie
 		file("star_parameters_${id}.txt")
 		file("${id}.star_alignmentReport.txt")
+		file("star_parameters_${id}.txt")
 
 		script:
 		"""
@@ -984,7 +1004,7 @@ if (params.bamcoverage == true) {
 	.map { mergeid, id, bam, controlid, mark, bam_index ->
 		[ mergeid, id, bam, controlid, mark, bam_index ].flatten()
 	}
-	.into { bamcoverage_mergedbams }
+	.set { bamcoverage_mergedbams }
 
 	if (params.mode != "rna" && params.mode != "gro") {
 	process bamCoverage {
@@ -1187,7 +1207,8 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  	}
 
 
- 	// call peaks for files with input using macs
+ 	// call peaks for files with input using macs with automatically calculated egs using epic effective
+ 	if (!params.macs_g && !params.epic_egs) {
  	process narrow_peak_calling_WI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1223,14 +1244,60 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
  		"""
 
- 		else if(params.mdoe == "atac" && (params.lib == "s" || params.lib == "p"))
+ 		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
  		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
  		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
  		"""
  	}
+ }
+
+ // macs peak calling using manual egs
+ 	if (params.macs_g && params.epic_egs) {
+ 	process narrow_peak_calling_WI {
+
+ 		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
+
+ 		input:
+ 		file chromSizes from chrom_sizes_WI.val
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from macs_input_narrow_bams
+
+ 		output:
+ 		set mergeid, id, file("${id}_peaks.narrowPeak"), mark, fragLen into narrow_peaks_anno_WI_m
+ 		file("${id}.macs2_report.txt")
+ 		file("macs2_parameters_${id}.txt")
+ 		file("*")
+
+ 		script:
+ 		shiftsize = Math.round(-1 * ((fragLen as int)/2))
+ 		if(params.lib == "s" && params.mode == "chip")
+ 		"""
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		"""
+
+ 		else if(params.lib == "p" && params.mode == "chip")
+ 		"""
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		"""
+
+ 		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
+ 		"""
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		"""
+
+ 		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
+ 		"""
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
+ 		"""
+ 	}
+ }
 
  	// call peaks for files without input using macs
+ 	if (!params.macs_g && !params.epic_egs) {
  	process narrow_peak_calling_NI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1250,31 +1317,76 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		shiftsize = Math.round(-1 * ((fragLen as int)/2))
  		if(params.lib == "s" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.lib == "p" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
- 		else if(params.mode == "dnase")
+ 		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
  		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
  		"""
 
- 		else if(params.mode == "atac")
+ 		else if(params.mdoe == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
  		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
  		"""
  	}
+ }
 
- 	// call broad peaks for files with input using epic
-	if (params.mode == "chip") {
+ 	// call peaks no input with manual egs
+ 	if (params.macs_g && params.epic_egs) {
+ 	process narrow_peak_calling_NI {
+
+ 		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
+
+ 		input:
+ 		file chromSizes from chrom_sizes_NI.val
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from macs_no_input_narrow_bams
+
+ 		output:
+ 		set mergeid, id, file("${id}_peaks.narrowPeak"), mark, fragLen into narrow_peaks_anno_NI_m
+ 		file("${id}.macs2_report.txt")
+ 		file("macs2_parameters_${id}.txt")
+ 		file("*")
+
+ 		script:
+ 		shiftsize = Math.round(-1 * ((fragLen as int)/2))
+ 		if(params.lib == "s" && params.mode == "chip")
+ 		"""
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		"""
+
+ 		else if(params.lib == "p" && params.mode == "chip")
+ 		"""
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		"""
+
+ 		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
+ 		"""
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		"""
+
+ 		else if(params.mdoe == "atac" && (params.lib == "s" || params.lib == "p"))
+ 		"""
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
+ 		"""
+ 	}
+ }
+
+ 	// call broad peaks for files with input using epic automatic egs
+	if (params.mode == "chip" && !params.macs_g && !params.epic_egs) {
  	process broad_peak_calling {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1291,19 +1403,54 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		file("*")
 
  		script:
- 		if (params.lib == "s")
+ 		if (params.lib == "s" && !params.macs_g && !params.epic_egs)
  		"""
  		bedtools bamtobed -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -i ${control} > ${id}_control.bed
- 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} > ${id}_epic.bed 2> ${id}.epic_report.txt
+ 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} > ${id}_epic.bed 2> ${id}.epic_report.txt
  		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
  		"""
 
- 		else if (params.lib == "p")
+ 		else if (params.lib == "p" && !params.macs_g && !params.epic_egs)
  		"""
  		bedtools bamtobed -bedpe -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -bedpe -i ${control} > ${id}_control.bed
- 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end > ${id}_epic.bed 2> ${id}.epic_report.txt
+ 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio_epic} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end > ${id}_epic.bed 2> ${id}.epic_report.txt
+ 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end' > epic_parameters_${id}.txt
+ 		"""
+		}
+	}
+
+	// epic peak calling using manual egs
+	if (params.mode == "chip" && params.macs_g && params.epic_egs) {
+ 	process broad_peak_calling {
+
+ 		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
+
+ 		input:
+ 		file chromSizes from chrom_sizes_epic.val
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from epic_input_broad_bams
+
+ 		output:
+ 		set mergeid, id, file("${id}_epic.bed"), mark, fragLen into broad_peaks_anno_m
+ 		file("${id}.epic_report.txt")
+ 		file("epic_parameters_${id}.txt")
+ 		file("*")
+
+ 		script:
+ 		if (params.lib == "s" && !params.macs_g && !params.epic_egs)
+ 		"""
+ 		bedtools bamtobed -i ${bam} > ${id}_treatment.bed
+ 		bedtools bamtobed -i ${control} > ${id}_control.bed
+ 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${params.epic_egs} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} > ${id}_epic.bed 2> ${id}.epic_report.txt
+ 		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
+ 		"""
+
+ 		else if (params.lib == "p" && !params.macs_g && !params.epic_egs)
+ 		"""
+ 		bedtools bamtobed -bedpe -i ${bam} > ${id}_treatment.bed
+ 		bedtools bamtobed -bedpe -i ${control} > ${id}_control.bed
+ 		epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${params.epic_egs} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end > ${id}_epic.bed 2> ${id}.epic_report.txt
  		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes} --pair-end' > epic_parameters_${id}.txt
  		"""
 		}
