@@ -13,6 +13,8 @@ export PATH="/opt/anaconda2/bin:$PATH"
 	apt-get update
 
 	apt-get install -y wget libboost-all-dev
+
+	ln -s /bin/tar /bin/gtar
 	
 	R --slave -e "source('https://bioconductor.org/biocLite.R'); \
 		      biocLite('ChIPQC')"
@@ -36,10 +38,7 @@ export PATH="/opt/anaconda2/bin:$PATH"
 
 	R --slave -e 'install.packages("http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz", repos=NULL, type="source")'
 
-	R --slave -e "library(devtools); \
-	                  devtools::install_github('hms-dbmi/spp', build_vignettes = FALSE)"
-
 	wget https://repo.continuum.io/archive/Anaconda2-4.4.0-Linux-x86_64.sh
 	bash Anaconda2-4.4.0-Linux-x86_64.sh -b -p /opt/anaconda2
 
-	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs nucleoatac
+	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs nucleoatac r-spp
