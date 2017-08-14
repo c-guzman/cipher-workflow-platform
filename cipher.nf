@@ -1380,7 +1380,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
  		"""
 
- 		else if(params.mdoe == "atac" && (params.lib == "s" || params.lib == "p"))
+ 		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
  		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
@@ -1396,7 +1396,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		input:
  		file chromSizes from chrom_sizes_epic.val
- 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from epic_input_broad_bams_noegs
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from epic_input_broad_bams_noegs
  		val egs_ratio from egs_ratio_epic
 
  		output:
@@ -1406,7 +1406,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		file("*")
 
  		script:
- 		if (params.lib == "s" && !params.macs_g && !params.epic_egs)
+ 		if (params.lib == "s")
  		"""
  		bedtools bamtobed -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -i ${control} > ${id}_control.bed
@@ -1414,7 +1414,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${egs_ratio} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
  		"""
 
- 		else if (params.lib == "p" && !params.macs_g && !params.epic_egs)
+ 		else if (params.lib == "p")
  		"""
  		bedtools bamtobed -bedpe -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -bedpe -i ${control} > ${id}_control.bed
@@ -1432,7 +1432,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		input:
  		file chromSizes from chrom_sizes_epic.val
- 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from epic_input_broad_bams_egs
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from epic_input_broad_bams_egs
 
  		output:
  		set mergeid, id, file("${id}_epic.bed"), mark, fragLen into broad_peaks_anno_m
@@ -1441,7 +1441,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		file("*")
 
  		script:
- 		if (params.lib == "s" && !params.macs_g && !params.epic_egs)
+ 		if (params.lib == "s")
  		"""
  		bedtools bamtobed -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -i ${control} > ${id}_control.bed
@@ -1449,7 +1449,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		echo 'epic --treatment ${id}_treatment.bed --control ${id}_control.bed -cpu ${params.threads} -egs ${params.epic_egs} --fragment-size ${fragLen} -w ${params.epic_w} -g ${params.epic_g} -fdr ${params.epic_qvalue} -cs ${chromSizes}' > epic_parameters_${id}.txt
  		"""
 
- 		else if (params.lib == "p" && !params.macs_g && !params.epic_egs)
+ 		else if (params.lib == "p")
  		"""
  		bedtools bamtobed -bedpe -i ${bam} > ${id}_treatment.bed
  		bedtools bamtobed -bedpe -i ${control} > ${id}_control.bed
