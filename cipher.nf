@@ -981,7 +981,7 @@ if (params.bamcoverage == true) {
 
 	process merge_bams {
 
-		publishDir "${params.outdir}/${params.mode}/${id}/merged/alignments", mode: 'copy'
+		publishDir "${params.outdir}/${params.mode}/merged/${mergeid}/alignments", mode: 'copy'
 
 		input:
 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from groupedBams
@@ -1009,7 +1009,7 @@ if (params.bamcoverage == true) {
 	if (params.mode != "rna" && params.mode != "gro") {
 	process bamCoverage {
 
-		publishDir "${params.outdir}/${params.mode}/${mergeid}/tracks", mode: 'copy'
+		publishDir "${params.outdir}/${params.mode}/tracks", mode: 'copy'
 
 		input:
 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams
@@ -1039,7 +1039,7 @@ if (params.bamcoverage == true) {
 	} else {
 	process bamCoverage {
 
-		publishDir "${params.outdir}/${params.mode}/${mergeid}/tracks", mode: 'copy'
+		publishDir "${params.outdir}/${params.mode}/tracks", mode: 'copy'
 
 		input:
 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams
@@ -1192,17 +1192,20 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		it[3] != '-'
  	}
  	.cross(allBams) { it[3] }.map{ c, t ->
- 		[t[0], t[1], t[2], c[2], t[4], t[5], t[6], c[6]]
+ 		[t[0], t[1], t[2], c[2], t[4], t[5], t[6] ]
  	}
 
  	// create more bam files with input and no input for downstream analysis
  	bams_with_input.into {
- 		macs_input_narrow_bams
- 		epic_input_broad_bams
+ 		macs_input_narrow_bams_noegs
+ 		macs_input_narrow_bams_egs
+ 		epic_input_broad_bams_noegs
+ 		epic_input_broad_bams_egs
  	}
 
  	bams_no_input.into {
- 		macs_no_input_narrow_bams
+ 		macs_no_input_narrow_bams_egs
+ 		macs_no_input_narrow_bams_noegs
  		macs_no_input_broad_bams
  	}
 
@@ -1215,7 +1218,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		input:
  		file chromSizes from chrom_sizes_WI.val
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from macs_input_narrow_bams
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from macs_input_narrow_bams_noegs
  		val egs_size from egs_size_macs_input
 
  		output:
@@ -1253,14 +1256,14 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  }
 
  // macs peak calling using manual egs
- 	if (params.macs_g && params.epic_egs) {
+ 	if (params.macs_g == "*" && params.epic_egs == "*") {
  	process narrow_peak_calling_WI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
 
  		input:
  		file chromSizes from chrom_sizes_WI.val
- 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from macs_input_narrow_bams
+ 		set mergeid, id, file(bam), file(control), mark, fragLen, file(bam_index) from macs_input_narrow_bams_egs
 
  		output:
  		set mergeid, id, file("${id}_peaks.narrowPeak"), mark, fragLen into narrow_peaks_anno_WI_m
@@ -1304,7 +1307,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		input:
  		file chromSizes from chrom_sizes_NI.val
- 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from macs_no_input_narrow_bams
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from macs_no_input_narrow_bams_noegs
  		val egs_size from egs_size_macs_no_input
 
  		output:
@@ -1342,14 +1345,14 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  }
 
  	// call peaks no input with manual egs
- 	if (params.macs_g && params.epic_egs) {
+ 	if (params.macs_g == "*" && params.epic_egs == "*") {
  	process narrow_peak_calling_NI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
 
  		input:
  		file chromSizes from chrom_sizes_NI.val
- 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from macs_no_input_narrow_bams
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from macs_no_input_narrow_bams_egs
 
  		output:
  		set mergeid, id, file("${id}_peaks.narrowPeak"), mark, fragLen into narrow_peaks_anno_NI_m
@@ -1393,7 +1396,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		input:
  		file chromSizes from chrom_sizes_epic.val
- 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from epic_input_broad_bams
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from epic_input_broad_bams_noegs
  		val egs_ratio from egs_ratio_epic
 
  		output:
@@ -1422,14 +1425,14 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 	}
 
 	// epic peak calling using manual egs
-	if (params.mode == "chip" && params.macs_g && params.epic_egs) {
+	if (params.mode == "chip" && params.macs_g == "*" && params.epic_egs == "*") {
  	process broad_peak_calling {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
 
  		input:
  		file chromSizes from chrom_sizes_epic.val
- 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from epic_input_broad_bams
+ 		set mergeid, id, file(bam), mark, fragLen, file(bam_index) from epic_input_broad_bams_egs
 
  		output:
  		set mergeid, id, file("${id}_epic.bed"), mark, fragLen into broad_peaks_anno_m
