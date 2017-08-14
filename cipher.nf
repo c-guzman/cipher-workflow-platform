@@ -60,7 +60,7 @@ params.bt2_D = 20
 params.bt2_R = 3
 params.bt2_N = 0
 params.bt2_L = 20
-params.bt2_i = 'S,5,1,0.50'
+params.bt2_i = 'S,1,0.50'
 params.bt2_trim5 = 0
 params.bt2_trim3 = 0
 
@@ -281,6 +281,8 @@ log.info "multiqc:			${params.multiqc}"
 log.info "mapping:			${params.mapping}"
 log.info "bamcoverage:			${params.bamcoverage}"
 log.info "downstream_analysis		${params.downstream_analysis}"
+log.info ""
+log.info "threads:			${params.threads}"
 log.info ""
 log.info "aligner:			${params.aligner}"
 log.info "==============================================="
@@ -782,7 +784,7 @@ if (params.mapping == true && params.aligner == "bowtie2" && params.lib == "s") 
 		bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam 2> ${id}.bowtie2_alignmentReport.txt
 		samtools sort -T ${id} -@ ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.sam
 		samtools index -@ ${params.threads} ${id}.sorted.mapped.bam
-		echo 'bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -1 ${read1} -2 ${read2} -S ${id}.mapped.sam' > bowtie2_parameters_${id}.txt
+		echo 'bowtie2 -q -D ${params.bt2_D} -R ${params.bt2_R} -N ${params.bt2_N} -L ${params.bt2_L} -i ${params.bt2_i} --trim5 ${params.bt2_trim5} --trim3 ${params.bt2_trim3} -p ${params.threads} --local -x genome -U ${read1} -S ${id}.mapped.sam' > bowtie2_parameters_${id}.txt
 		"""
 	}
 }
