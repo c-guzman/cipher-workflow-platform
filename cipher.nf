@@ -1256,7 +1256,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  }
 
  // macs peak calling using manual egs
- 	if (params.macs_g == "*" && params.epic_egs == "*") {
+ 	if (params.macs_g && params.epic_egs) {
  	process narrow_peak_calling_WI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1345,7 +1345,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  }
 
  	// call peaks no input with manual egs
- 	if (params.macs_g == "*" && params.epic_egs == "*") {
+ 	if (params.macs_g && params.epic_egs) {
  	process narrow_peak_calling_NI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1425,7 +1425,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 	}
 
 	// epic peak calling using manual egs
-	if (params.mode == "chip" && params.macs_g == "*" && params.epic_egs == "*") {
+	if (params.mode == "chip" && params.macs_g && params.epic_egs) {
  	process broad_peak_calling {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
