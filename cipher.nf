@@ -389,7 +389,7 @@ if (params.downstream_analysis == true)
  	}
 
 // Calculate effective genome size
-if (!params.macs_g && !params.epic_egs && params.downstream_analysis == true) {
+if (!params.macs_g && (!params.epic_egs || !params.epic_gn) && params.downstream_analysis == true) {
 	process calculate_egs {
 
  		input:
@@ -1163,7 +1163,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		publishDir "${params.outdir}/${params.mode}/${id}/fragment_sizes", mode: 'copy'
 
  		input:
- 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from spp_bams
+ 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from treat
 
  		output:
  		set mergeid, id, file("${id}.params.out") into modelParams
