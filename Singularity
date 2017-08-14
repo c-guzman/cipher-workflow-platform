@@ -12,7 +12,7 @@ export PATH="/opt/anaconda2/bin:$PATH"
 
 	apt-get update
 
-	apt-get install -y wget bzip2
+	apt-get install -y wget bzip2 perl
 
 	ln -s /bin/tar /bin/gtar
 
