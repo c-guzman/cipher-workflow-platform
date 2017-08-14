@@ -1212,7 +1212,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
 
  	// call peaks for files with input using macs with automatically calculated egs using epic effective
- 	if (!params.macs_g && !params.epic_egs) {
+ 	if (!params.macs_g) {
  	process narrow_peak_calling_WI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1257,7 +1257,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  }
 
  // macs peak calling using manual egs
- 	if (params.macs_g && params.epic_egs) {
+ 	if (params.macs_g) {
  	process narrow_peak_calling_WI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1301,7 +1301,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  }
 
  	// call peaks for files without input using macs
- 	if (!params.macs_g && !params.epic_egs) {
+ 	if (!params.macs_g) {
  	process narrow_peak_calling_NI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1346,7 +1346,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  }
 
  	// call peaks no input with manual egs
- 	if (params.macs_g && params.epic_egs) {
+ 	if (params.macs_g) {
  	process narrow_peak_calling_NI {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1390,7 +1390,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  }
 
  	// call broad peaks for files with input using epic automatic egs
-	if (params.mode == "chip" && !params.macs_g && !params.epic_egs && !params.epic_gn) {
+	if (params.mode == "chip" && !params.epic_egs && !params.epic_gn) {
  	process broad_peak_calling {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
@@ -1426,7 +1426,7 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 	}
 
 	// epic peak calling using manual egs
-	if (params.mode == "chip" && params.macs_g && (params.epic_egs || params.epic_gn)) {
+	if (params.mode == "chip" && (params.epic_egs || params.epic_gn)) {
  	process broad_peak_calling {
 
  		publishDir "${params.outdir}/${params.mode}/${id}/peaks", mode: 'copy'
