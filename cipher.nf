@@ -91,7 +91,7 @@ params.star_twopassMode = 'None'
 
 // default bamcoverage parameters
 params.bamcoverage = true
-params.bamcoverage_bs = 10
+params.bamcoverage_bs = 50
 params.bamcoverage_smooth = 100
 params.bamcoverage_e = 150
 
