@@ -1,5 +1,5 @@
 Bootstrap: docker
-From: bioconductor/release_core2
+From: ubuntu:latest
 
 %labels
 Maintainer cag104@ucsd.edu
@@ -12,33 +12,16 @@ export PATH="/opt/anaconda2/bin:$PATH"
 
 	apt-get update
 
-	apt-get install -y wget libboost-all-dev
+	apt-get install -y wget bzip2
 
 	ln -s /bin/tar /bin/gtar
-	
-	R --slave -e "source('https://bioconductor.org/biocLite.R'); \
-		      biocLite('ChIPQC')"
-
-	R --slave -e "source('https://bioconductor.org/biocLite.R'); \
-                      biocLite('groHMM')"
-
-	R --slave -e "source('https://bioconductor.org/biocLite.R'); \
-                      biocLite('RUVSeq')"
-
-	R --slave -e "source('https://bioconductor.org/biocLite.R'); \
-                      biocLite('edgeR')"
-
-	R --slave -e "source('https://bioconductor.org/biocLite.R'); \
-                      biocLite('DESeq2')"
-
-	R --slave -e "source('https://bioconductor.org/biocLite.R'); \
-                      biocLite('ChIPseeker')"
-
-	R --slave -e 'install.packages(c("ggplot2", "data.table", "RColorBrewer", "devtools"), repos="https://cloud.r-project.org/")'
-
-	R --slave -e 'install.packages("http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz", repos=NULL, type="source")'
 
 	wget https://repo.continuum.io/archive/Anaconda2-4.4.0-Linux-x86_64.sh
+
 	bash Anaconda2-4.4.0-Linux-x86_64.sh -b -p /opt/anaconda2
 
-	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs nucleoatac r-spp
+	/opt/anaconda2/bin/conda install -c r r-base=3.3.2 r-essentials=1.5.2 r-devtools=1.12.0
+
+	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs nucleoatac r-spp=1.14 bioconductor-biocinstaller=1.24.0 bioconductor-edger=3.16.5 bioconductor-deseq2=1.14.1 bioconductor-chipseeker=1.10.0
+
+	/opt/anaconda2/bin/R --slave -e 'install.packages("http://hartleys.github.io/QoRTs/QoRTs_LATEST.tar.gz", repos=NULL, type="source")'
