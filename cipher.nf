@@ -1551,16 +1551,40 @@ if (params.downstream_analysis == true && (params.mode == "rna" || params.mode =
  		file("qorts_parameters_${id}.txt")
 
  		script:
- 		if (params.lib == "s")
+ 		if (params.lib == "s" && params.strand_info == "unstranded")
  		"""
  		java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
  		echo 'java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
  		"""
 
- 		if (params.lib == "p")
+ 		else if (params.lib == "p" && params.strand_info == "unstranded")
  		"""
  		java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --outfilePrefix ${id} ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
  		echo 'java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --outfilePrefix ${id} ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
+ 		"""
+
+ 		else if (params.lib == "s" && params.strand_info == "frFirstStrand")
+ 		"""
+ 		java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stranded --stopAfterNReads 5000000 --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
+ 		echo 'java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stranded --stopAfterNReads 5000000 --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
+ 		"""
+
+ 		else if (params.lib == "p" && params.strand_info == "frFirstStrand")
+ 		"""
+ 		java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stranded --stopAfterNReads 5000000 --outfilePrefix ${id} ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
+ 		echo 'java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stranded --stopAfterNReads 5000000 --outfilePrefix ${id} ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
+ 		"""
+
+ 		else if (params.lib == "s" && params.strand_info == "frSecondStrand")
+ 		"""
+ 		java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stranded_fr_secondstrand --stopAfterNReads 5000000 --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
+ 		echo 'java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stranded_fr_secondstrand --stopAfterNReads 5000000 --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
+ 		"""
+
+ 		else if (params.lib == "p" && params.strand_info == "frSecondStrand")
+ 		"""
+ 		java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stranded_fr_secondstrand --stopAfterNReads 5000000 --outfilePrefix ${id} ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
+ 		echo 'java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stranded_fr_secondstrand --stopAfterNReads 5000000 --outfilePrefix ${id} ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
  		"""
  	}
  }
