@@ -41,7 +41,7 @@ params.aligner = 'bbmap'
 params.bbmap_maxindel = 1
 params.bbmap_ambig = "random"
 params.bbmap_minid = 0.76
-params.bbmap_intronlen = 20
+params.bbmap_intronlen = 999999999
 
 params.bwa_T = 30
 params.bwa_k = 19
@@ -161,7 +161,10 @@ if (params.help == true) {
 	log.info '--mapping			Set this to false if you would like to skip the alignment step. (Default: true)'
 	log.info '--aligner			The aligner to map your data to the reference genome. Choose from: bbmap, bowtie2, bwa, hisat2, star. (Default: bbmap)'
 	log.info ''
-	log.info '--bbmap_maxindel	See maxindel flag in BBMap user manual for more information. Set to 200k for RNA-seq. (Default: 1)'
+	log.info '--bbmap_maxindel	See maxindel flag in BBMap user manual for more information. Set to 200k for mammalian RNA-seq. (Default: 1)'
+	log.info '--bbmap_intronlen	See intronlen flag in BBMap user manual for more information. Set to 20 for mammalian RNA-seq. (Default: 999999999)'
+	log.info '--bbmap_ambig		See ambig flag in BBMap user manual for more information. (Default: random)'
+	log.info '--bbmap_minid		See minid flag in BBMap user manual for more information. (Default: 0.76)'
 	log.info ''
 	log.info '--bwa_T			See T flag in BWA user manual for more information. (Default: 30)'
 	log.info '--bwa_k			See k flag in BWA user manual for more information. (Default: 19)'
@@ -391,7 +394,7 @@ if (params.downstream_analysis == true)
  	}
 
 // Calculate effective genome size
-if (!params.macs_g && (!params.epic_egs || !params.epic_gn) && params.downstream_analysis == true) {
+if ((params.mode == "chip" || params.mode == "dnase" || params.mode == "atac") && !params.macs_g && (!params.epic_egs || !params.epic_gn) && params.downstream_analysis == true) {
 	process calculate_egs {
 
  		input:
@@ -758,7 +761,7 @@ if (params.mapping == true && params.aligner == "bbmap" && params.lib == "p") {
 		bbmap.sh in=${read1} in2=${read2} outm=${id}.mapped.bam outu=${id}.unmapped.bam maxindel=${params.bbmap_maxindel} intronlen=${params.bbmap_intronlen} ambig=${params.bbmap_ambig} statsfile=${id}.bbmap_alignmentReport.txt minid=${params.bbmap_minid}
 		samtools sort -T ${id} -@ ${params.threads} -o ${id}.sorted.mapped.bam ${id}.mapped.bam
 		samtools index -@ ${params.threads} ${id}.sorted.mapped.bam
-		echo 'bbmap.sh 'in=${read1} in2=${read2} outm=${id}.mapped.bam outu=${id}.unmapped.bam maxindel=${params.bbmap_maxindel} intronlen=${params.bbmap_intronlen} ambig=${params.bbmap_ambig} statsfile=${id}.bbmap_alignmentReport.txt minid=${params.bbmap_minid}' > bbmap_parameters_${id}.txt
+		echo 'bbmap.sh in=${read1} in2=${read2} outm=${id}.mapped.bam outu=${id}.unmapped.bam maxindel=${params.bbmap_maxindel} intronlen=${params.bbmap_intronlen} ambig=${params.bbmap_ambig} statsfile=${id}.bbmap_alignmentReport.txt minid=${params.bbmap_minid}' > bbmap_parameters_${id}.txt
 		"""
 	}
 }
@@ -1048,8 +1051,8 @@ if (params.bamcoverage == true) {
 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams
 
 		output:
-		file("${mergeid}.RPKMnorm.fwd.bw") into bigwigs
-		file("${mergeid}.RPKMnorm.rev.bw") into bigwigs
+		file("${mergeid}.RPKMnorm.fwd.bw") into bigwigs_fwd
+		file("${mergeid}.RPKMnorm.rev.bw") into bigwigs_rev
 		file("bamcoverage_parameters_${mergeid}.txt")
 		file("${mergeid}.bamcoverage_report_fwd.txt")
 		file("${mergeid}.bamcoverage_report_rev.txt")
@@ -1162,8 +1165,6 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  	process estimate_fragment_size {
 
- 		publishDir "${params.outdir}/${params.mode}/${id}/fragment_sizes", mode: 'copy'
-
  		input:
  		set mergeid, id, file(bam), controlid, mark, file(bam_index) from treat
 
@@ -1246,8 +1247,8 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
@@ -1290,8 +1291,8 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
@@ -1335,8 +1336,8 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mdoe == "atac" && (params.lib == "s" || params.lib == "p"))
@@ -1379,8 +1380,8 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
@@ -1520,15 +1521,17 @@ if (params.mode == "mnase" && params.downstream_analysis == true) {
 if (params.downstream_analysis == true && (params.mode == "rna" || params.mode == "gro")) {
 
 	if (!params.strand_info) {
- 	exit 1, "Please specify strand information. Available: unstranded, frFirstStrand, frSecondStrand. If you are unsure, run the pipeline using --strandInfo unstranded and --subsample and then look in your qc folder for information on the strandedness of your dataset."
+ 	exit 1, "Please specify strand information. Available: unstranded, frFirstStrand, frSecondStrand. If you are unsure, run the pipeline using --strand_info unstranded and --subsample and then look in your qc folder for information on the strandedness of your dataset."
  	}
 
- 	if (!params.dge_file) {
+ 	if (!params.dge_file && params.dge == true) {
  	exit 1, "Please specify a experiment config file. Check README for exact information. Includes condition information required for differential gene expression analysis."
  	}
 
  	// set up experiment file
+ 	if (params.dge == true && !params.dge_file) {
  	exp_file = file(params.dge_file)
+ 	}
 
  	// quality control with qorts
  	if (params.mode == "rna") {
@@ -1550,47 +1553,17 @@ if (params.downstream_analysis == true && (params.mode == "rna" || params.mode =
  		script:
  		if (params.lib == "s")
  		"""
- 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --nameSorted --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
- 		echo 'java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --nameSorted --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
+ 		java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
+ 		echo 'java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --outfilePrefix ${id} --singleEnded ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
  		"""
 
  		if (params.lib == "p")
  		"""
- 		java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --nameSorted --outfilePrefix ${id} ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
- 		echo 'java -jar $baseDir/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --nameSorted --outfilePrefix ${id} ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
+ 		java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --outfilePrefix ${id} ${bam} ${gtf_file} QC 2> ${id}.qorts_report.txt
+ 		echo 'java -jar /opt/anaconda2/bin/QoRTs.jar QC --generatePlots --genomeFA ${fasta_file} --keepMultiMapped --title ${id} --stopAfterNReads 5000000 --outfilePrefix ${id} ${bam} ${gtf_file} QC' > qorts_parameters_${id}.txt
  		"""
  	}
  }
-
- 	// preseq for rna data
- 	if (params.mode == "rna") {
-
- 		process preseq {
-
- 		publishDir "${params.outdir}/${params.mode}/${id}/preseq", mode: 'copy'
-
- 		input:
- 		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bam_preseq
-
- 		output:
- 		file("${id}.c_curve.txt") into preseq_results
- 		file("${id}.preseq_report.txt")
- 		file("preseq_parameters_${id}.txt")
-
- 		script:
- 		if (params.lib == "s")
- 		"""
- 		preseq c_curve -l 9000000000 -B -o ${id}.c_curve.txt ${bam} 2> ${id}.preseq_report.txt
- 		echo 'preseq c_curve -l 9000000000 -B -o ${id}.c_curve.txt ${bam}' > preseq_parameters_${id}.txt
- 		"""
-
- 		if (params.lib == "p")
- 		"""
- 		preseq c_curve -l 9000000000 -P -B -o ${id}.c_curve.txt ${bam} 2> ${id}.preseq_report.txt
- 		echo 'preseq c_curve -l 9000000000 -P -B -o ${id}.c_curve.txt ${bam}' > preseq_parameters_${id}.txt
- 		"""
- 		}
- 	}
 
  	// read counting using featurecounts
  	process read_counting {
@@ -1686,7 +1659,6 @@ if (params.downstream_analysis == true && (params.mode == "rna" || params.mode =
  		publishDir "${params.outdir}/${params.mode}/${id}/multiqc", mode: 'copy'
 
  		input:
- 		file ('preseq/*') from preseq_results.flatten().toList()
  		file ('featurecounts/*') from featureCounts_logs.flatten().toList()
  		file ('stringtie/*') from stringtie_log.flatten().toList()
 
