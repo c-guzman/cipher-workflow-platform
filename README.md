@@ -94,8 +94,8 @@ Currently the following platforms are supported:
 
 By default the pipeline is parallelized by spanning multiple threads in the machine where the script is launched.
 
-To submit the execution to a SGE cluster create a file named `nextflow.config`, in the directory
-where the pipeline is going to be launched, with the following content:
+For example, to submit the execution to a SGE cluster edit the file named `nextflow.config`, in the directory
+where the cipher.nf file is found, with the following content:
 
     process {
       executor='sge'
@@ -105,3 +105,5 @@ where the pipeline is going to be launched, with the following content:
 In doing that, tasks will be executed through the `qsub` SGE command, and so your pipeline will behave like any
 other SGE job script, with the benefit that *Nextflow* will automatically and transparently manage the tasks
 synchronisation, file(s) staging/un-staging, etc.
+
+More information regarding the platforms Nextflow supports and how to run them can be found [HERE](https://www.nextflow.io/docs/latest/executor.html).

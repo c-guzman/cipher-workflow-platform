@@ -33,6 +33,7 @@ params.multiqc = true
 
 // default dge parameters
 params.dge = false
+params.dge_file = false
 
 // default mapping parameters
 params.mapping = true
@@ -155,6 +156,7 @@ if (params.help == true) {
 	log.info 'DGE FLAGS:'
 	log.info ''
 	log.info '--dge				Set this to false if you would like to skip the differential gene expression step. (Default: false)'
+	log.info '--dge_file		A tab separated text file containing sample and condition information for DGE analysis. (Default: none)'
 	log.info ''
 	log.info 'ALIGNMENT FLAGS:'
 	log.info ''
@@ -186,6 +188,20 @@ if (params.help == true) {
 	log.info '--bt2_i			See i flag in Bowtie2 user manual for more information. (Default: S,5,1,0.50)'
 	log.info '--bt2_trim5			See trim5 flag in Bowtie2 user manual for more information. (Default: 0)'
 	log.info '--bt2_trim3			See trim3 flag in Bowtie2 user manual for more information. (Default: 0)'
+	log.info ''
+	log.info '--hs_trim5		See trim5 flag in HISAT2 user manual for more information. (Default: 0)'
+	log.info '--hs_trim3		See trim3 flag in HISAT2 user manual for more information. (Default: 0)'
+	log.info '--hs_mp			See mp flag in HISAT2 user manual for more information. (Default: 6,2)'
+	log.info '--hs_sp			See sp flag in HISAT2 user manual for more information. (Default: 2,1)'
+	log.info '--hs_np			See np flag in HISAT2 user manual for more information. (Default: 1)'
+	log.info '--hs_rdg			See rdg flag in HISAT2 user manual for more information. (Default: 5,3)'
+	log.info '--hs_rfg			See rfg flag in HISAT2 user manual for more information. (Default: 5,3)'
+	log.info '--hs_pen_cansplice		See pen_cansplice flag in HISAT2 user manual for more information. (Default: 0)'
+	log.info '--hs_pen_noncansplice		See pen_noncansplice flag in HISAT2 user manual for more information. (Default: 12)'
+	log.info '--hs_min_intronlen		See min_intronlen flag in HISAT2 user manual for more information. (Default: 20)'
+	log.info '--hs_max_intronlen		See max_intronlen flag in HISAT2 user manual for more information. (Default: 500000)'
+	log.info '--hs_k			See k flag in HISAT2 user manual for more information. (Default: 5)'
+	log.info '--hs_max_seeds	See max_seeds flag in HISAT2 user manual for more information. (Default: 5)'
 	log.info ''
 	log.info 'BAMCOVERAGE FLAGS:'
 	log.info ''
@@ -1010,7 +1026,9 @@ if (params.bamcoverage == true) {
 	.map { mergeid, id, bam, controlid, mark, bam_index ->
 		[ mergeid, id, bam, controlid, mark, bam_index ].flatten()
 	}
-	.set { bamcoverage_mergedbams }
+	.into { 
+		bamcoverage_mergedbams_chip
+		bamcoverage_mergedbams_rna }
 
 	if (params.mode != "rna" && params.mode != "gro") {
 	process bamCoverage {
@@ -1018,7 +1036,7 @@ if (params.bamcoverage == true) {
 		publishDir "${params.outdir}/${params.mode}/tracks", mode: 'copy'
 
 		input:
-		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams
+		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams_chip
 
 		output:
 		file("${mergeid}.RPKMnorm.bw") into bigwigs
@@ -1042,27 +1060,30 @@ if (params.bamcoverage == true) {
 		bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --smoothLength ${params.bamcoverage_smooth} -e ${params.bamcoverage_e} --centerReads --MNase
 		"""
 		}
-	} else {
+	}
+
+	if (params.mode == "rna" || params.mode == "gro") {
 	process bamCoverage {
 
 		publishDir "${params.outdir}/${params.mode}/tracks", mode: 'copy'
 
 		input:
-		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams
+		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams_rna
 
 		output:
 		file("${mergeid}.RPKMnorm.fwd.bw") into bigwigs_fwd
 		file("${mergeid}.RPKMnorm.rev.bw") into bigwigs_rev
-		file("bamcoverage_parameters_${mergeid}.txt")
+		file("bamcoverage_parameters_${mergeid}_fwd.txt")
+		file("bamcoverage_parameters_${mergeid}_rev.txt")
 		file("${mergeid}.bamcoverage_report_fwd.txt")
 		file("${mergeid}.bamcoverage_report_rev.txt")
 
 		script:
 		"""
 		bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.fwd.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand forward 2> ${mergeid}.bamcoverage_report_fwd.txt
-		bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.rev.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand reverse 2> ${mergeid}.bamcoverage_report_revtxt
-		echo 'bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.fwd.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand forward' > bamcoverage_parameters_${mergeid}.txt
-		echo 'bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.rev.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand reverse' >> bamcoverage_parameters_${mergeid}.txt
+		bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.rev.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand reverse 2> ${mergeid}.bamcoverage_report_rev.txt
+		echo 'bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.fwd.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand forward' > bamcoverage_parameters_${mergeid}_fwd.txt
+		echo 'bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.rev.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand reverse' > bamcoverage_parameters_${mergeid}_rev.txt
 		"""
 		}
 	}
@@ -1524,12 +1545,12 @@ if (params.downstream_analysis == true && (params.mode == "rna" || params.mode =
  	exit 1, "Please specify strand information. Available: unstranded, frFirstStrand, frSecondStrand. If you are unsure, run the pipeline using --strand_info unstranded and --subsample and then look in your qc folder for information on the strandedness of your dataset."
  	}
 
- 	if (!params.dge_file && params.dge == true) {
+ 	if (params.dge_file != false && params.dge == true) {
  	exit 1, "Please specify a experiment config file. Check README for exact information. Includes condition information required for differential gene expression analysis."
  	}
 
  	// set up experiment file
- 	if (params.dge == true && !params.dge_file) {
+ 	if (params.dge == true && params.dge_file != false) {
  	exp_file = file(params.dge_file)
  	}
 
