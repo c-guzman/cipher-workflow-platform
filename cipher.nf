@@ -1036,7 +1036,7 @@ if (params.bamcoverage == true) {
 		publishDir "${params.outdir}/${params.mode}/tracks", mode: 'copy'
 
 		input:
-		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams_chip
+		set mergeid, id1, id2, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams_chip
 
 		output:
 		file("${mergeid}.RPKMnorm.bw") into bigwigs
@@ -1068,7 +1068,7 @@ if (params.bamcoverage == true) {
 		publishDir "${params.outdir}/${params.mode}/tracks", mode: 'copy'
 
 		input:
-		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams_rna
+		set mergeid, id1, id2, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams_rna
 
 		output:
 		file("${mergeid}.RPKMnorm.fwd.bw") into bigwigs_fwd
