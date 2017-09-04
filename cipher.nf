@@ -602,8 +602,6 @@ if (params.clumpify == true && params.lib == "p") {
 if (params.bbduk == true && params.lib == "s") {
 	process bbduk {
 
-		publishDir "${params.outdir}/${params.mode}/${id}/trimmed_reads", mode: 'copy'
-
 		input:
 		set mergeid, id, file(read1), controlid, mark from bbduk_fqs_s
 
@@ -629,8 +627,6 @@ if (params.bbduk == true && params.lib == "s") {
 // step bbduk for pair end data
 if (params.bbduk == true && params.lib == "p") {
 	process bbduk {
-
-		publishDir "${params.outdir}/${params.mode}/${id}/trimmed_reads", mode: 'copy'
 
 		input:
 		set mergeid, id, file(read1), file(read2), controlid, mark from bbduk_fqs_p
@@ -1346,13 +1342,13 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		if(params.lib == "s" && params.mode == "chip")
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.lib == "p" && params.mode == "chip")
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
@@ -1390,13 +1386,13 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		if(params.lib == "s" && params.mode == "chip")
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.lib == "p" && params.mode == "chip")
  		"""
  		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
