@@ -20,7 +20,7 @@ export PATH="/opt/anaconda2/bin:$PATH"
 
 	bash Anaconda2-4.4.0-Linux-x86_64.sh -b -p /opt/anaconda2
 
-	/opt/anaconda2/bin/conda install -c r r-base=3.3.2 r-essentials=1.5.2 r-devtools=1.12.0
+	/opt/anaconda2/bin/conda install -c r --yes r-base=3.3.2 r-essentials=1.5.2 r-devtools=1.12.0
 
 	/opt/anaconda2/bin/conda install -c bioconda --yes bbmap samtools epic sambamba deeptools macs2 bedtools bedops multiqc subread stringtie nextflow bowtie2 bwa hisat2 star fastqc gimmemotifs nucleoatac salmon r-spp=1.14 bioconductor-biocinstaller=1.24.0 bioconductor-edger=3.16.5 bioconductor-deseq2=1.14.1 bioconductor-chipseeker=1.10.0
 
