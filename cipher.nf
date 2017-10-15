@@ -1270,8 +1270,8 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37' > macs2_parameters_${id}.txt
  		"""
  	}
  }
@@ -1314,8 +1314,8 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37' > macs2_parameters_${id}.txt
  		"""
  	}
  }
@@ -1359,8 +1359,8 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37' > macs2_parameters_${id}.txt
  		"""
  	}
  }
@@ -1403,8 +1403,8 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --broad' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37' > macs2_parameters_${id}.txt
  		"""
  	}
  }
