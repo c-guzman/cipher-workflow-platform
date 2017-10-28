@@ -103,6 +103,9 @@ params.epic_qvalue = 0.01
 
 // default macs parameters
 params.macs_qvalue = 0.01
+params.macs_fe_cutoff = 1.0
+params.macs_slocal = 1000
+params.macs_llocal = 10000
 
 // default danpos2 parameters
 params.danpos_jw = 40
@@ -1252,26 +1255,26 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		shiftsize = Math.round(-1 * ((fragLen as int)/2))
  		if(params.lib == "s" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.lib == "p" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
  	}
  }
@@ -1296,26 +1299,26 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		shiftsize = Math.round(-1 * ((fragLen as int)/2))
  		if(params.lib == "s" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.lib == "p" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -c ${control} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37' --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} > macs2_parameters_${id}.txt
  		"""
  	}
  }
@@ -1341,26 +1344,26 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		shiftsize = Math.round(-1 * ((fragLen as int)/2))
  		if(params.lib == "s" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.lib == "p" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${egs_size} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
  	}
  }
@@ -1385,26 +1388,26 @@ if (params.downstream_analysis == true && (params.mode == "chip" || params.mode 
  		shiftsize = Math.round(-1 * ((fragLen as int)/2))
  		if(params.lib == "s" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.lib == "p" && params.mode == "chip")
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAMPE -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "dnase" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize}' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} -B --SPMR --nomodel --extsize=${fragLen} --shift=${shiftsize} --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
 
  		else if(params.mode == "atac" && (params.lib == "s" || params.lib == "p"))
  		"""
- 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 2> ${id}.macs2_report.txt
- 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37' > macs2_parameters_${id}.txt
+ 		macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff} 2> ${id}.macs2_report.txt
+ 		echo 'macs2 callpeak -t ${bam} -n ${id} --outdir . -f BAM -g ${params.macs_g} -q ${params.macs_qvalue} --nomodel --extsize 73 --shift 37 --slocal ${params.macs_slocal} --llocal ${params.macs_llocal} --fe-cutoff ${params.macs_fe_cutoff}' > macs2_parameters_${id}.txt
  		"""
  	}
  }
