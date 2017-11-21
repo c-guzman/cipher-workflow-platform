@@ -281,6 +281,7 @@ if (params.help == true) {
  config_file = file(params.config)
  fasta_file = file(params.fa)
  gtf_file = file(params.gtf)
+ overhang = Math.round((params.readLen as int) - 1)
 
  // display run information
 log.info ""
@@ -522,7 +523,6 @@ if (params.aligner == 'star' && params.mapping == true) {
  		file("indexFiles/*") into star_index
 
  		script:
- 		overhang = Math.round((${params.readLen} as int) - 1)
  		"""
  		mkdir indexFiles
  		STAR --runMode genomeGenerate --runThreadN ${params.threads} --genomeDir indexFiles --genomeFastaFiles ${fasta_file} --sjdbGTFfile ${gtf_file} --sjdbOverhang ${overhang}
@@ -609,7 +609,7 @@ if (params.bbduk == true && params.lib == "s") {
 		set mergeid, id, file(read1), controlid, mark from bbduk_fqs_s
 
 		output:
-		set mergeid, id, file("${id}.trimmed.fq.gz"), controlid, mark into post_fastqc_fqs_s, mapping_fqs
+		set mergeid, id, file("${id}.trimmed.fq.gz"), controlid, mark into post_fastqc_fqs_s, mapping_fqs_s
 		file("${id}_bbduk_statsFile.txt")
 		file("bbduk_parameters_${id}.txt")
 
@@ -623,7 +623,7 @@ if (params.bbduk == true && params.lib == "s") {
 	bbduk_fqs_s.into {
 
 		post_fastqc_fqs_s
-		mapping_fqs
+		mapping_fqs_s
 	}
 }
 
@@ -635,7 +635,7 @@ if (params.bbduk == true && params.lib == "p") {
 		set mergeid, id, file(read1), file(read2), controlid, mark from bbduk_fqs_p
 
 		output:
-		set mergeid, id, file("${id}_R1.trimmed.fq.gz"), file("${id}_R2.trimmed.fq.gz"), controlid, mark into post_fastqc_fqs_p, mapping_fqs
+		set mergeid, id, file("${id}_R1.trimmed.fq.gz"), file("${id}_R2.trimmed.fq.gz"), controlid, mark into post_fastqc_fqs_p, mapping_fqs_p
 		file("${id}_bbduk_statsFile.txt")
 		file("bbduk_parameters_${id}.txt")
 
@@ -649,7 +649,7 @@ if (params.bbduk == true && params.lib == "p") {
 	bbduk_fqs_p.into {
 
 		post_fastqc_fqs_p
-		mapping_fqs
+		mapping_fqs_p
 	}
 }
 
@@ -736,7 +736,7 @@ if (params.mapping == true && params.aligner == "bbmap" && params.lib == "s") {
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), controlid, mark from mapping_fqs_s
 		file("ref/*") from bbmap_index
 
 		output:
@@ -762,7 +762,7 @@ if (params.mapping == true && params.aligner == "bbmap" && params.lib == "p") {
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs_p
 		file("ref/*") from bbmap_index
 
 		output:
@@ -788,7 +788,7 @@ if (params.mapping == true && params.aligner == "bowtie2" && params.lib == "s") 
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), controlid, mark from mapping_fqs_s
 		file("*") from bowtie2_index
 
 		output:
@@ -814,7 +814,7 @@ if (params.mapping == true && params.aligner == "bowtie2" && params.lib == "p") 
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs_p
 		file("*") from bowtie2_index
 
 		output:
@@ -840,7 +840,7 @@ if (params.mapping == true && params.aligner == "bwa" && params.lib == "s") {
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), controlid, mark from mapping_fqs_s
 		file("*") from bwa_index
 
 		output:
@@ -866,7 +866,7 @@ if (params.mapping == true && params.aligner == "bwa" && params.lib == "p") {
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs_p
 		file("*") from bwa_index
 
 		output:
@@ -892,7 +892,7 @@ if (params.mapping == true && params.aligner == "hisat2" && params.lib == "s") {
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), controlid, mark from mapping_fqs_s
 		file("*") from hisat2_index
 
 		output:
@@ -918,7 +918,7 @@ if (params.mapping == true && params.aligner == "hisat2" && params.lib == "p") {
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs_p
 		file("*") from hisat2_index
 
 		output:
@@ -944,7 +944,7 @@ if (params.mapping == true && params.aligner == "star" && params.lib == "s") {
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), controlid, mark from mapping_fqs_s
 		file("indexFiles/*") from star_index
 
 		output:
@@ -970,7 +970,7 @@ if (params.mapping == true && params.aligner == "star" && params.lib == "p") {
 		publishDir "${params.outdir}/${params.mode}/${id}/alignments", mode: 'copy'
 
 		input:
-		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs
+		set mergeid, id, file(read1), file(read2), controlid, mark from mapping_fqs_p
 		file("indexFiles/*") from star_index
 
 		output:
@@ -992,71 +992,34 @@ if (params.mapping == true && params.aligner == "star" && params.lib == "p") {
 // merge replicates together then create bigwigs
 if (params.bamcoverage == true) {
 
-	singleBams = Channel.create()
-	groupedBams = Channel.create()
-
-	bamcoverage_bams.groupTuple(by: [0,3,4])
-	.choice(singleBams, groupedBams) {
-		it[2].size() > 1 ? 1 : 0
-	}
-
-	process merge_bams {
-
-		publishDir "${params.outdir}/${params.mode}/merged/${mergeid}/alignments", mode: 'copy'
-
-		input:
-		set mergeid, id, file(bam), controlid, mark, file(bam_index) from groupedBams
-
-		output:
-		set mergeid, id, file("${mergeid}_merged.bam"), controlid, mark, file("${mergeid}_merged.bam.bai") into mergedBams
-		file("samtools_merge_parameters_${mergeid}.txt")
-
-		script:
-		def mergeid = mergeid.sort().join(':')
-		"""
-		samtools merge -@ ${params.threads} ${mergeid}_merged.bam ${bam}
-		samtools index -@ ${params.threads} ${mergeid}_merged.bam
-		echo 'samtools merge -@ ${params.threads} ${mergeid}_merged.bam ${bam}' > samtools_merge_parameters_${mergeid}.txt
-		"""
-	}
-
-	singleBams
-	.mix(mergedBams)
-	.map { mergeid, id, bam, controlid, mark, bam_index ->
-		[ mergeid, id, bam, controlid, mark, bam_index ].flatten()
-	}
-	.into { 
-		bamcoverage_mergedbams_chip
-		bamcoverage_mergedbams_rna }
-
 	if (params.mode != "rna" && params.mode != "gro") {
 	process bamCoverage {
 
 		publishDir "${params.outdir}/${params.mode}/tracks", mode: 'copy'
 
 		input:
-		set mergeid, id1, id2, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams_chip
+		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_bams
 
 		output:
-		file("${mergeid}.RPKMnorm.bw") into bigwigs
-		file("bamcoverage_parameters_${mergeid}.txt")
-		file("${mergeid}.bamcoverage_report.txt")
+		file("${id}.RPKMnorm.bw") into bigwigs
+		file("bamcoverage_parameters_${id}.txt")
+		file("${id}.bamcoverage_report.txt")
 
 		script:
 		if (params.mode == "chip" || params.mode == "dnase")
 		"""
-		bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --smoothLength ${params.bamcoverage_smooth} -e ${params.bamcoverage_e} --centerReads 2> ${mergeid}.bamcoverage_report.txt
-		echo 'bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --smoothLength ${params.bamcoverage_smooth} -e ${params.bamcoverage_e} --centerReads' > bamcoverage_parameters_${mergeid}.txt
+		bamCoverage -b ${bam} -o ${id}.RPKMnorm.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --smoothLength ${params.bamcoverage_smooth} -e ${params.bamcoverage_e} --centerReads 2> ${id}.bamcoverage_report.txt
+		echo 'bamCoverage -b ${bam} -o ${id}.RPKMnorm.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --smoothLength ${params.bamcoverage_smooth} -e ${params.bamcoverage_e} --centerReads' > bamcoverage_parameters_${id}.txt
 		"""
 
 		else if (params.mode == "mnase" && params.lib == "s")
 		"""
-		bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --smoothLength ${params.bamcoverage_smooth} -e ${params.bamcoverage_e} --centerReads --minFragmentLength 130 --maxFragmentLength 200
+		bamCoverage -b ${bam} -o ${id}.RPKMnorm.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --smoothLength ${params.bamcoverage_smooth} -e ${params.bamcoverage_e} --centerReads --minFragmentLength 130 --maxFragmentLength 200
 		"""
 
 		else if (params.mode == "mnase" && params.lib == "p")
 		"""
-		bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --smoothLength ${params.bamcoverage_smooth} -e ${params.bamcoverage_e} --centerReads --MNase
+		bamCoverage -b ${bam} -o ${id}.RPKMnorm.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --smoothLength ${params.bamcoverage_smooth} -e ${params.bamcoverage_e} --centerReads --MNase
 		"""
 		}
 	}
@@ -1067,22 +1030,22 @@ if (params.bamcoverage == true) {
 		publishDir "${params.outdir}/${params.mode}/tracks", mode: 'copy'
 
 		input:
-		set mergeid, id1, id2, file(bam), controlid, mark, file(bam_index) from bamcoverage_mergedbams_rna
+		set mergeid, id, file(bam), controlid, mark, file(bam_index) from bamcoverage_bams
 
 		output:
-		file("${mergeid}.RPKMnorm.fwd.bw") into bigwigs_fwd
-		file("${mergeid}.RPKMnorm.rev.bw") into bigwigs_rev
-		file("bamcoverage_parameters_${mergeid}_fwd.txt")
-		file("bamcoverage_parameters_${mergeid}_rev.txt")
-		file("${mergeid}.bamcoverage_report_fwd.txt")
-		file("${mergeid}.bamcoverage_report_rev.txt")
+		file("${id}.RPKMnorm.fwd.bw") into bigwigs_fwd
+		file("${id}.RPKMnorm.rev.bw") into bigwigs_rev
+		file("bamcoverage_parameters_${id}_fwd.txt")
+		file("bamcoverage_parameters_${id}_rev.txt")
+		file("${id}.bamcoverage_report_fwd.txt")
+		file("${id}.bamcoverage_report_rev.txt")
 
 		script:
 		"""
-		bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.fwd.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand forward 2> ${mergeid}.bamcoverage_report_fwd.txt
-		bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.rev.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand reverse 2> ${mergeid}.bamcoverage_report_rev.txt
-		echo 'bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.fwd.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand forward' > bamcoverage_parameters_${mergeid}_fwd.txt
-		echo 'bamCoverage -b ${bam} -o ${mergeid}.RPKMnorm.rev.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand reverse' > bamcoverage_parameters_${mergeid}_rev.txt
+		bamCoverage -b ${bam} -o ${id}.RPKMnorm.fwd.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand forward 2> ${id}.bamcoverage_report_fwd.txt
+		bamCoverage -b ${bam} -o ${id}.RPKMnorm.rev.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand reverse 2> ${id}.bamcoverage_report_rev.txt
+		echo 'bamCoverage -b ${bam} -o ${id}.RPKMnorm.fwd.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand forward' > bamcoverage_parameters_${id}_fwd.txt
+		echo 'bamCoverage -b ${bam} -o ${id}.RPKMnorm.rev.bw -of bigwig -bs ${params.bamcoverage_bs} -p ${params.threads} --normalizeUsingRPKM --filterRNAstrand reverse' > bamcoverage_parameters_${id}_rev.txt
 		"""
 		}
 	}
