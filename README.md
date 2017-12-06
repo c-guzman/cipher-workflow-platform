@@ -75,7 +75,7 @@ Where columns refer to:
 
 **NOTE:** If not running on a cluster please set the `-qs <INT>` flag in order to control the number of processes that CIPHER parallelizes. Too many and the workflow will abruptly end because it runs out of memory. `nextflow run -qs <INT> cipher.nf ...`
 
-**NOTE:** If you would like to run CIPHER without using the Singularity workflow please make sure that you have installed all the required software for your specific pipeline. Tools used can be found inside the main cipher.nf script.
+**NOTE:** If you would like to run CIPHER without using Singularity containers, please make sure that you have installed all the required software for your specific pipeline. Tools used can be found inside the main cipher.nf script.
 
 ## Example Data
 
