@@ -92,9 +92,9 @@ params.star_twopassMode = 'None'
 
 // default bamcoverage parameters
 params.bamcoverage = true
-params.bamcoverage_bs = 50
-params.bamcoverage_smooth = 100
-params.bamcoverage_e = 150
+params.bamcoverage_bs = 10
+params.bamcoverage_smooth = 0
+params.bamcoverage_e = 200
 
 // default epic parameters
 params.epic_w = 200
@@ -114,6 +114,9 @@ params.danpos_jd = 150
 // default downstream analysis parameters
 params.downstream_analysis = true
 
+// default quality control analysis
+params.qc = true
+
 
 
 // print help
@@ -122,7 +125,7 @@ if (params.help == true) {
 	log.info '========================================================================================'
 	log.info ''
 	log.info 'Usage:'
-	log.info 'nextflow run cipher_main.nf --mode <MODE> --config <CONFIG> --fa <FASTA> --gtf <GTF> --lib <LIB> --readLen <LEN> [options]'
+	log.info 'nextflow run cipher.nf --mode <MODE> --config <CONFIG> --fa <FASTA> --gtf <GTF> --lib <LIB> --readLen <LEN> [options]'
 	log.info ''
 	log.info 'REQUIRED FLAGS:'
 	log.info ''
@@ -209,6 +212,9 @@ if (params.help == true) {
 	log.info 'BAMCOVERAGE FLAGS:'
 	log.info ''
 	log.info '--bamcoverage			Set this to false if you would like to skip the bamCoverage bigwig creation step. (Default: true)'
+	log.info '--bamcoverage_bs		The average binsize for track files generated. (Default: 10)'
+	log.info '--bamcoverage_smooth	The smoothing window for track files. (Default: 0)'
+	log.info '--bamcoverage_e		Reads are extended on either side by this number. (Default: 200)'
 	log.info ''
 	log.info 'OTHER FLAGS:'
 	log.info ''
@@ -217,7 +223,8 @@ if (params.help == true) {
 	log.info ''
 	log.info 'CHIP-SEQ FLAGS:'
 	log.info ''
-	log.info '--downstream_analysis		Set this to false if you would like CIPHER to skip the downstream analysis. (Default: true)'
+	log.info '--downstream_analysis		Set this to false if you would like CIPHER to skip downstream analysis. (Default: true)'
+	log.info '--qc						Set this to false if you would like CIPHER to skip quality control analysis. (Default: true)'
 	log.info ''
 	log.info '--macs_g					See g flag in MACS2 user manual for more information. (Default: automatically calculated)'
 	log.info '--epic_egs				See egs flag in EPIC user manual for more information. (Default: automatically calculated)'
